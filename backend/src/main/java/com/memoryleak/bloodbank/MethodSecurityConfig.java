@@ -19,9 +19,9 @@ public class MethodSecurityConfig
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/callback*").permitAll()
-                .antMatchers("/admin","/user").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/callback/*", "/callback").permitAll()
+                .antMatchers("/admin/*","/user/*").authenticated()
+//                .anyRequest().permitAll()
                 .and()
                 .httpBasic()
                 .and()
