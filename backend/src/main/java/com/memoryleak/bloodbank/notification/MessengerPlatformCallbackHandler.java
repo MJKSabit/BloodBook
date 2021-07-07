@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank;
+package com.memoryleak.bloodbank.notification;
 
 import static com.github.messenger4j.Messenger.CHALLENGE_REQUEST_PARAM_NAME;
 import static com.github.messenger4j.Messenger.MODE_REQUEST_PARAM_NAME;
@@ -50,8 +50,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;

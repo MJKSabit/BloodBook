@@ -1,6 +1,8 @@
 package com.memoryleak.bloodbank;
 
 import com.github.messenger4j.Messenger;
+import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
