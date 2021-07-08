@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_table")
 public class User {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +22,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean active = false;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean banned = false;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String role;
 

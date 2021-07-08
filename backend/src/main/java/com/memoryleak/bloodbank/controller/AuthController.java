@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,8 +48,9 @@ public class AuthController {
                 .loadUserByUsername(username);
 
         final String token = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok("{\"jwttoken\":\""+token+"\"}");
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("jwt", token);
+        return ResponseEntity.ok().headers(responseHeaders).build();
     }
 
     private void authenticate(String username, String password) throws Exception {
