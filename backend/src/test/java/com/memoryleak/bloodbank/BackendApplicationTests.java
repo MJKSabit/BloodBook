@@ -1,6 +1,9 @@
 package com.memoryleak.bloodbank;
 
+import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import com.memoryleak.bloodbank.service.UserService;
+import com.memoryleak.bloodbank.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,16 +17,17 @@ import java.util.List;
 class BackendApplicationTests {
 
     @Autowired
-    EmailNotificationHandler emailNotificationHandler;
+    UserServiceImpl userService;
 
     @Test
-    void contextLoads() throws IOException {
-        List<String> to = new ArrayList<>();
-
-        String subject = "From Spring Boot-2";
-        String body = "This is body!";
-
-        System.out.println(emailNotificationHandler.sendEmail(to, subject, body));
+    void addUser() throws IOException {
+        User user = new User();
+        user.setUsername("MJKSabit");
+        user.setEmail("sabit.jehadul.karim@gmail.com");
+        user.setPassword("password");
+        userService.save(user);
     }
+
+
 
 }
