@@ -1,0 +1,86 @@
+package com.memoryleak.bloodbank.controller;
+
+import com.memoryleak.bloodbank.model.User;
+import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import com.memoryleak.bloodbank.repository.UserRepository;
+import com.memoryleak.bloodbank.service.UserService;
+import com.memoryleak.bloodbank.util.JwtTokenUtil;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.regex.Pattern;
+
+@RestController
+public class RegistrationController {
+
+    @Value("${BASE_URL:http://localhost:8080}")
+    String BASE_URL;
+
+    private static final Pattern usernameMatcher = Pattern.compile("^[A-Za-z]\\w{5,29}$");
+    private static final Pattern passwordMatcher = Pattern.compile("^.{8,20}$");
+    private static final Pattern emailMatcher = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}");
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    EmailNotificationHandler emailNotificationHandler;
+
+
+    private boolean validUser(User user) {
+        String username = user.getUsername(), email = user.getEmail(), password = user.getPassword();
+        return usernameMatcher.matcher(username).matches() &&
+                passwordMatcher.matcher(password).matches() &&
+                emailMatcher.matcher(email).matches();
+    }
+
+    @PostMapping(path = "/register/user")
+    public ResponseEntity<String> registerUser(@RequestBody String requestString) throws IOException {
+        JSONObject requestData = new JSONObject(requestString);
+
+        User user = new User();
+        user.setUsername(requestData.getString("username"));
+        user.setPassword(requestData.getString("password"));
+        user.setEmail(requestData.getString("email"));
+
+        if (validUser(user) && userService.findByUsername(user.getUsername()) == null) {
+            userService.save(user);
+            String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail());
+            emailNotificationHandler.sendEmail(
+                    Collections.singletonList(user.getEmail()),
+                    "Confirm Your Account",
+                    "Go to the link below to activate your BloodBook Account\n"+
+                            BASE_URL+"/register/activate/"+jwtVerification
+                    );
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else
+            return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(path = "register/activate/{jwtVerify}")
+    public ResponseEntity<String> activateUser(@PathVariable String jwtVerify) {
+        String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify);
+
+        if (username == null) return
+            ResponseEntity.badRequest().build();
+
+        User user = userService.findByUsername(username);
+        user.setActive(true);
+        userRepository.save(user);
+        return ResponseEntity.ok("Account Activated!");
+    }
+
+
+}

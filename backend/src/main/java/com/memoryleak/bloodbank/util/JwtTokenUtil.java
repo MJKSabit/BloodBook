@@ -17,7 +17,8 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 15 * 60 * 1000; // 15 min
+    public static final long JWT_TOKEN_VALIDITY = 15 * 60; // 15 min
+    public static final long JWT_VERIFY_VALIDITY = 7 * 24 * 60 * 60; // 7 days
 
     @Value("${JWT_SECRET}")
     public String SECRET;
@@ -47,10 +48,14 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
+    public String generateVerifyToken(String username, String email) {
+        return doGenerateToken(new HashMap<>(), username+":"+email, JWT_VERIFY_VALIDITY);
+    }
+
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, userDetails.getUsername(), JWT_TOKEN_VALIDITY);
     }
 
     //while creating the token -
@@ -58,7 +63,7 @@ public class JwtTokenUtil implements Serializable {
     //2. Sign the JWT using the HS512 algorithm and secret key.
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, long validity) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
@@ -66,8 +71,13 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateAndGetUsernameFromToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String validateAndGetUsernameFromToken(String token) {
+        if (isTokenExpired(token)) return null;
+        return getClaimFromToken(token, Claims::getSubject).split(":")[0];
     }
 }
