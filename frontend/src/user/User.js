@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import logo from '../logo.svg';
 import '../App.css';
+import SignIn from './auth/SignIn';
 
 
 export default function User() {
@@ -22,5 +23,5 @@ export default function User() {
       </header>
     </div>)
 
-  return <>{show}</>
+  return <SignIn />
 }
