@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { signIn } from '../../store/action';
+import { forgotPassword, signIn } from '../../store/action';
 import Copyright from './Copyright';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -39,18 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn(props) {
+export default function ForgotPassword(props) {
   const userType = props.userType || 'user'
   const classes = useStyles();
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
 
-  const signInFunction = () => {
-    dispatch(signIn(username, password))
+  const forgotPasswordFunction = () => {
+    dispatch(forgotPassword(username))
     setUsername('')
-    setPassword('')
   }
 
   return (
@@ -61,7 +59,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Forgot Password? You will receive an email to reset your password.
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -76,23 +74,6 @@ export default function SignIn(props) {
             onChange={(e) => setUsername(e.target.value)}
             autoFocus
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
           <Button
             type="submit"
             fullWidth
@@ -102,16 +83,16 @@ export default function SignIn(props) {
             onClick={
               (e) => {
                 e.preventDefault()
-                signInFunction()
+                forgotPasswordFunction()
               }
             }
           >
-            Sign In
+            Continue
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to={`/${userType}/forgot`} variant='body2' component={RouterLink}>
-                Forgot password?
+              <Link to={`/${userType}/signin`} variant='body2' component={RouterLink}>
+                Sign in
               </Link>
             </Grid>
             <Grid item>

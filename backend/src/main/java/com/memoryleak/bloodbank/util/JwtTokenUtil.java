@@ -48,8 +48,8 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    public String generateVerifyToken(String username, String email) {
-        return doGenerateToken(new HashMap<>(), username+":"+email, JWT_VERIFY_VALIDITY);
+    public String generateVerifyToken(String username, String email, String match) {
+        return doGenerateToken(new HashMap<>(), match+":"+username+":"+email, JWT_VERIFY_VALIDITY);
     }
 
     //generate token for user
@@ -76,8 +76,12 @@ public class JwtTokenUtil implements Serializable {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String validateAndGetUsernameFromToken(String token) {
+    public String validateAndGetUsernameFromToken(String token, String match) {
         if (isTokenExpired(token)) return null;
-        return getClaimFromToken(token, Claims::getSubject).split(":")[0];
+        String[] claim = getClaimFromToken(token, Claims::getSubject).split(":");
+        if (claim[0].equals(match))
+            return claim[1];
+        else
+            return null;
     }
 }

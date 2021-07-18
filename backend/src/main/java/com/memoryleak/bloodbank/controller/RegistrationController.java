@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RestController
@@ -57,7 +58,7 @@ public class RegistrationController {
 
         if (validUser(user) && userService.findByUsername(user.getUsername()) == null) {
             userService.save(user);
-            String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail());
+            String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "activate");
             emailNotificationHandler.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Your Account",
@@ -69,12 +70,12 @@ public class RegistrationController {
             return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(path = "register/activate/{jwtVerify}")
+    @GetMapping(path = "/register/activate/{jwtVerify}")
     public ResponseEntity<String> activateUser(@PathVariable String jwtVerify) {
-        String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify);
+        String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify, "activate");
 
         if (username == null) return
-            ResponseEntity.badRequest().build();
+                ResponseEntity.badRequest().build();
 
         User user = userService.findByUsername(username);
         user.setActive(true);
@@ -82,5 +83,36 @@ public class RegistrationController {
         return ResponseEntity.ok("Account Activated!");
     }
 
+    @PostMapping(path = "/forgot")
+    public ResponseEntity<String> forgotPassword(@RequestBody String requestString) throws IOException {
+        JSONObject requestData = new JSONObject(requestString);
 
+        User user = userRepository.findUserByUsername(requestData.getString("username"));
+
+        if (user!=null) {
+            String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "forgot");
+            emailNotificationHandler.sendEmail(
+                    Collections.singletonList(user.getEmail()),
+                    "Confirm Password Reset",
+                    "Go to the link below to activate your BloodBook Account\n"+
+                            BASE_URL+"/forgot/"+jwtVerification
+            );
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } else
+            return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(path = "/forgot/{jwtVerify}")
+    public ResponseEntity<String> passwordReset(@PathVariable String jwtVerify) {
+        String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify, "forgot");
+
+        if (username == null) return
+                ResponseEntity.badRequest().build();
+
+        User user = userService.findByUsername(username);
+        String password = UUID.randomUUID().toString();
+        user.setPassword(password);
+        userService.save(user);
+        return ResponseEntity.ok("Password Reset! Use Password: "+password);
+    }
 }
