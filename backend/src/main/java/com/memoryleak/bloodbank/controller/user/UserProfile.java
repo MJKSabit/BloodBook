@@ -8,12 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
@@ -28,7 +26,7 @@ public class UserProfile {
 
     @GetMapping("/user/{username}")
     public ResponseEntity<User> profile(@PathVariable String username) {
-        User user = userRepository.findUserByUsername(username);
+        User user = userRepository.findUserByUsernameIgnoreCase(username);
         if (user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(user);

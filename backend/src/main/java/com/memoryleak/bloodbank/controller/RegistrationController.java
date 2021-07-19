@@ -87,7 +87,7 @@ public class RegistrationController {
     public ResponseEntity<String> forgotPassword(@RequestBody String requestString) throws IOException {
         JSONObject requestData = new JSONObject(requestString);
 
-        User user = userRepository.findUserByUsername(requestData.getString("username"));
+        User user = userRepository.findUserByUsernameIgnoreCase(requestData.getString("username"));
 
         if (user!=null) {
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "forgot");

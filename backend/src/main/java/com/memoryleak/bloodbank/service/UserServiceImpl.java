@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUserByUsernameIgnoreCase(username);
     }
 
     @Override
     public User login(String username, String password) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUserByUsernameIgnoreCase(username);
     }
 
 }
