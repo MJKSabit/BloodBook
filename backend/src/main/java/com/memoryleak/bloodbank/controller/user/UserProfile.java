@@ -1,6 +1,7 @@
 package com.memoryleak.bloodbank.controller.user;
 
-import com.memoryleak.bloodbank.model.User;
+import com.memoryleak.bloodbank.model.GeneralUser;
+import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.repository.UserRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
@@ -22,11 +23,14 @@ public class UserProfile {
     UserRepository userRepository;
 
     @Autowired
+    GeneralUserRepository generalUserRepository;
+
+    @Autowired
     JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<User> profile(@PathVariable String username) {
-        User user = userRepository.findUserByUsernameIgnoreCase(username);
+    public ResponseEntity<GeneralUser> profile(@PathVariable String username) {
+        GeneralUser user = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         if (user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(user);

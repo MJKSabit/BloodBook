@@ -1,7 +1,11 @@
 package com.memoryleak.bloodbank.controller;
 
+import com.memoryleak.bloodbank.model.GeneralUser;
+import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import com.memoryleak.bloodbank.repository.GeneralUserRepository;
+import com.memoryleak.bloodbank.repository.LocationRepository;
 import com.memoryleak.bloodbank.repository.UserRepository;
 import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -37,6 +42,12 @@ public class RegistrationController {
     UserRepository userRepository;
 
     @Autowired
+    GeneralUserRepository generalUserRepository;
+
+    @Autowired
+    LocationRepository locationRepository;
+
+    @Autowired
     EmailNotificationHandler emailNotificationHandler;
 
 
@@ -51,13 +62,30 @@ public class RegistrationController {
     public ResponseEntity<String> registerUser(@RequestBody String requestString) throws IOException {
         JSONObject requestData = new JSONObject(requestString);
 
+        Location location = new Location();
+        location.setLongitude(requestData.getDouble("longitude"));
+        location.setLatitude(requestData.getDouble("latitude"));
+
         User user = new User();
         user.setUsername(requestData.getString("username"));
         user.setPassword(requestData.getString("password"));
         user.setEmail(requestData.getString("email"));
+        user.setLocation(location);
 
         if (validUser(user) && userService.findByUsername(user.getUsername()) == null) {
             userService.save(user);
+
+            GeneralUser generalUser = new GeneralUser();
+            generalUser.setUser(user);
+            generalUser.setBloodGroup(requestData.getString("bloodGroup").toUpperCase());
+            generalUser.setName(requestData.getString("name"));
+            generalUser.setImageURL(requestData.optString("imageURL"));
+            generalUser.setAbout(requestData.getString("about"));
+            generalUser.setActiveDonor(requestData.getBoolean("active"));
+            generalUser.setLastDonation(new Date(requestData.getLong("lastDonation")));
+
+            generalUserRepository.save(generalUser);
+
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "activate");
             emailNotificationHandler.sendEmail(
                     Collections.singletonList(user.getEmail()),

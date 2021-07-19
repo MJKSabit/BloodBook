@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface GeneralUserRepository extends CrudRepository<GeneralUser, Long> {
-    GeneralUser findGeneralUserByUserUsername(String username);
+    GeneralUser findGeneralUserByUserUsernameIgnoreCase(String username);
 }

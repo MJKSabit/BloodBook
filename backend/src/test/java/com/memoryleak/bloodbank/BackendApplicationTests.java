@@ -1,7 +1,9 @@
 package com.memoryleak.bloodbank;
 
+import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import com.memoryleak.bloodbank.repository.LocationRepository;
 import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -19,13 +21,19 @@ class BackendApplicationTests {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    LocationRepository locationRepository;
+
     @Test
     void addUser() throws IOException {
-        User user = new User();
-        user.setUsername("MJKSabit");
-        user.setEmail("sabit.jehadul.karim@gmail.com");
-        user.setPassword("password");
-        userService.save(user);
+        Location location = new Location();
+
+        location.setLatitude(0);
+        location.setLatitude(1.1);
+
+        locationRepository.save(location);
+
+        System.out.println("\n\n\n\n\nLOCATION: "+location.getId()+"\n\n\n\n\n");
     }
 
 
