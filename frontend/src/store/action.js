@@ -45,7 +45,7 @@ export const signIn = (username, password) => {
                     jwt: response.data.jwt
                 }
             })
-        })
+        }).catch(e => console.log(e))
     }
 }
 
@@ -59,7 +59,7 @@ export const forgotPassword = (username) => {
     return (dispatch, state) => {
         axios.post(`${API_URL}/forgot`, {username}).then(response => {
             dispatch(notifyUser('Check your Email for reset link!'))
-        })
+        }).catch(e => console.log(e))
     }
 }
 
@@ -78,12 +78,14 @@ export const signUpUser = async (user) => {
 axios.interceptors.response.use(
     response => response,
     error => {
-      const {status} = error.response;
+        console.log(error)
+      const {status} = error;
       if (status === UNAUTHORIZED) {
         store.dispatch(signOut());
       } else {
         store.dispatch(notifyUser(error.message))
         console.log(error)
+        return Promise.reject(error);
       }
    }
 );

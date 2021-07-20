@@ -221,7 +221,7 @@ export default function SignUp(props) {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox checked={active} onChange={ (e) => setActive(e.target.value)} />}
+                control={<Checkbox checked={active} onChange={ (e) => setActive(e.target.checked)} />}
                 label="Active Blood Donor"
               />
             </Grid>
@@ -269,7 +269,7 @@ export default function SignUp(props) {
               signUpUser(data).then(response => {
                 dispatch(notifyUser('Check your Email to confirm your account!'))
                 history.push('/user/signin')
-              })
+              }).catch(e => console.log(e))
             }}
           >
             Sign Up
