@@ -3,7 +3,7 @@ package com.memoryleak.bloodbank.controller;
 import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.User;
-import com.memoryleak.bloodbank.notification.EmailNotificationHandler;
+import com.memoryleak.bloodbank.notification.EmailNotification;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.repository.LocationRepository;
 import com.memoryleak.bloodbank.repository.UserRepository;
@@ -11,6 +11,7 @@ import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,8 @@ public class RegistrationController {
     LocationRepository locationRepository;
 
     @Autowired
-    EmailNotificationHandler emailNotificationHandler;
+    @Qualifier("spring")
+    EmailNotification emailNotification;
 
 
     private boolean validUser(User user) {
@@ -89,7 +91,7 @@ public class RegistrationController {
             generalUserRepository.save(generalUser);
 
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "activate");
-            emailNotificationHandler.sendEmail(
+            emailNotification.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Your Account",
                     "Go to the link below to activate your BloodBook Account\n"+
@@ -121,7 +123,7 @@ public class RegistrationController {
 
         if (user!=null) {
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "forgot");
-            emailNotificationHandler.sendEmail(
+            emailNotification.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Password Reset",
                     "Go to the link below to activate your BloodBook Account\n"+
