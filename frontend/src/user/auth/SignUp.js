@@ -20,7 +20,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { useState } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
-import { notifyUser } from '../../store/action';
+import { notifyUser, signUpUser } from '../../store/action';
 import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -251,10 +251,11 @@ export default function SignUp(props) {
             className={classes.submit}
             onClick={ e => {
               e.preventDefault()
-              console.log({
+              const data = {
                 name, latitude, longitude, password, lastDonation: selectedDate.getTime(),
-                imageURL, about, bloodGroup, email, username
-              })
+                imageURL, about, bloodGroup, email, username, active
+              }
+              dispatch(signUpUser(data))
             }}
           >
             Sign Up

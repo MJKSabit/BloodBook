@@ -69,3 +69,14 @@ export const notifyUser = (notification) => ({
     }
 })
 
+
+export const signUpUser = (user) => {
+    return (dispatch, state) => {
+        axios.post(`${API_URL}/register/user`, user).then(response => {
+            dispatch(notifyUser('Check your Email to confirm your account!'))
+        }).catch(err => {
+            dispatch(notifyUser('Error occured, maybe invalid data or connection error'))
+            console.log(err.message)
+        })
+    }
+}

@@ -63,8 +63,10 @@ public class RegistrationController {
         JSONObject requestData = new JSONObject(requestString);
 
         Location location = new Location();
-        location.setLongitude(requestData.getDouble("longitude"));
-        location.setLatitude(requestData.getDouble("latitude"));
+        // If no Location is set, Invalid Location
+        location.setLongitude(requestData.optDouble("longitude", -200));
+        location.setLatitude(requestData.optDouble("latitude", -100));
+        locationRepository.save(location);
 
         User user = new User();
         user.setUsername(requestData.getString("username"));
