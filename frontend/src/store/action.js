@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { NOTIFICATION, SIGN_IN, SIGN_OUT } from './actionTypes';
+import store from "./index";
+import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED } from './actionTypes';
 
 const API_URL = 'http://localhost:8080'
 const MAPBOX_GEOCODING_API = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
@@ -44,7 +45,7 @@ export const signIn = (username, password) => {
                     jwt: response.data.jwt
                 }
             })
-        }).catch(err => dispatch(notifyUser(err.message)))
+        })
     }
 }
 
@@ -58,7 +59,7 @@ export const forgotPassword = (username) => {
     return (dispatch, state) => {
         axios.post(`${API_URL}/forgot`, {username}).then(response => {
             dispatch(notifyUser('Check your Email for reset link!'))
-        }).catch(err => dispatch(notifyUser(err.message)))
+        })
     }
 }
 
@@ -70,13 +71,19 @@ export const notifyUser = (notification) => ({
 })
 
 
-export const signUpUser = (user) => {
-    return (dispatch, state) => {
-        axios.post(`${API_URL}/register/user`, user).then(response => {
-            dispatch(notifyUser('Check your Email to confirm your account!'))
-        }).catch(err => {
-            dispatch(notifyUser('Error occured, maybe invalid data or connection error'))
-            console.log(err.message)
-        })
-    }
+export const signUpUser = async (user) => {
+    return await axios.post(`${API_URL}/register/user`, user)
 }
+
+axios.interceptors.response.use(
+    response => response,
+    error => {
+      const {status} = error.response;
+      if (status === UNAUTHORIZED) {
+        store.dispatch(signOut());
+      } else {
+        store.dispatch(notifyUser(error.message))
+        console.log(error)
+      }
+   }
+);

@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import Copyright from './Copyright'
 import LocationSelector from '../../generic/LocationSelector';
 import ImageUploader from '../../generic/ImageUploader';
@@ -51,6 +51,8 @@ export default function SignUp(props) {
   const userType = props.userType || 'user'
   const classes = useStyles();
 
+  const [error, setError] = useState({username: false, email: false, password: false, confirmPassword: false})
+
   const [bloodGroup, setBloodgroup] = useState('A+')
   const [active, setActive] = useState(true)
   // 56 days after blood donation
@@ -66,6 +68,7 @@ export default function SignUp(props) {
   const [imageURL, setImgURL] = useState(null)
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
   return (
     <Container component="main" maxWidth="xs">
@@ -76,6 +79,12 @@ export default function SignUp(props) {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
+        </Typography>
+        <Typography variant="subtitle2" align='center'>
+          Make sure:<br /> 
+          Username: uses A~Z, a~z and _ with length 6~29 <br />
+          Password: 8~20 characters + matches Confirm Password <br />
+          Valid Email and All fields are filled.
         </Typography>
         <form className={classes.form} noValidate onSubmit={e => { e.preventDefault(); }}>
           <Grid container spacing={2} alignItems="center">
@@ -89,12 +98,14 @@ export default function SignUp(props) {
                 label="Username"
                 autoFocus
                 value={username}
+                error={error.username}
                 onChange={e => setUsername(e.target.value)}
                 onBlur={ e => {
                   if (!usernameMatcher.test(username)) {
-                    e.target.focus()
+                    setError({...error, username: true})
                     dispatch(notifyUser("Invalid Username (must be > 5 chars)"))
                   }
+                  else setError({...error, username: false})
                 }}
               />
             </Grid>
@@ -120,12 +131,13 @@ export default function SignUp(props) {
                 name="email"
                 autoComplete="email"
                 value={email}
+                error={error.email}
                 onChange={e => setEmail(e.target.value)}
                 onBlur={ e => {
                   if (!emailMatcher.test(email)) {
-                    e.target.focus()
+                    setError({...error, email: true})
                     dispatch(notifyUser("Invalid E-mail"))
-                  }
+                  } else setError({...error, email: false})
                 }}
               />
             </Grid>
@@ -137,15 +149,15 @@ export default function SignUp(props) {
                 name="password"
                 label="Password"
                 type="password"
-                id="password"
                 autoComplete="current-password"
+                error={error.password}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 onBlur={ e => {
                   if (!passwordMatcher.test(password)) {
-                    e.target.focus()
+                    setError({...error, password: true})
                     dispatch(notifyUser("Invalid Password (not 8 chars)"))
-                  }
+                  } else setError({...error, password: false})
                 }}
               />
             </Grid>
@@ -157,15 +169,15 @@ export default function SignUp(props) {
                 name="password"
                 label="Confirm Password"
                 type="password"
-                id="password"
                 autoComplete="current-password"
+                error={error.passwordMatcher}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 onBlur={ e => {
                   if (password !== confirmPassword) {
-                    e.target.focus()
+                    setError({...error, ...error, passwordMatcher: true})
                     dispatch(notifyUser("Passwords don't match"))
-                  }
+                  } else setError({...error, ...error, passwordMatcher: false})
                 }}
               />
             </Grid>
@@ -177,7 +189,7 @@ export default function SignUp(props) {
             <Grid item xs={8}>
               <LocationSelector onSelected={
                 (lat, long) => {setLatitude(lat); setLongitude(long)}
-              } />
+              } lat={-200} long={-200} />
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body2'>
@@ -244,7 +256,6 @@ export default function SignUp(props) {
             </Grid>
           </Grid>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
@@ -255,7 +266,10 @@ export default function SignUp(props) {
                 name, latitude, longitude, password, lastDonation: selectedDate.getTime(),
                 imageURL, about, bloodGroup, email, username, active
               }
-              dispatch(signUpUser(data))
+              signUpUser(data).then(response => {
+                dispatch(notifyUser('Check your Email to confirm your account!'))
+                history.push('/user/signin')
+              })
             }}
           >
             Sign Up

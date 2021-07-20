@@ -39,6 +39,9 @@ export default function User() {
     <Route path='/user/profile' exact>
       User Profile
     </Route>
+    <Route path='/user/profile/:username'>
+      Other User Profile
+    </Route>
     <Route>
       <Redirect to='/user/profile'/>
     </Route>
