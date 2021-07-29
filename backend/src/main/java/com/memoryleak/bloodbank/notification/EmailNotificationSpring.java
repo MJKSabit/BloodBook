@@ -2,12 +2,10 @@ package com.memoryleak.bloodbank.notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -18,7 +16,7 @@ public class EmailNotificationSpring implements EmailNotification {
     private JavaMailSender emailSender;
 
     @Override
-    public boolean sendEmail(List<String> to, String subject, String body) {
+    public void sendEmail(List<String> to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(subject);
         message.setText(body);
@@ -31,6 +29,5 @@ public class EmailNotificationSpring implements EmailNotification {
         message.setBcc(bccList);
 
         emailSender.send(message);
-        return true;
     }
 }

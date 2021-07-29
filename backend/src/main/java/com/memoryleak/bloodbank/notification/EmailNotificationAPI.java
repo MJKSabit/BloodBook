@@ -29,7 +29,7 @@ public class EmailNotificationAPI implements EmailNotification {
     }
 
     @Override
-    public boolean sendEmail(List<String> to, String subject, String body) throws IOException {
+    public void sendEmail(List<String> to, String subject, String body) {
         JSONArray toArray = new JSONArray(to);
         JSONObject json = new JSONObject();
         json.put("to", toArray);
@@ -46,17 +46,20 @@ public class EmailNotificationAPI implements EmailNotification {
                 .build();
 
         Call call = client.newCall(request);
-        Response response = call.execute();
 
-        logger.debug("Sent Email Response Code: "+response.code());
+        try {
+            Response response = call.execute();
+            logger.debug("Sent Email Response Code: "+response.code());
 
-        if (response.code() == 200) {
-            String responseBody = response.body().string();
-            logger.debug("Sent Email Response Body: "+responseBody);
-            JSONObject jsonResponse = new JSONObject(responseBody);
-            return jsonResponse.getBoolean("success");
+            if (response.code() == 200) {
+                String responseBody = response.body().string();
+                logger.debug("Sent Email Response Body: "+responseBody);
+                JSONObject jsonResponse = new JSONObject(responseBody);
+                jsonResponse.getBoolean("success");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return false;
     }
 }

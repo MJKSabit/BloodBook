@@ -5,8 +5,10 @@ import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.Post;
+import com.memoryleak.bloodbank.notification.PostNotificationService;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.repository.LocationRepository;
+import com.memoryleak.bloodbank.repository.PostForUserRepository;
 import com.memoryleak.bloodbank.repository.PostRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 public class PostController {
@@ -35,7 +41,11 @@ public class PostController {
     LocationRepository locationRepository;
 
     @Autowired
+    PostNotificationService postNotificationService;
+
+    @Autowired
     JwtTokenUtil jwtTokenUtil;
+
 
     private GeneralUser getUser(String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
@@ -95,7 +105,13 @@ public class PostController {
 
         post = postRepository.save(post);
         if (notify) {
-            // User Notify Logic
+            List<GeneralUser> users = generalUserRepository.getMatchPostRequirement(
+                    post.getBloodGroup(),
+                    Date.from(post.getNeeded().toInstant().minus(Duration.ofDays(56))),
+                    post.getLocation().getLatitude(),
+                    post.getLocation().getLongitude());
+
+            postNotificationService.notifyUsers(post, users);
         }
 
 
