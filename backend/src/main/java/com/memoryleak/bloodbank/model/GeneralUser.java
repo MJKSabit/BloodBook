@@ -1,6 +1,8 @@
 package com.memoryleak.bloodbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,27 +21,35 @@ public class GeneralUser implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+//    @JsonView(View.ExtendedPublic.class)
     private User user;
 
     @Column(nullable = false)
+//    @JsonView(View.ExtendedPublic.class)
     private String name;
 
     @Column(nullable = true)
+//    @JsonView(View.ExtendedPublic.class)
     private String imageURL;
 
     @Column(nullable = false)
+    @JsonView(View.ExtendedPublic.class)
     private String bloodGroup;
 
     @Column(name = "last_donation")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonView(View.Private.class)
     private Date lastDonation;
 
+    @JsonView(View.Private.class)
     @Column(nullable = false)
     private boolean isActiveDonor;
 
     @Column
+    @JsonView(View.Private.class)
     private String facebook;
 
+    @JsonView(View.ExtendedPublic.class)
     @Column(nullable = false)
     private String about = "";
 
@@ -91,6 +101,7 @@ public class GeneralUser implements Serializable {
         this.lastDonation = lastDonation;
     }
 
+    @JsonView(View.Private.class)
     public boolean isActiveDonor() {
         return isActiveDonor;
     }

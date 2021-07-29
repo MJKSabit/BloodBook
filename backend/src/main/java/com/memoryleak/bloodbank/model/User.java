@@ -1,6 +1,8 @@
 package com.memoryleak.bloodbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,9 +16,11 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @JsonView(View.ExtendedPublic.class)
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonView(View.Private.class)
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -38,6 +42,7 @@ public class User implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "location_id")
+    @JsonView(View.Private.class)
     private Location location;
 
     public Location getLocation() {

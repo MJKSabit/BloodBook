@@ -41,10 +41,10 @@ public class WebSecurityConfig
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers("/callback/*", "/callback").permitAll()
-                .antMatchers("/admin/*", "/admin").hasRole("ADMIN")
-                .antMatchers("/user/*", "/user").hasRole("USER")
-                .antMatchers("/bloodbank/*", "/bloodbank/").hasRole("BLOODBANK")
+                .antMatchers("/callback/**", "/callback").permitAll()
+                .antMatchers("/admin/**", "/admin").hasRole("ADMIN")
+                .antMatchers("/user/**", "/user").hasRole("USER")
+                .antMatchers("/bloodbank/**", "/bloodbank/").hasRole("BLOODBANK")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -88,7 +88,7 @@ public class WebSecurityConfig
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("GET", "POST", "OPTIONS", "PUT")
+                registry.addMapping("/**").allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
                         .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
                                 "Access-Control-Request-Headers", "jwt")
                         .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "jwt")

@@ -1,5 +1,10 @@
 package com.memoryleak.bloodbank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,8 +14,11 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+    @JsonView(View.Public.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "general_user_id")
     private GeneralUser user;
@@ -21,6 +29,9 @@ public class Post {
     @Column(nullable = false, name = "post_bg")
     private String bloodGroup;
 
+    @Column(nullable = false, name = "managed")
+    private boolean managed = false;
+
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date posted = new Date();
@@ -29,6 +40,7 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date needed;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne
     @JoinColumn(name = "location_id")
     private Location location;
@@ -79,5 +91,21 @@ public class Post {
 
     public void setNeeded(Date needed) {
         this.needed = needed;
+    }
+
+    public boolean isManaged() {
+        return managed;
+    }
+
+    public void setManaged(boolean managed) {
+        this.managed = managed;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

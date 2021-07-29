@@ -68,7 +68,7 @@ public class RegistrationController {
         // If no Location is set, Invalid Location
         location.setLongitude(requestData.optDouble("longitude", -200));
         location.setLatitude(requestData.optDouble("latitude", -100));
-        locationRepository.save(location);
+        location = locationRepository.save(location);
 
         User user = new User();
         user.setUsername(requestData.getString("username"));

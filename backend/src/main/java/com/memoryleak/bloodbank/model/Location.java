@@ -1,6 +1,8 @@
 package com.memoryleak.bloodbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
 
 import javax.persistence.*;
 
@@ -13,9 +15,11 @@ public class Location {
     private Long id;
 
     @Column(nullable = false)
+    @JsonView(View.Public.class)
     private double latitude;
 
     @Column (nullable = false)
+    @JsonView(View.Public.class)
     private double longitude;
 
     public Long getId() {

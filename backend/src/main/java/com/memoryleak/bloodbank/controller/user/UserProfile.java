@@ -1,5 +1,7 @@
 package com.memoryleak.bloodbank.controller.user;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.repository.UserRepository;
@@ -28,17 +30,20 @@ public class UserProfile {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/profile/{username}")
+    @JsonView(View.ExtendedPublic.class)
     public ResponseEntity<GeneralUser> profile(@PathVariable String username) {
         GeneralUser user = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         if (user == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/user")
-    public RedirectView myProfile(@RequestHeader("Authorization") String bearerToken) {
+    @GetMapping("/user/profile")
+    @JsonView(View.Private.class)
+    public GeneralUser myProfile(@RequestHeader("Authorization") String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return new RedirectView("/user/"+username);
+        return generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
     }
 }
