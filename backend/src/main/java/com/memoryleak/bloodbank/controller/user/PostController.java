@@ -14,6 +14,7 @@ import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -41,6 +42,9 @@ public class PostController {
     LocationRepository locationRepository;
 
     @Autowired
+    PostForUserRepository postForUserRepository;
+
+    @Autowired
     PostNotificationService postNotificationService;
 
     @Autowired
@@ -59,6 +63,23 @@ public class PostController {
                 generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username),
                 PageRequest.of(page, PAGE_SIZE, Sort.by("posted").descending())
         );
+    }
+
+    @JsonView(View.Public.class)
+    @GetMapping("/user/posts")
+    public Slice postsForUser(@RequestHeader("Authorization") String bearerToken,
+                                    @RequestParam(required = false, defaultValue = "my", name = "for") String filter,
+                                    @RequestParam(required = false, defaultValue = "0") int page) {
+
+        switch (filter) {
+            case "my":
+                GeneralUser generalUser = getUser(bearerToken);
+                return postForUserRepository.findAllByUser(generalUser, PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+            case "all":
+                return postRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+            default:
+                return null;
+        }
     }
 
     @JsonView(View.Public.class)

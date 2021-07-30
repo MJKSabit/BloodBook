@@ -5,6 +5,7 @@ import com.memoryleak.bloodbank.model.Post;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface PostRepository extends PagingAndSortingRepository<Post, Long> {
