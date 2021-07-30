@@ -21,4 +21,6 @@ public interface BloodBankRepository extends PagingAndSortingRepository<BloodBan
             @Param("lat") double latitude,
             @Param("lng") double longitude
     );
+
+    BloodBank findGeneralUserByUserUsernameIgnoreCase(String bloodbank);
 }

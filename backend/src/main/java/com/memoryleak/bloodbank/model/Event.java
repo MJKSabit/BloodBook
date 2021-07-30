@@ -1,5 +1,10 @@
 package com.memoryleak.bloodbank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.memoryleak.bloodbank.config.View;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,8 +14,10 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+    @JsonView(View.Public.class)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bb_user_id")
     private BloodBank user;
@@ -26,6 +33,7 @@ public class Event {
     @Temporal(TemporalType.TIMESTAMP)
     private Date eventDate;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne
     @JoinColumn(name = "location_id")
     private Location location;

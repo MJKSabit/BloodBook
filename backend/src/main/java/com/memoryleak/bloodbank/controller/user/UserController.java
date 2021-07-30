@@ -45,4 +45,6 @@ public class UserController {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
         return generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
     }
+
+
 }

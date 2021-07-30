@@ -11,7 +11,6 @@ import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -27,7 +26,7 @@ import java.util.List;
 public class PostController {
     private final static Logger logger = LogManager.getLogger(PostController.class);
 
-    private final static int PAGE_SIZE = 30;
+    public final static int PAGE_SIZE = 30;
 
     @Autowired
     PostRepository postRepository;
@@ -67,14 +66,14 @@ public class PostController {
 
     @JsonView(View.Public.class)
     @GetMapping("/user/posts")
-    public Slice postsForUser(@RequestHeader("Authorization") String bearerToken,
+    public Slice<Post> postsForUser(@RequestHeader("Authorization") String bearerToken,
                                     @RequestParam(required = false, defaultValue = "my", name = "for") String filter,
                                     @RequestParam(required = false, defaultValue = "0") int page) {
 
         switch (filter) {
             case "my":
                 GeneralUser generalUser = getUser(bearerToken);
-                return postForUserRepository.findAllByUser(generalUser, PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+                return postForUserRepository.findAllPostForUser(generalUser, PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
             case "all":
                 return postRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
             default:
