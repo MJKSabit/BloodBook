@@ -6,10 +6,7 @@ import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.Post;
 import com.memoryleak.bloodbank.notification.PostNotificationService;
-import com.memoryleak.bloodbank.repository.GeneralUserRepository;
-import com.memoryleak.bloodbank.repository.LocationRepository;
-import com.memoryleak.bloodbank.repository.PostForUserRepository;
-import com.memoryleak.bloodbank.repository.PostRepository;
+import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +40,9 @@ public class PostController {
 
     @Autowired
     PostForUserRepository postForUserRepository;
+
+    @Autowired
+    BloodBankRepository bloodBankRepository;
 
     @Autowired
     PostNotificationService postNotificationService;
@@ -84,8 +84,24 @@ public class PostController {
 
     @JsonView(View.Public.class)
     @GetMapping("/user/post/{id}")
-    public Post getPost(@PathVariable long id) {
-        return postRepository.findPostById(id);
+    public ResponseEntity<PostDetails> getPost(@RequestHeader("Authorization") String bearerToken, @PathVariable long id) {
+        GeneralUser user = getUser(bearerToken);
+        Post post = postRepository.findPostById(id);
+        if (post == null)
+            return ResponseEntity.notFound().build();
+
+        PostDetails postDetails =  user.equals(post.getUser()) ?
+                new PostDetails(
+                        post,
+                        bloodBankRepository.getBloodBankMatchingRequirements(
+                                post.getBloodGroup(),
+                                post.getLocation().getLatitude(),
+                                post.getLocation().getLongitude()
+                        )
+                ) :
+                new PostDetails(post);
+
+        return ResponseEntity.ok(postDetails);
     }
 
     @JsonView(View.Public.class)

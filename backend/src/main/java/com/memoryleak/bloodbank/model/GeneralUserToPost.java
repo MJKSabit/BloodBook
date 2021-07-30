@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Entity
 public class GeneralUserToPost {
-
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

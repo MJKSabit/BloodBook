@@ -10,7 +10,12 @@ import java.util.Objects;
 @Table(name = "bloodbank_user")
 public class BloodBank implements Serializable {
 
+    @JsonIgnore
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
     @OneToOne
     @JoinColumn(nullable = false)
     private User user;
