@@ -4,7 +4,11 @@ import com.memoryleak.bloodbank.model.User;
 
 public interface UserService {
 
-    void save(User user);
+    default void save(User user) {
+        save(user, "USER");
+    }
+
+    void save(User user, String role);
 
     User findByUsername(String username);
 

@@ -1,12 +1,8 @@
 package com.memoryleak.bloodbank.controller;
 
-import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.Location;
-import com.memoryleak.bloodbank.model.User;
+import com.memoryleak.bloodbank.model.*;
 import com.memoryleak.bloodbank.notification.EmailNotification;
-import com.memoryleak.bloodbank.repository.GeneralUserRepository;
-import com.memoryleak.bloodbank.repository.LocationRepository;
-import com.memoryleak.bloodbank.repository.UserRepository;
+import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.json.JSONObject;
@@ -51,6 +47,14 @@ public class RegistrationController {
     @Autowired
     @Qualifier("spring")
     EmailNotification emailNotification;
+
+    @Autowired
+    BloodBankRepository bloodBankRepository;
+
+    private static final String[] bloodGroups = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"};
+
+    @Autowired
+    BloodBankBloodCountRepository bloodBankBloodCountRepository;
 
 
     private boolean validUser(User user) {
@@ -97,6 +101,47 @@ public class RegistrationController {
                     "Go to the link below to activate your BloodBook Account\n"+
                             BASE_URL+"/register/activate/"+jwtVerification
                     );
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else
+            return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping(path = "/register/bloodbank")
+    public ResponseEntity<String> registerBloodBank(@RequestBody String requestString) throws IOException {
+        JSONObject requestData = new JSONObject(requestString);
+
+        Location location = new Location();
+        // If no Location is set, Invalid Location
+        location.setLongitude(requestData.optDouble("longitude", -200));
+        location.setLatitude(requestData.optDouble("latitude", -100));
+        location = locationRepository.save(location);
+
+        User user = new User();
+        user.setUsername(requestData.getString("username"));
+        user.setPassword(requestData.getString("password"));
+        user.setEmail(requestData.getString("email"));
+        user.setLocation(location);
+
+        if (validUser(user) && userService.findByUsername(user.getUsername()) == null) {
+            userService.save(user, "BLOODBANK");
+
+            BloodBank bloodBank = new BloodBank();
+            bloodBank.setUser(user);
+            bloodBank.setName(requestData.getString("name"));
+            bloodBank.setImageURL(requestData.optString("imageURL"));
+            bloodBank.setAbout(requestData.getString("about"));
+            bloodBank = bloodBankRepository.save(bloodBank);
+
+
+            for (String bloodGroup : bloodGroups)
+                bloodBankBloodCountRepository.save(new BloodBankBloodCount(bloodBank, bloodGroup));
+
+
+            emailNotification.sendEmail(
+                    Collections.singletonList(user.getEmail()),
+                    "Confirm Your Account",
+                    "Reply to this Email with Scanned Verified Document to activate BloodBank Account in BloodBook!"
+            );
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else
             return ResponseEntity.badRequest().build();
