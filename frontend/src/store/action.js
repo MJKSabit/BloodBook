@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from "./index";
-import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED } from './actionTypes';
+import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE } from './actionTypes';
 
 const API_URL = 'http://localhost:8080'
 const MAPBOX_GEOCODING_API = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
@@ -75,6 +75,19 @@ export const signUpUser = async (user) => {
     return await axios.post(`${API_URL}/register/user`, user)
 }
 
+export const getMyProfile = () => {
+    return (dispatch, state) => {
+        axios.get(`${API_URL}/user/profile`).then ( profile => {
+            dispatch({
+                type: MY_PROFILE,
+                payload: {
+                    profile: profile.data
+                }
+            })
+        }).catch(e => console.log(e))
+    }
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {
@@ -89,3 +102,10 @@ axios.interceptors.response.use(
       }
    }
 );
+
+axios.interceptors.request.use( config => {
+    const jwt = store.getState().jwt
+    if (jwt)
+        config.headers.Authorization = `Bearer ${jwt}`
+    return config
+})

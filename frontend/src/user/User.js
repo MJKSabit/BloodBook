@@ -6,6 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { useDispatch, useStore } from 'react-redux';
 import SignUp from './auth/SignUp';
 import ForgotPassword from './auth/ForgotPassword';
+import Skeleton from './Skeleton';
 
 
 export default function User() {
@@ -35,17 +36,20 @@ export default function User() {
     </Route>
   </Switch>)
 
-  const signedIn = (<Switch>
-    <Route path='/user/profile' exact>
-      User Profile
-    </Route>
-    <Route path='/user/profile/:username'>
-      Other User Profile
-    </Route>
-    <Route>
-      <Redirect to='/user/profile'/>
-    </Route>
-  </Switch>)
+  const signedIn = (
+    <Skeleton />
+    // <Switch>
+    //   <Route path='/user/profile' exact>
+    //     User Profile
+    //   </Route>
+    //   <Route path='/user/profile/:username'>
+    //     Other User Profile
+    //   </Route>
+    //   <Route>
+    //     <Redirect to='/user/profile'/>
+    //   </Route>
+    // </Switch>
+  )
 
   return isSignedIn ? signedIn : notSignedIn
 }

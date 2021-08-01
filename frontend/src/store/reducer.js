@@ -1,5 +1,5 @@
 import { intitialState } from "./index";
-import { FORGOT_PASSWORD, NOTIFICATION, SIGN_IN, SIGN_OUT } from "./actionTypes";
+import { FORGOT_PASSWORD, MY_PROFILE, NOTIFICATION, SIGN_IN, SIGN_OUT } from "./actionTypes";
 
 
 export default function rootReducer(state = intitialState, action) {
@@ -20,6 +20,11 @@ export default function rootReducer(state = intitialState, action) {
             return {
                 ...state,
                 notification: action.payload.notification
+            }
+        case MY_PROFILE:
+            return {
+                ...state,
+                profile: action.payload.profile
             }
         default:
             return state;

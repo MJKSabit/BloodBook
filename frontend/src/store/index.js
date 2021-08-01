@@ -6,6 +6,7 @@ import rootReducer from './reducer';
 export const intitialState = {
     jwt: localStorage.getItem('JWT'),
     notification: null,
+    profile: null,
 }
 
 const store = createStore(rootReducer, compose(
