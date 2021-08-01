@@ -27,6 +27,7 @@ import { useDispatch } from 'react-redux';
 import { getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import Profile from './opt/Profile';
 // import Posts from "./Posts";
 
 const drawerWidth = 240;
@@ -144,9 +145,7 @@ const Skeleton=props=>{
     const mainContentSelection = (
     <Switch>
       <Route path="/user/profile" exact>
-        <>
-        Profile
-        </>
+        <Profile />
       </Route>
       <Route path="/user/posts" exact>
         <>

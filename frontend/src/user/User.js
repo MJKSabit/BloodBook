@@ -19,7 +19,7 @@ export default function User() {
     )
 
     return unsubsrcibe;
-  })
+  }, [])
 
   const notSignedIn = (<Switch>
     <Route path="/user/signin" exact>

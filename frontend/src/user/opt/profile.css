@@ -1,0 +1,31 @@
+.profile-header{
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.profile-name{
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.profile-bg{
+  color : #ffffff;
+  margin-left: auto;
+  padding: 10px 20px;
+  background-color: #ff0000;
+  font-size: 2em;
+  border-radius: 20px;
+}
+
+.profile-body{
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+.profile-entry-container{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}

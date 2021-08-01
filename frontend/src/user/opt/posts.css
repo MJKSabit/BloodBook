@@ -1,0 +1,41 @@
+.posts-title{
+  font-size: 2em;
+  margin-top: 20px;
+  font-weight: bold;
+  color:#888888;
+}
+
+.post-container{
+  display: flex;
+  position: relative;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.post-left{
+  margin-right: 10px;
+}
+
+.post-right{
+  bottom: 20px;
+  position: absolute;
+  right: 20px;
+}
+
+.post-menu{
+  top: 20px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+}
+
+.post-name{
+  font-size: 1.3em;
+  color:#0090ff;
+  margin-left: 6px;
+}
+
+.post-date{
+  margin-left: 6px;
+  margin-bottom: 20px;
+}
