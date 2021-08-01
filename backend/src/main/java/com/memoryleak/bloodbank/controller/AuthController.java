@@ -45,22 +45,25 @@ public class AuthController {
         String username = loginData.getString("username");
         String password = loginData.getString("password");
 
-        authenticate(
-                username,
-                password);
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            final UserDetails userDetails = userDetailsService
+                    .loadUserByUsername(username);
 
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(username);
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        JSONObject object = new JSONObject();
-        object.put("jwt", token);
-        return ResponseEntity.ok(object.toString());
+            final String token = jwtTokenUtil.generateToken(userDetails);
+            JSONObject object = new JSONObject();
+            object.put("jwt", token);
+            return ResponseEntity.ok(object.toString());
+        } catch (DisabledException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     private void authenticate(String username, String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

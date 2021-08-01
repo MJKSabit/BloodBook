@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.Event;
 import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.Post;
 import com.memoryleak.bloodbank.repository.BloodBankRepository;
 import com.memoryleak.bloodbank.repository.EventForUserRepository;
 import com.memoryleak.bloodbank.repository.EventRepository;
