@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import logo from '../logo.svg';
 import '../App.css';
 import SignIn from './auth/SignIn';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { useDispatch, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import SignUp from './auth/SignUp';
 import ForgotPassword from './auth/ForgotPassword';
 import Skeleton from './Skeleton';

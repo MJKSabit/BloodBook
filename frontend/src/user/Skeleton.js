@@ -20,15 +20,15 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import PersonIcon from '@material-ui/icons/Person';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Grid from "@material-ui/core/Grid";
-// import Profile from "./Profile";
 import './skeleton.css'
 import { useDispatch } from 'react-redux';
 import { getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import Profile from './opt/Profile';
-// import Posts from "./Posts";
+import Posts from './opt/Posts';
+import PostPage from './opt/PostsPage';
+import OtherProfile from './opt/OtherProfile';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -91,17 +91,18 @@ const Skeleton=props=>{
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
-    const [menu,setMenu] = useState(1)
+    
     const dispatch = useDispatch()
     const [avatar, setAvatar] = useState(null)
 
-    dispatch(getMyProfile())
-    useEffect( () => store.subscribe( () => {
-      const newAvatar = store.getState().profile.imageURL
-      if (avatar !== newAvatar)
-        setAvatar(newAvatar)
-    }), [])
+    useEffect( () => {
+      dispatch(getMyProfile())  
+      return store.subscribe( () => {
+        const newAvatar = store.getState().profile.imageURL
+        if (avatar !== newAvatar)
+          setAvatar(newAvatar)
+      })
+    }, [])
 
     const container = window !== undefined ? () => window().document.body : undefined;
     const drawer=(
@@ -147,10 +148,11 @@ const Skeleton=props=>{
       <Route path="/user/profile" exact>
         <Profile />
       </Route>
+      <Route path="/user/profile/:username" exact>
+        <OtherProfile />
+      </Route>
       <Route path="/user/posts" exact>
-        <>
-        Posts
-        </>
+        <PostPage />
       </Route>
       <Route path="/user/events" exact>
         <>
@@ -163,9 +165,7 @@ const Skeleton=props=>{
         </>
       </Route>
       <Route path="/user/explore" exact>
-        <>
-        Explore
-        </>
+        <Posts url={'/user/posts?for=all'} />
       </Route>
       <Redirect to="/user/profile" />
     </Switch>

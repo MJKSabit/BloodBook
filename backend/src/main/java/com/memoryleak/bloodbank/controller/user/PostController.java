@@ -138,6 +138,7 @@ public class PostController {
 
         post.setLocation(location);
         post.setUser(user);
+        post.setPosted(new Date());
 
         post = postRepository.save(post);
         if (notify) {

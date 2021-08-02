@@ -1,7 +1,7 @@
 import { mapboxGeoCoding } from '../store/action';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { LocationOnOutlined, Search } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -67,28 +67,30 @@ export default function LocationSelector({lat, long, onSelected}) {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <TextField 
-          label='Location' 
-          style={{'width': '100%'}}
-          onKeyDown={
-            e => e.key === 'Enter' && search(e.target.value)
-          }
-          InputProps={{
-            endAdornment: (
-              <Search color='inherit' size={20} />
-            ),
-          }}
-        />
-        <SimpleDialog open={open} onClose={handleClose} options={options} />
+    <Box pt={2} pb={2}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <TextField 
+            label='Location' 
+            style={{'width': '100%'}}
+            onKeyDown={
+              e => e.key === 'Enter' && search(e.target.value)
+            }
+            InputProps={{
+              endAdornment: (
+                <Search color='inherit' size={20} />
+              ),
+            }}
+          />
+          <SimpleDialog open={open} onClose={handleClose} options={options} />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}} />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} />
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-        <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}} />
-      </Grid>
-      <Grid item xs={6}>
-        <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} />
-      </Grid>
-    </Grid>
+    </Box>
   );
 }

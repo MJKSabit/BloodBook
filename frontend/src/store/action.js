@@ -75,6 +75,12 @@ export const signUpUser = async (user) => {
     return await axios.post(`${API_URL}/register/user`, user)
 }
 
+export const createNewPost = async (data) => {
+    const response = await axios.post(`${API_URL}/user/post`, data).data
+    store.dispatch(notifyUser('Posted Sucessfully!'))
+    return response
+}
+
 export const getMyProfile = () => {
     return (dispatch, state) => {
         axios.get(`${API_URL}/user/profile`).then ( profile => {
@@ -88,12 +94,23 @@ export const getMyProfile = () => {
     }
 }
 
+export const getUserProfile = async (username) => {
+    const response = await axios.get(`${API_URL}/user/profile/${username}`)
+    return response.data
+}
+
+export const getPosts = async (url, page=0) => {
+    const adder = url.match(/\?/) !== null ? '&' : '?'
+    const data = await axios.get(`${API_URL}${url}${adder}page=${page}`)
+    return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {
         console.log(error)
       const status = error.response.status;
-      
+
       if (status === UNAUTHORIZED) {
         store.dispatch(signOut());
       } else {
