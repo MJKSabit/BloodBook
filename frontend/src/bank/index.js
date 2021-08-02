@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import store from "../store";
 import ForgotPassword from "../user/auth/ForgotPassword";
 import SignIn from "../user/auth/SignIn";
+import BankSignUp from "./BankSignUp";
 
 export default function BloodBank() {
   const [isSignedIn, setSignedIn] = useState(store.getState().jwt !== null)
@@ -24,7 +25,7 @@ export default function BloodBank() {
       <ForgotPassword userType='bloodbank' />
     </Route>
     <Route path="/bloodbank/signup" exact>
-      Sign-Up Bloodbank
+      <BankSignUp />
     </Route>
     <Route>
       <Redirect to="/bloodbank/signin" />

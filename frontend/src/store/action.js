@@ -126,6 +126,10 @@ export const getMyProfile = () => {
     }
 }
 
+export const signUpBloodBank = async (details) => {
+    await axios.post(`${API_URL}/register/bloodbank`, details)
+}
+
 export const getBankProfile = (username = '') => {
     return (dispatch, state) => {
         axios.get(`${API_URL}/bloodbank/profile/${username}`).then ( profile => {
