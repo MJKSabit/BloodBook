@@ -61,7 +61,7 @@ public class PostController {
     public Slice<Post> postsOfUser(@PathVariable String username, @RequestParam(required = false, defaultValue = "0") int page) {
         return postRepository.findByUser(
                 generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username),
-                PageRequest.of(page, PAGE_SIZE, Sort.by("posted").descending())
+                PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending())
         );
     }
 

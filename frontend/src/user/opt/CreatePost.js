@@ -97,7 +97,7 @@ export default function CreatePost(props) {
             <Grid item xs={12}>
               <Grid container spacing={5}>
                 <Grid item xs={6}>
-                  <Button fullWidth variant="contained" onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button fullWidth variant="outlined" color='secondary' onClick={() => setOpen(false)}>Cancel</Button>
                 </Grid>
                 <Grid item xs={6}>
                   <Button fullWidth variant="contained" color="primary" onClick={
@@ -112,7 +112,7 @@ export default function CreatePost(props) {
                           latitude,
                           longitude
                         }
-                      }).then(data => {setOpen(false)}, err => console.log(err))
+                      }, notify).then(data => {setOpen(false)}, err => console.log(err))
                     }
                   }>Post</Button>
                 </Grid>

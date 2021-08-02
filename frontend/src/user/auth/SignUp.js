@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const usernameMatcher = /^[A-Za-z]\w{5,29}$/
-const passwordMatcher = /^.{8,20}$/
+export const passwordMatcher = /^.{8,20}$/
 const emailMatcher = /^[\w!#$%&'*+/=?`{|}~^-]+(?:\.[\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}/
 
 export default function SignUp(props) {
@@ -189,7 +189,7 @@ export default function SignUp(props) {
             <Grid item xs={8}>
               <LocationSelector onSelected={
                 (lat, long) => {setLatitude(lat); setLongitude(long)}
-              } lat={-200} long={-200} />
+              } lat={0} long={0} />
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body2'>

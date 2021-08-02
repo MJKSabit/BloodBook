@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
+import static com.memoryleak.bloodbank.controller.RegistrationController.passwordMatcher;
+
 @RestController
 public class UserController {
     private final static Logger logger = LogManager.getLogger(UserController.class);
@@ -88,6 +90,9 @@ public class UserController {
         String oldPassword = request.getString("old");
         String newPassword = request.getString("new");
 
+        if (!passwordMatcher.matcher(newPassword).matches())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
             userRepository.save(user);
@@ -101,10 +106,16 @@ public class UserController {
     public String getMessengerToken(@RequestHeader("Authorization") String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
         GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
-        generalUser.setFacebook(null);
-        generalUserRepository.save(generalUser);
-
         User user = generalUser.getUser();
         return jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "messenger");
+    }
+
+    @DeleteMapping("/user/messenger-token")
+    public ResponseEntity<?> deleteMessengerToken(@RequestHeader("Authorization") String bearerToken) {
+        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
+        GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
+        generalUser.setFacebook(null);
+        generalUserRepository.save(generalUser);
+        return ResponseEntity.ok().build();
     }
 }

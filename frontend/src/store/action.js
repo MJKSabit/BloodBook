@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from "./index";
-import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE } from './actionTypes';
+import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE, REMOVE_MESSENGER } from './actionTypes';
 
 const API_URL = 'http://localhost:8080'
 const MAPBOX_GEOCODING_API = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
@@ -75,10 +75,42 @@ export const signUpUser = async (user) => {
     return await axios.post(`${API_URL}/register/user`, user)
 }
 
-export const createNewPost = async (data) => {
-    const response = await axios.post(`${API_URL}/user/post`, data).data
+export const createNewPost = async (data, notify=true) => {
+    const response = await axios.post(`${API_URL}/user/post?notify=${notify}`, data)
     store.dispatch(notifyUser('Posted Sucessfully!'))
+    return response.data
+}
+
+export const saveSettings = async (data) => {
+    const response = await axios.post(`${API_URL}/user/change-profile`, data)
+    store.dispatch(notifyUser('Saved Settings Sucessfully!'))
+    store.dispatch({
+        type: MY_PROFILE,
+        payload: {
+            profile: response.data
+        }
+    })
     return response
+}
+
+export const changePassword = async (oldPassword, newPassword) => {
+    const data = {}
+    data['old'] = oldPassword
+    data['new'] = newPassword
+    await axios.post(`${API_URL}/user/change-password`, data)
+    store.dispatch(notifyUser('Password Changed Sucessfully!'))
+}
+
+export const getMessengerToken = async () => {
+    const data = await axios.get(`${API_URL}/user/messenger-token`)
+    return data.data
+}
+
+export const deleteMessengerToken = async () => {
+    await axios.delete(`${API_URL}/user/messenger-token`)
+    store.dispatch({
+        type: REMOVE_MESSENGER
+    })
 }
 
 export const getMyProfile = () => {

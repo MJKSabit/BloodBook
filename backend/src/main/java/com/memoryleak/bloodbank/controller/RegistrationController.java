@@ -26,7 +26,7 @@ public class RegistrationController {
     String BASE_URL;
 
     private static final Pattern usernameMatcher = Pattern.compile("^[A-Za-z]\\w{5,29}$");
-    private static final Pattern passwordMatcher = Pattern.compile("^.{8,20}$");
+    public static final Pattern passwordMatcher = Pattern.compile("^.{8,20}$");
     private static final Pattern emailMatcher = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}");
 
     @Autowired

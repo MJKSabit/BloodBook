@@ -2,9 +2,9 @@ import { Avatar, CircularProgress, Grid } from "@material-ui/core"
 import { useState } from "react"
 import { uploadImage } from "../store/action"
 
-export default function ImageUploader({onUpload}) {
+export default function ImageUploader({onUpload, init=null}) {
   const [isUploading, setUploading] = useState(false)
-  const [uploadLink, setUploadLink] = useState(null)
+  const [uploadLink, setUploadLink] = useState(init)
   
   const onFileSelected = (e) => {
     const file = e.target.files[0]
