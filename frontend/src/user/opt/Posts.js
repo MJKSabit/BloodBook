@@ -1,18 +1,19 @@
 import React from 'react'
 import './posts.css'
 import './profile.css'
-import {Avatar, Box, Button} from "@material-ui/core";
+import {Avatar, Box, Button, IconButton, Menu, MenuItem} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import InfoIcon from '@material-ui/icons/Info';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getPosts } from '../../store/action';
+import { changePostManaged, deletePost, getPosts, notifyUser } from '../../store/action';
 import { Link } from '@material-ui/core';
 import { CheckCircle, LocationOn } from '@material-ui/icons';
 import { getMapLink } from './UserCard';
 import { Link as RouterLink } from "react-router-dom";
+import store from '../../store';
 
 const Posts = props => {
   const {url, label} = props
@@ -63,8 +64,23 @@ const Posts = props => {
   )
 }
 
-const Post = props => {
-  const {post} = props
+export const Post = props => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [post, setPost] = useState(props.post)
+
+  if (post === null)
+    return null
+
+  const editAccess = post.user.user.username === store.getState().profile.user.username
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
     return(
         <Paper>
             <div className={'post-container'}>
@@ -105,7 +121,38 @@ const Post = props => {
                     </div>
                 </div>
                 <div className={'post-menu'}>
-                    <MoreVertIcon/>
+                    <IconButton onClick={handleClick}><MoreVertIcon/> </IconButton>
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={(e) => {
+                        handleClose()
+                        navigator.clipboard.writeText(`${window.location.origin}/user/post/${post.id}`).then(
+                          () => store.dispatch(notifyUser('Copied!')),
+                          () => store.dispatch(notifyUser('Can not copy!'))
+                        )
+                      }}>Copy Link</MenuItem>
+                      { editAccess && <>
+                        <MenuItem onClick={(e) => {
+                          handleClose(e)
+                          changePostManaged(post.id).then (
+                            data => setPost(data),
+                            err => console.log(err)
+                          )
+                        }}>Change Managed</MenuItem>
+                        <MenuItem onClick={(e) => {
+                          handleClose(e)
+                          deletePost(post.id).then(
+                            () => setPost(null),
+                            err => console.log(err)
+                          )
+                        }}>Delete</MenuItem>
+                      </>}
+                    </Menu>
                 </div>
                 <div className={'post-right profile-bg'}>
                     A+

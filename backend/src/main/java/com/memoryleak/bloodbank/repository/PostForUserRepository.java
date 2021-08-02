@@ -9,9 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PostForUserRepository extends PagingAndSortingRepository<GeneralUserToPost, Long> {
 
     @Query("SELECT gutp.post FROM GeneralUserToPost gutp WHERE gutp.user = :g_user")
     Slice<Post> findAllPostForUser(@Param("g_user") GeneralUser user, Pageable pageable);
+
+    List<GeneralUserToPost> findAllByPost(Post post);
 
 }

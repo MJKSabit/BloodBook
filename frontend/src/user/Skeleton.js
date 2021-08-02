@@ -29,6 +29,7 @@ import Profile from './opt/Profile';
 import Posts from './opt/Posts';
 import PostPage from './opt/PostsPage';
 import OtherProfile from './opt/OtherProfile';
+import PostDetails from './opt/PostDetails';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -153,6 +154,9 @@ const Skeleton=props=>{
       </Route>
       <Route path="/user/posts" exact>
         <PostPage />
+      </Route>
+      <Route path="/user/post/:id">
+          <PostDetails />
       </Route>
       <Route path="/user/events" exact>
         <>

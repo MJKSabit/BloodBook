@@ -8,13 +8,16 @@ export default function rootReducer(state = intitialState, action) {
             localStorage.setItem('JWT', action.payload.jwt)
             return {
                 ...state,
-                jwt: action.payload.jwt
+                jwt: action.payload.jwt,
+                profile: null,
+                notification: 'Signed In!'
             }
         case SIGN_OUT:
             localStorage.removeItem('JWT')
             return {
                 ...state,
-                jwt: null
+                jwt: null,
+                notification: 'Signed Out!'
             }
         case NOTIFICATION:
             return {

@@ -99,6 +99,21 @@ export const getUserProfile = async (username) => {
     return response.data
 }
 
+export const getPostDetails = async (id) => {
+    const response = await axios.get(`${API_URL}/user/post/${id}`)
+    return response.data
+}
+
+export const changePostManaged = async (id) => {
+    const response = await axios.post(`${API_URL}/user/post/${id}/managed`)
+    return response.data
+}
+
+export const deletePost = async (id) => {
+    const response = await axios.delete(`${API_URL}/user/post/${id}`)
+    return response.data
+}
+
 export const getPosts = async (url, page=0) => {
     const adder = url.match(/\?/) !== null ? '&' : '?'
     const data = await axios.get(`${API_URL}${url}${adder}page=${page}`)

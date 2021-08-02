@@ -14,7 +14,7 @@ import { useState } from 'react';
 
 function App() {
   const [open, setOpen] = useState(false);
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState(store.getState().notification)
 
   store.subscribe( () => {
     const stateNotification = store.getState().notification
@@ -23,7 +23,7 @@ function App() {
       if (!open)
         setOpen(true)
     }
-  })
+  }, [])
 
   return (
     <Provider store={store}>

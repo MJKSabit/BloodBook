@@ -112,7 +112,7 @@ export default function CreatePost(props) {
                           latitude,
                           longitude
                         }
-                      }).then(data => console.log(data), err => console.log(err))
+                      }).then(data => {setOpen(false)}, err => console.log(err))
                     }
                   }>Post</Button>
                 </Grid>

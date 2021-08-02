@@ -3,6 +3,7 @@ package com.memoryleak.bloodbank.controller.user;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.GeneralUser;
+import com.memoryleak.bloodbank.model.GeneralUserToPost;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.Post;
 import com.memoryleak.bloodbank.notification.PostNotificationService;
@@ -112,6 +113,11 @@ public class PostController {
             return ResponseEntity.badRequest().build();
 
         if (!post.getUser().equals(getUser(bearerToken))) {
+            List<GeneralUserToPost> generalUserToPosts = postForUserRepository.findAllByPost(post);
+
+            for (GeneralUserToPost generalUserToPost: generalUserToPosts)
+                postForUserRepository.delete(generalUserToPost);
+
             postRepository.delete(post);
             return ResponseEntity.ok(post);
         } else {
