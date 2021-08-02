@@ -34,15 +34,7 @@ const Posts = props => {
   }
 
   useEffect( () => {
-    if (url && hasMore) {
-      setHasMore(false)
-      getPosts(url, page).then(response => {
-        console.log(response)
-        setPosts(posts.concat(response.content))
-        setHasMore(response.hasNext)
-        setPage(response.page+1)
-      })
-    }
+    fetchData()
   }, [])
 
   return(
@@ -155,7 +147,7 @@ export const Post = props => {
                     </Menu>
                 </div>
                 <div className={'post-right profile-bg'}>
-                    A+
+                    {post.bloodGroup}
                 </div>
             </div>
         </Paper>

@@ -16,9 +16,9 @@
 }
 
 .post-right{
-  top: 100px;
+  bottom: 30px;
   position: absolute;
-  left: 20px;
+  left: 12px;
 }
 
 .post-menu{

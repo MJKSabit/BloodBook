@@ -5,7 +5,7 @@ import store from "../store";
 import ForgotPassword from "../user/auth/ForgotPassword";
 import SignIn from "../user/auth/SignIn";
 
-export default function Admin() {
+export default function BloodBank() {
   const [isSignedIn, setSignedIn] = useState(store.getState().jwt !== null)
 
   useEffect(() => {
@@ -17,19 +17,22 @@ export default function Admin() {
   }, [])
 
   const notSignedIn = (<Switch>
-    <Route path="/admin/signin" exact>
-      <SignIn userType='admin' />
+    <Route path="/bloodbank/signin" exact>
+      <SignIn userType='bloodbank' />
     </Route>
-    <Route path="/admin/forgot" exact>
-      <ForgotPassword userType='admin' />
+    <Route path="/bloodbank/forgot" exact>
+      <ForgotPassword userType='bloodbank' />
+    </Route>
+    <Route path="/bloodbank/signup" exact>
+      Sign-Up Bloodbank
     </Route>
     <Route>
-      <Redirect to="/admin/signin" />
+      <Redirect to="/bloodbank/signin" />
     </Route>
   </Switch>)
 
   const signedIn = (
-    <Typography>Hello Admin</Typography>
+    <Typography>Hello BloodBank</Typography>
   )
 
   return isSignedIn ? signedIn : notSignedIn

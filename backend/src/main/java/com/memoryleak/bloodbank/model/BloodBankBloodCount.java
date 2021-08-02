@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "bb_blood_count")
+@Table(name = "blood_count")
 public class BloodBankBloodCount {
     @JsonIgnore
     @Id
@@ -13,8 +13,8 @@ public class BloodBankBloodCount {
     private Long id;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="bb_id", nullable = false)
     private BloodBank bloodBank;
 
     @Column(name = "bloodgroup", nullable = false)

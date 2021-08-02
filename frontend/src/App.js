@@ -11,6 +11,7 @@ import store from './store';
 import Admin from './admin';
 import { Snackbar } from '@material-ui/core';
 import { useState } from 'react';
+import BloodBank from './bank';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -36,7 +37,7 @@ function App() {
             <Admin />
           </Route>
           <Route path='/bloodbank'>
-            BloodBank Page
+            <BloodBank />
           </Route>
           <Route>
             <Redirect to='/user' />

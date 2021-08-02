@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BloodBankRepository extends PagingAndSortingRepository<BloodBank, Long> {
 
-    static final double LAT_LONG_RADIUS_SQUARE = (15.0 / 111) * (15.0 / 111); // 15 km
+    static final double LAT_LONG_RADIUS_SQUARE = (30.0 / 111) * (30.0 / 111); // 15 km
 
     @Query("SELECT bc.bloodBank FROM BloodBankBloodCount bc where " +
             "bc.bloodGroup = :bloodgroup and bc.inStock > 0 and " +

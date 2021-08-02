@@ -20,16 +20,16 @@ import ExploreIcon from '@material-ui/icons/Explore';
 import PersonIcon from '@material-ui/icons/Person';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import './skeleton.css'
+import '../user/skeleton.css'
 import { useDispatch } from 'react-redux';
 import { getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
-import Profile from './opt/Profile';
-import Posts from './opt/Posts';
-import PostPage from './opt/PostsPage';
-import OtherProfile from './opt/OtherProfile';
-import PostDetails from './opt/PostDetails';
+// import Profile from './opt/Profile';
+// import Posts from './opt/Posts';
+// import PostPage from './opt/PostsPage';
+// import OtherProfile from './opt/OtherProfile';
+// import PostDetails from './opt/PostDetails';
 import Settings from './opt/Settings';
 
 const drawerWidth = 240;
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Skeleton=props=>{
+const BankSkeleton = props => {
 
     const { window } = props;
     const classes = useStyles();
@@ -98,7 +98,7 @@ const Skeleton=props=>{
     const [avatar, setAvatar] = useState(null)
 
     useEffect( () => {
-      dispatch(getMyProfile())  
+      dispatch(getBankProfile())  
       return store.subscribe( () => {
         const newAvatar = store.getState().profile.imageURL
         if (avatar !== newAvatar)
@@ -237,4 +237,4 @@ const Skeleton=props=>{
     )
 }
 
-export default Skeleton
+export default BankSkeleton

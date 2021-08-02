@@ -95,11 +95,13 @@ export default function ForgotPassword(props) {
                 Sign in
               </Link>
             </Grid>
+            { userType !== 'admin' &&
             <Grid item>
               <Link component={RouterLink} to={`/${userType}/signup`} variant='body2'>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
+            }
           </Grid>
         </form>
       </div>

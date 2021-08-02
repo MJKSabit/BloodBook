@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -64,14 +65,15 @@ public class RegistrationController {
                 emailMatcher.matcher(email).matches();
     }
 
+    @Transactional
     @PostMapping(path = "/register/user")
     public ResponseEntity<String> registerUser(@RequestBody String requestString) throws IOException {
         JSONObject requestData = new JSONObject(requestString);
 
         Location location = new Location();
         // If no Location is set, Invalid Location
-        location.setLongitude(requestData.optDouble("longitude", -200));
-        location.setLatitude(requestData.optDouble("latitude", -100));
+        location.setLongitude(requestData.optDouble("longitude", 0));
+        location.setLatitude(requestData.optDouble("latitude", 0));
         location = locationRepository.save(location);
 
         User user = new User();
@@ -106,14 +108,15 @@ public class RegistrationController {
             return ResponseEntity.badRequest().build();
     }
 
+    @Transactional
     @PostMapping(path = "/register/bloodbank")
-    public ResponseEntity<String> registerBloodBank(@RequestBody String requestString) throws IOException {
+    public ResponseEntity<String> registerBloodBank(@RequestBody String requestString) {
         JSONObject requestData = new JSONObject(requestString);
 
         Location location = new Location();
         // If no Location is set, Invalid Location
-        location.setLongitude(requestData.optDouble("longitude", -200));
-        location.setLatitude(requestData.optDouble("latitude", -100));
+        location.setLongitude(requestData.optDouble("longitude", 0));
+        location.setLatitude(requestData.optDouble("latitude", 0));
         location = locationRepository.save(location);
 
         User user = new User();
@@ -126,11 +129,12 @@ public class RegistrationController {
             userService.save(user, "BLOODBANK");
 
             BloodBank bloodBank = new BloodBank();
+            assert user.getId() != null;
             bloodBank.setUser(user);
-            bloodBank.setName(requestData.getString("name"));
+            bloodBank.setName(requestData.optString("name", "Name"));
             bloodBank.setImageURL(requestData.optString("imageURL"));
-            bloodBank.setAbout(requestData.getString("about"));
-            bloodBank = bloodBankRepository.save(bloodBank);
+            bloodBank.setAbout(requestData.optString("about", "About"));
+            bloodBankRepository.save(bloodBank);
 
 
             for (String bloodGroup : bloodGroups)

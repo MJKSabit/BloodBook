@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from "./index";
-import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE, REMOVE_MESSENGER } from './actionTypes';
+import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE, REMOVE_MESSENGER, FORBIDDEN } from './actionTypes';
 
 const API_URL = 'http://localhost:8080'
 const MAPBOX_GEOCODING_API = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
@@ -126,6 +126,24 @@ export const getMyProfile = () => {
     }
 }
 
+export const getBankProfile = (username = '') => {
+    return (dispatch, state) => {
+        axios.get(`${API_URL}/bloodbank/profile/${username}`).then ( profile => {
+            dispatch({
+                type: MY_PROFILE,
+                payload: {
+                    profile: profile.data
+                }
+            })
+        }).catch(e => console.log(e))
+    }
+}
+
+export const getBankBloodCount = async (username = '') => {
+    const count = await axios.get(`${API_URL}/bloodbank/count/${username}`)
+    return count.data
+}
+
 export const getUserProfile = async (username) => {
     const response = await axios.get(`${API_URL}/user/profile/${username}`)
     return response.data
@@ -158,7 +176,7 @@ axios.interceptors.response.use(
         console.log(error)
       const status = error.response.status;
 
-      if (status === UNAUTHORIZED) {
+      if (status === UNAUTHORIZED || status === FORBIDDEN) {
         store.dispatch(signOut());
       } else {
         store.dispatch(notifyUser(error.message))

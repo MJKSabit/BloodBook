@@ -45,7 +45,7 @@ public class UserController {
     public ResponseEntity<GeneralUser> profile(@PathVariable String username) {
         GeneralUser user = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         if (user == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         return ResponseEntity.ok(user);
     }
