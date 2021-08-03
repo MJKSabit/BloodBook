@@ -9,7 +9,7 @@ const Profile = props => {
   const username = store.getState().profile.user.username
   return (<>
     <UserCard user={store.getState().profile} />
-    <Posts url={`/user/posts/${username}`} />
+    <Posts url={`/user/posts/${username}`} label='My Posts' />
   </>)
 }
 

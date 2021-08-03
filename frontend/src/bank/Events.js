@@ -15,35 +15,41 @@ const Events = props => {
   const [events, setEvents] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   const fetchData = () => {
     if (url && hasMore) {
-      setHasMore(false)
-      getEvents(url, page).then(response => {
-        console.log(response)
+      setLoading(true)
+      getEvents(url, page).then(response => {        
         setEvents(events.concat(response.content))
         setHasMore(response.hasNext)
         setPage(response.page+1)
+        setLoading(false)
       })
     }
   }
 
   useEffect( () => {
-    fetchData()
-  }, [])
+    setEvents([])
+    getEvents(url, 0).then(response => {
+      setEvents(response.content)
+      setHasMore(response.hasNext)
+      setPage(response.page+1)
+    })
+  }, [url])
 
   return(
     <div>
-      <div className={'posts-title'}>
+      {label && <div className={'posts-title'}>
         <Box pt={4}>
-          {label || 'Events'}
+          {label}
         </Box>
-      </div>
+      </div>}
       <div className={'posts-list-container'}>
           {events.map( event => (<Event event={event} userType={userType} key={event.id}/>))}
       </div>
       <div className={'post-list-container'} style={{visibility: hasMore ? 'visible': 'hidden'}}>
-        <Button onClick={() => fetchData()} disabled={!hasMore} fullWidth={true}>
+        <Button onClick={() => fetchData()} disabled={loading} fullWidth={true}>
           Load More
         </Button>
       </div>

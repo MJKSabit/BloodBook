@@ -22,7 +22,7 @@ const OtherProfile = props => {
 
   return (<>
     <UserCard user={profile} />
-    <Posts url={`/user/posts/${username}`} />
+    <Posts url={`/user/posts/${username}`} label='Posts'/>
   </>)
 }
 

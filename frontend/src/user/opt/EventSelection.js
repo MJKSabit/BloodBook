@@ -1,5 +1,6 @@
 import { Box, Button, ButtonGroup } from "@material-ui/core"
 import { useState } from "react"
+import Events from "../../bank/Events"
 
 
 const eventUrl = '/user/events'
@@ -22,7 +23,7 @@ const EventSelection = props => {
         </Button> 
       </ButtonGroup>
     </Box>
-    {url}
+    <Events url={url} userType='user'/>
   </>
 }
 
