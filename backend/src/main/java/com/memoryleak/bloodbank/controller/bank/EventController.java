@@ -116,4 +116,15 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+
+    @JsonView(View.Public.class)
+    @GetMapping("/bloodbank/event/{id}")
+    public ResponseEntity<Event> getEvent(@PathVariable long id) {
+        Event event = eventRepository.findEventById(id);
+
+        if (event == null)
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(event);
+    }
 }

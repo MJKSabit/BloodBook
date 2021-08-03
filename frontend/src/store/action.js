@@ -191,6 +191,11 @@ export const getEvents = async (url, page=0) => {
     return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
 }
 
+export const getEvent = async (id) => {
+    const response = await axios.get(`${API_URL}/bloodbank/event/${id}`)
+    return response.data
+}
+
 export const deleteEvent = async (id) => {
     const response = await axios.delete(`${API_URL}/bloodbank/event/${id}`)
     return response.data

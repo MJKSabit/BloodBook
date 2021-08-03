@@ -32,6 +32,9 @@ import OtherProfile from './opt/OtherProfile';
 import PostDetails from './opt/PostDetails';
 import Settings from './opt/Settings';
 import Explore from './opt/Explore';
+import { OtherBankProfile } from '../bank/BankProfile';
+import EventPage from './opt/EventPage';
+import EventSelection from './opt/EventSelection';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -161,9 +164,10 @@ const Skeleton=props=>{
           <PostDetails />
       </Route>
       <Route path="/user/events" exact>
-        <>
-        Events
-        </>
+        <EventSelection />
+      </Route>
+      <Route path='/user/event/:id' >
+          <EventPage userType='user' />
       </Route>
       <Route path="/user/settings" exact>
         <Settings />
@@ -171,6 +175,9 @@ const Skeleton=props=>{
       <Route path="/user/explore" exact>
         {/* <Posts url={'/user/posts?for=all'} label='All Posts'/> */}
         <Explore />
+      </Route>
+      <Route path="/user/bloodbank/:username">
+          <OtherBankProfile userType='user' />
       </Route>
       <Redirect to="/user/profile" />
     </Switch>

@@ -51,7 +51,7 @@ const Events = props => {
   )
 }
 
-const Event = props => {
+export const Event = props => {
   const {userType} = props
   const [anchorEl, setAnchorEl] = useState(null);
   const [event, setEvent] = useState(props.event)
