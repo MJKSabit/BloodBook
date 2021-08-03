@@ -79,4 +79,19 @@ public class BankController {
 
         return ResponseEntity.ok(bankBloodCounts);
     }
+
+    @PostMapping("/bloodbank/change-profile")
+    @JsonView(View.Private.class)
+    public ResponseEntity<BloodBank> changeSettings(@RequestHeader("Authorization") String bearerToken,
+                                                    @RequestBody String settings) {
+        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
+        BloodBank bank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
+
+        JSONObject request = new JSONObject(settings);
+        bank.setAbout(request.getString("about"));
+        bank.setImageURL(request.getString("imageURL"));
+        bloodBankRepository.save(bank);
+
+        return ResponseEntity.ok(bank);
+    }
 }

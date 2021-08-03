@@ -211,6 +211,18 @@ export const exploreBanks = async () => {
     return response.data
 }
 
+export const saveBankSettings = async (data) => {
+    const response = await axios.post(`${API_URL}/bloodbank/change-profile`, data)
+    store.dispatch(notifyUser('Saved Settings Sucessfully!'))
+    store.dispatch({
+        type: MY_PROFILE,
+        payload: {
+            profile: response.data
+        }
+    })
+    return response
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {
