@@ -206,6 +206,11 @@ export const addEvent = async (event, notify) => {
     return response.data
 }
 
+export const exploreBanks = async () => {
+    const response = await axios.get(`${API_URL}/user/bloodbanks`)
+    return response.data
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {

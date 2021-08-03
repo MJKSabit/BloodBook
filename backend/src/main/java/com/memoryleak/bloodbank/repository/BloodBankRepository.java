@@ -22,5 +22,12 @@ public interface BloodBankRepository extends PagingAndSortingRepository<BloodBan
             @Param("lng") double longitude
     );
 
+    @Query("SELECT bb FROM BloodBank bb WHERE " +
+            "(bb.user.location.latitude-:lat)*(bb.user.location.latitude-:lat) + " +
+            "(bb.user.location.longitude-:lng)*(bb.user.location.longitude-:lng) <= "
+            +LAT_LONG_RADIUS_SQUARE+" ")
+    List<BloodBank> exploreNearbyBloodBank(@Param("lat") double latitude,
+                                           @Param("lng") double longitude);
+
     BloodBank findBloodBankByUserUsernameIgnoreCase(String username);
 }

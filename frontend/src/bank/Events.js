@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, IconButton, Link, Menu, MenuItem, Paper } from "@material-ui/core"
+import { Avatar, Box, Button, IconButton, Link, Menu, MenuItem, Paper, Typography } from "@material-ui/core"
 import { Info, LocationOn, MoreVert, QueryBuilder } from "@material-ui/icons";
 import { useEffect, useState } from "react"
 import { Link as RouterLink } from "react-router-dom";
@@ -40,9 +40,11 @@ const Events = props => {
 
   return(
     <div>
-      {label && <div className={'posts-title'}>
-        <Box pt={4}>
-          {label}
+      {label && <div>
+        <Box mt={5} mb={5} pl={3}>
+          <Typography color='textSecondary' variant='h5'>
+            {label}
+          </Typography>
         </Box>
       </div>}
       <div className={'posts-list-container'}>
