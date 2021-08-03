@@ -130,13 +130,18 @@ export const signUpBloodBank = async (details) => {
     await axios.post(`${API_URL}/register/bloodbank`, details)
 }
 
+export const getOtherBankProfile = async (username = null) => {
+    const response = await axios.get(`${API_URL}/bloodbank/profile${username ? '/'+username : ''}`)
+    return response.data
+}
+
 export const getBankProfile = (username = null) => {
     return (dispatch, state) => {
-        axios.get(`${API_URL}/bloodbank/profile${username ? '/'+username : ''}`).then ( profile => {
+        getOtherBankProfile().then ( profile => {
             dispatch({
                 type: MY_PROFILE,
                 payload: {
-                    profile: profile.data
+                    profile
                 }
             })
         }).catch(e => console.log(e))
@@ -145,6 +150,12 @@ export const getBankProfile = (username = null) => {
 
 export const getBankBloodCount = async (username = null) => {
     const count = await axios.get(`${API_URL}/bloodbank/count${username ? '/'+username : ''}`)
+    return count.data
+}
+
+export const setBloodCount = async (data) => {
+    const count = await axios.post(`${API_URL}/bloodbank/count`, data)
+    store.dispatch(notifyUser('Updated Blood Count!'))
     return count.data
 }
 
@@ -172,6 +183,11 @@ export const getPosts = async (url, page=0) => {
     const adder = url.match(/\?/) !== null ? '&' : '?'
     const data = await axios.get(`${API_URL}${url}${adder}page=${page}`)
     return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
+}
+
+export const addEvent = async (event, notify) => {
+    const response = await axios.post(`${API_URL}/bloodbank/event?notify=${notify}`, event)
+    return response.data
 }
 
 axios.interceptors.response.use(

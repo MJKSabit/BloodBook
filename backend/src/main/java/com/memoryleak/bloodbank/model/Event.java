@@ -18,6 +18,7 @@ public class Event {
     private Long id;
 
     @JsonView(View.Public.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bb_user_id")
     private BloodBank user;

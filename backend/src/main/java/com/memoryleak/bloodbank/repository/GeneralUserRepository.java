@@ -9,7 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface GeneralUserRepository extends CrudRepository<GeneralUser, Long> {
-    static final double LAT_LONG_RADIUS_SQUARE = (10.0 / 111) * (10.0 / 111); // 10 km
+    static final double LAT_LONG_RADIUS_SQUARE_POST = (15.0 / 111) * (15.0 / 111); // 15 km
+    static final double LAT_LONG_RADIUS_SQUARE_EVENT = (10.0 / 111) * (10.0 / 111); // 10 km
 
     GeneralUser findGeneralUserByUserUsernameIgnoreCase(String username);
 
@@ -19,10 +20,19 @@ public interface GeneralUserRepository extends CrudRepository<GeneralUser, Long>
             "gu.lastDonation <= :donationDate and " +
             "(gu.user.location.latitude-:lat)*(gu.user.location.latitude-:lat) + " +
             "(gu.user.location.longitude-:lng)*(gu.user.location.longitude-:lng) <= "
-            +LAT_LONG_RADIUS_SQUARE+" ")
+            + LAT_LONG_RADIUS_SQUARE_POST +" ")
     List<GeneralUser> getMatchPostRequirement(
             @Param("bloodgroup") String bloodGroup,
             @Param("donationDate") Date lastDonationThreshold,
+            @Param("lat") double latitude,
+            @Param("lng") double longitude
+    );
+
+    @Query("SELECT gu FROM GeneralUser gu where " +
+            "(gu.user.location.latitude-:lat)*(gu.user.location.latitude-:lat) + " +
+            "(gu.user.location.longitude-:lng)*(gu.user.location.longitude-:lng) <= "
+            + LAT_LONG_RADIUS_SQUARE_EVENT +" ")
+    List<GeneralUser> getMatchEventRequirement(
             @Param("lat") double latitude,
             @Param("lng") double longitude
     );

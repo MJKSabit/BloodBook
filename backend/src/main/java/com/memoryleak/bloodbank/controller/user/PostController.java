@@ -6,7 +6,7 @@ import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.GeneralUserToPost;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.Post;
-import com.memoryleak.bloodbank.notification.PostNotificationService;
+import com.memoryleak.bloodbank.notification.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -45,7 +46,7 @@ public class PostController {
     BloodBankRepository bloodBankRepository;
 
     @Autowired
-    PostNotificationService postNotificationService;
+    UserNotificationService userNotificationService;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -110,9 +111,9 @@ public class PostController {
         Post post = postRepository.findPostById(id);
 
         if (post==null)
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
 
-        if (!post.getUser().equals(getUser(bearerToken))) {
+        if (post.getUser().equals(getUser(bearerToken))) {
             List<GeneralUserToPost> generalUserToPosts = postForUserRepository.findAllByPost(post);
 
             for (GeneralUserToPost generalUserToPost: generalUserToPosts)
@@ -125,6 +126,7 @@ public class PostController {
         }
     }
 
+    @Transactional
     @JsonView(View.Public.class)
     @PostMapping("/user/post")
     public ResponseEntity<Post> createPost(@RequestHeader("Authorization") String bearerToken,
@@ -154,7 +156,7 @@ public class PostController {
                     post.getLocation().getLatitude(),
                     post.getLocation().getLongitude());
 
-            postNotificationService.notifyUsers(post, users);
+            userNotificationService.notifyUsers(post, users);
         }
 
 
@@ -169,7 +171,7 @@ public class PostController {
         if (post==null)
             return ResponseEntity.badRequest().build();
 
-        if (!post.getUser().equals(getUser(bearerToken))) {
+        if (post.getUser().equals(getUser(bearerToken))) {
             post.setManaged(!post.isManaged());
             postRepository.save(post);
             return ResponseEntity.ok(post);

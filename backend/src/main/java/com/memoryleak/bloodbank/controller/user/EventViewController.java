@@ -57,7 +57,7 @@ public class EventViewController {
     public Slice<Event> postsOfUser(@PathVariable String bloodbank,
                                     @RequestParam(required = false, defaultValue = "0") int page) {
         return eventRepository.findByUser(
-                bloodBankRepository.findGeneralUserByUserUsernameIgnoreCase(bloodbank),
+                bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(bloodbank),
                 PageRequest.of(page, PAGE_SIZE, Sort.by("posted").descending())
         );
     }

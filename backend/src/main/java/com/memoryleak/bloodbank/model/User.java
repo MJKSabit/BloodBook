@@ -3,6 +3,7 @@ package com.memoryleak.bloodbank.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
+import org.hibernate.proxy.HibernateProxyHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -112,9 +113,11 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+        if (o == null || id == null) return false;
+        Class<?> objClass = HibernateProxyHelper.getClassWithoutInitializingProxy(o);
+        if (this.getClass() != objClass) return false;
+
+        return id.equals(((User) o).getId());
     }
 
     @Override

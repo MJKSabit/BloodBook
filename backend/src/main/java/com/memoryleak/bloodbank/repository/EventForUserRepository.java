@@ -9,9 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface EventForUserRepository extends PagingAndSortingRepository<GeneralUserToEvent, Long> {
 
     @Query("SELECT gute.event FROM GeneralUserToEvent gute WHERE gute.user = :g_user")
     Slice<Event> findAllEventForUser(@Param("g_user")GeneralUser user, Pageable pageable);
 
+    List<GeneralUserToEvent> findAllByEvent(Event event);
 }

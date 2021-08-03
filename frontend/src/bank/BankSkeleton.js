@@ -25,7 +25,8 @@ import { useDispatch } from 'react-redux';
 import { getBankProfile, getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
-import BankProfile from './BankProfile';
+import BankProfile, { OtherBankProfile } from './BankProfile';
+import SetBloodCount from './SetBloodCount';
 // import Profile from './opt/Profile';
 // import Posts from './opt/Posts';
 // import PostPage from './opt/PostsPage';
@@ -142,10 +143,10 @@ const BankSkeleton = props => {
         <BankProfile />
       </Route>
       <Route path="/bloodbank/profile/:username" exact>
-        BloodBank Specific Profile
+        <OtherBankProfile />
       </Route>
       <Route path="/bloodbank/counts" exact>
-        Set BloodBank Counts
+        <SetBloodCount />
       </Route>
       <Route path="/bloodbank/settings">
         BloodBank Settings

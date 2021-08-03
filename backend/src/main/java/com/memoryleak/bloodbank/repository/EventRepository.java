@@ -11,4 +11,5 @@ public interface EventRepository extends PagingAndSortingRepository<Event, Long>
 
     Slice<Event> findByUser(BloodBank user, Pageable pageable);
 
+    Event findEventById(long id);
 }

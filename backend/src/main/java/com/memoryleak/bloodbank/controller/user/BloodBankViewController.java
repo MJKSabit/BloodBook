@@ -19,7 +19,7 @@ public class BloodBankViewController {
     @JsonView(View.Private.class)
     @GetMapping("/user/bloodbank/{bloodbank}")
     public ResponseEntity<BloodBank> getBloodBank(@PathVariable String bloodbank) {
-        BloodBank bloodBank = bloodBankRepository.findGeneralUserByUserUsernameIgnoreCase(bloodbank);
+        BloodBank bloodBank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(bloodbank);
 
         if (bloodbank == null)
             return ResponseEntity.notFound().build();

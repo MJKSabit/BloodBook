@@ -8,9 +8,8 @@ import com.github.messenger4j.send.MessagingType;
 import com.github.messenger4j.send.NotificationType;
 import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.recipient.IdRecipient;
-import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.GeneralUserToPost;
-import com.memoryleak.bloodbank.model.Post;
+import com.memoryleak.bloodbank.model.*;
+import com.memoryleak.bloodbank.repository.EventForUserRepository;
 import com.memoryleak.bloodbank.repository.PostForUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 @Service
-public class PostNotificationService {
+public class UserNotificationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PostNotificationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserNotificationService.class);
 
     @Value("${FRONTEND_URL:https://blood-book.netlify.app}")
     String FRONTEND_URL;
@@ -41,6 +40,9 @@ public class PostNotificationService {
     PostForUserRepository postForUserRepository;
 
     @Autowired
+    EventForUserRepository eventForUserRepository;
+
+    @Autowired
     Messenger messenger;
 
     private String getMapLink(double lat, double lng) {
@@ -50,6 +52,8 @@ public class PostNotificationService {
     private String getPostLink(Post post) {
         return FRONTEND_URL+"/user/post/"+post.getId();
     }
+
+    private String getEventLink(Event event) { return  FRONTEND_URL+"/user/event/"+event.getId(); }
 
     public void notifyUsers(Post post, List<GeneralUser> users) {
         List<String> emails = new ArrayList<>();
@@ -74,11 +78,42 @@ public class PostNotificationService {
                 "Location: %s\n" +
                 "Link: %s\n" +
                  " - BloodBook",
-                post.getUser().getUser().getUsername(), post.getUser().getUser().getEmail(), post.getBloodGroup(),
+                post.getUser().getName(), post.getUser().getUser().getEmail(), post.getBloodGroup(),
                 post.getNeeded().toString(), post.getPosted().toString(),
                 post.getInfo(),
                 getMapLink(post.getLocation().getLatitude(), post.getLocation().getLongitude()),
                 getPostLink(post));
+
+        emailNotification.sendEmail(emails, subject, postText);
+        sendFacebookMessage(facebookRecipients, postText);
+    }
+
+    public void notifyUsers(Event event, List<GeneralUser> users) {
+        List<String> emails = new ArrayList<>();
+        List<String> facebookRecipients = new ArrayList<>();
+
+        for (GeneralUser user : users) {
+            emails.add(user.getUser().getEmail());
+            if (user.getFacebook() != null)
+                facebookRecipients.add(user.getFacebook());
+
+            eventForUserRepository.save(new GeneralUserToEvent(user, event));
+        }
+
+        String subject = String.format("Upcoming Event by %s", event.getUser().getName());
+        String postText = String.format("Hello BloodBook User,\n" +
+                        "%s (%s) is going to arrange an event near you\n" +
+                        "At: %s (Posted At: )\n" +
+                        "Information:\n" +
+                        "%s\n\n" +
+                        "Location: %s\n" +
+                        "Link: %s\n" +
+                        " - BloodBook",
+                event.getUser().getName(), event.getUser().getUser().getEmail(),
+                event.getEventDate().toString(), event.getPosted().toString(),
+                event.getInfo(),
+                getMapLink(event.getLocation().getLatitude(), event.getLocation().getLongitude()),
+                getEventLink(event));
 
         emailNotification.sendEmail(emails, subject, postText);
         sendFacebookMessage(facebookRecipients, postText);
