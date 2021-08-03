@@ -27,6 +27,10 @@ import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import BankProfile, { OtherBankProfile } from './BankProfile';
 import SetBloodCount from './SetBloodCount';
+import BankSettings from './BankSettings';
+import EventPage from '../user/opt/EventPage';
+import { AddBox } from '@material-ui/icons';
+import Explore from '../user/opt/Explore';
 // import Profile from './opt/Profile';
 // import Posts from './opt/Posts';
 // import PostPage from './opt/PostsPage';
@@ -113,13 +117,18 @@ const BankSkeleton = props => {
         <div>
             <List style={{marginTop:'55px'}}>
                 <Divider/>
+                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/explore" activeClassName="Mui-selected" exact>
+                    <ListItemIcon><ExploreIcon /> </ListItemIcon>
+                    <ListItemText primary={'Explore'} />
+                </ListItem>
+                <Divider/>
                 <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/profile" activeClassName="Mui-selected">
                     <ListItemIcon><ReceiptIcon /> </ListItemIcon>
                     <ListItemText primary={'Profile'} />
                 </ListItem>
                 <Divider/>
                 <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/counts" activeClassName="Mui-selected">
-                    <ListItemIcon><ReceiptIcon /> </ListItemIcon>
+                    <ListItemIcon><AddBox /> </ListItemIcon>
                     <ListItemText primary={'Counts'} />
                 </ListItem>
                 <Divider/>
@@ -149,10 +158,13 @@ const BankSkeleton = props => {
         <SetBloodCount />
       </Route>
       <Route path="/bloodbank/settings">
-        BloodBank Settings
+        <BankSettings />
       </Route>
       <Route path="/bloodbank/event/:id">
-        Specific Event
+        <EventPage userType='bloodbank' />
+      </Route>
+      <Route path='/bloodbank/explore'>
+        <Explore userType='bloodbank'/>
       </Route>
       <Redirect to="/bloodbank/profile" />
     </Switch>

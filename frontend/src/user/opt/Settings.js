@@ -179,6 +179,7 @@ const Settings = props => {
             variant="outlined"
             fullWidth
             label='Old Password'
+            type='password'
             value={oldPassword}
             onChange={e => setOldPassword(e.target.value)}
           />
@@ -188,6 +189,7 @@ const Settings = props => {
             variant="outlined"
             fullWidth
             label='New Password'
+            type='password'
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
@@ -196,6 +198,7 @@ const Settings = props => {
           <TextField
             variant="outlined"
             fullWidth
+            type='password'
             label='New Password (Confirm)'
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
@@ -206,9 +209,9 @@ const Settings = props => {
         <Box display='flex' flexDirection="row-reverse" mt={4}>
           <Box>
             <Button color="primary" variant='contained' onClick={ (e) => {
-              changePassword(oldPassword, password).catch(
-                err => console.log(err)
-              )
+              changePassword(oldPassword, password).then(
+                () => {setPassword(''); setOldPassword(''); setConfirmPassword('')}
+              ).catch(err => console.log(err))
             }}
             disabled={password !== confirmPassword || !passwordMatcher.test(password) || oldPassword === ''}>
               Change Password

@@ -2,14 +2,8 @@ package com.memoryleak.bloodbank.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
-import com.memoryleak.bloodbank.model.BloodBank;
-import com.memoryleak.bloodbank.model.Event;
-import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.Location;
-import com.memoryleak.bloodbank.repository.BloodBankRepository;
-import com.memoryleak.bloodbank.repository.EventForUserRepository;
-import com.memoryleak.bloodbank.repository.EventRepository;
-import com.memoryleak.bloodbank.repository.GeneralUserRepository;
+import com.memoryleak.bloodbank.model.*;
+import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +34,9 @@ public class BloodBankInfoController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @JsonView(View.Public.class)
     @GetMapping("/user/events")
     public Slice<Event> postsForUser(@RequestHeader("Authorization") String bearerToken,
@@ -60,12 +57,12 @@ public class BloodBankInfoController {
     }
 
     @JsonView(View.Public.class)
-    @GetMapping("/user/bloodbanks")
+    @GetMapping("/explore")
     List<BloodBank> exploreBloodBank(@RequestHeader("Authorization") String bearerToken) {
-        GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(
+        User user = userRepository.findUserByUsernameIgnoreCase(
                 jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7))
         );
-        Location location = generalUser.getUser().getLocation();
+        Location location = user.getLocation();
         return bloodBankRepository.exploreNearbyBloodBank(location.getLatitude(), location.getLongitude());
     }
 

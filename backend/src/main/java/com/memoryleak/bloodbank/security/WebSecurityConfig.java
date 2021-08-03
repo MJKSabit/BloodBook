@@ -49,7 +49,9 @@ public class WebSecurityConfig
                 .antMatchers("/user/**", "/user").hasRole("USER")
                 .antMatchers("/bloodbank/*", "/bloodbank").hasRole("BLOODBANK")
                 .antMatchers("/bloodbank/count/*", "/bloodbank/profile/*",
-                        "/bloodbank/events/*", "/bloodbank/event/*").hasAnyRole("BLOODBANK", "USER")
+                        "/bloodbank/events/*", "/bloodbank/event/*",
+                        "/explore").hasAnyRole("BLOODBANK", "USER")
+                .antMatchers("/change-password").hasAnyRole("BLOODBANK", "USER", "ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

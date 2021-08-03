@@ -97,7 +97,7 @@ export const changePassword = async (oldPassword, newPassword) => {
     const data = {}
     data['old'] = oldPassword
     data['new'] = newPassword
-    await axios.post(`${API_URL}/user/change-password`, data)
+    await axios.post(`${API_URL}/change-password`, data)
     store.dispatch(notifyUser('Password Changed Sucessfully!'))
 }
 
@@ -207,7 +207,7 @@ export const addEvent = async (event, notify) => {
 }
 
 export const exploreBanks = async () => {
-    const response = await axios.get(`${API_URL}/user/bloodbanks`)
+    const response = await axios.get(`${API_URL}/explore`)
     return response.data
 }
 

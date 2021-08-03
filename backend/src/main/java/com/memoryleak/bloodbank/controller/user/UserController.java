@@ -80,7 +80,7 @@ public class UserController {
         return generalUserRepository.save(generalUser);
     }
 
-    @PostMapping("/user/change-password")
+    @PostMapping("/change-password")
     public ResponseEntity<?> changeUserPassword(@RequestHeader("Authorization") String bearerToken,
                                              @RequestBody String requestText) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
@@ -98,7 +98,7 @@ public class UserController {
             userRepository.save(user);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

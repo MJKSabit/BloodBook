@@ -7,6 +7,8 @@ import { Post } from "./Posts"
 
 export const BankList = (props) => {
   const {banks} = props
+  const userType = props.userType || 'user'
+  const urlPrefix = userType === 'user' ? '/user/bloodbank/' : '/bloodbank/profile/'
   const history = useHistory()
 
   if (banks === null)
@@ -23,7 +25,7 @@ export const BankList = (props) => {
             <ListItemText
               primary={bank.name}
               secondary={`@${bank.user.username}`}
-              onClick={() => history.push(`/user/bloodbank/${bank.user.username}`)}
+              onClick={() => history.push(`${urlPrefix}${bank.user.username}`)}
               />
           </ListItem>
         ))}

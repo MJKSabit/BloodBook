@@ -6,6 +6,7 @@ import { BankList } from "./PostDetails"
 
 const Explore = (props) => {
   const [banks, setBanks] = useState(null)
+  const userType = props.userType || 'user'
 
   useEffect(() => {
     exploreBanks().then(
@@ -22,7 +23,7 @@ const Explore = (props) => {
       BloodBanks near you:
     </Typography>
   </Box>
-  <BankList banks={banks} />
+  <BankList banks={banks} userType={userType} />
   </>
 }
 
