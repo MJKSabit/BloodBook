@@ -261,6 +261,7 @@ const BankProfile = (props) => {
 
 export const OtherBankProfile = props => {
   const {username} = useParams()
+  const userType = props.userType || 'bloodbank'
 
   const [profile, setProfile] = useState(null)
 
@@ -276,6 +277,9 @@ export const OtherBankProfile = props => {
   return <>
     <ProfileCard user={profile}/>
     <CountCard username={username} />
+    <Box mt={5} mb={5}>
+      <Events url={`/bloodbank/events/${username}`} label='Events' userType={userType}/>
+    </Box>
   </>
 }
 

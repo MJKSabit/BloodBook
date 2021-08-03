@@ -12,7 +12,7 @@ const Events = props => {
   let {url, label, userType} = props
   if (!userType) userType = 'bloodbank'
 
-  const [posts, setPosts] = useState([])
+  const [events, setEvents] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
 
@@ -21,7 +21,7 @@ const Events = props => {
       setHasMore(false)
       getEvents(url, page).then(response => {
         console.log(response)
-        setPosts(posts.concat(response.content))
+        setEvents(events.concat(response.content))
         setHasMore(response.hasNext)
         setPage(response.page+1)
       })
@@ -40,7 +40,7 @@ const Events = props => {
         </Box>
       </div>
       <div className={'posts-list-container'}>
-          {posts.map( post => (<Event post={post} userType={userType}/>))}
+          {events.map( event => (<Event event={event} userType={userType} key={event.id}/>))}
       </div>
       <div className={'post-list-container'} style={{visibility: hasMore ? 'visible': 'hidden'}}>
         <Button onClick={() => fetchData()} disabled={!hasMore} fullWidth={true}>
@@ -54,7 +54,7 @@ const Events = props => {
 const Event = props => {
   const {userType} = props
   const [anchorEl, setAnchorEl] = useState(null);
-  const [event, setEvent] = useState(props.post)
+  const [event, setEvent] = useState(props.event)
 
   if (event === null)
     return null
@@ -130,7 +130,7 @@ const Event = props => {
                       () => store.dispatch(notifyUser('Can not copy!'))
                     )
                   }}>Copy Link</MenuItem>
-                  { editAccess && <>
+                  { editAccess && 
                     <MenuItem onClick={(e) => {
                       handleClose(e)
                       deleteEvent(event.id).then(
@@ -138,7 +138,7 @@ const Event = props => {
                         err => console.log(err)
                       )
                     }}>Delete</MenuItem>
-                  </>}
+                  }
                 </Menu>
             </div>
         </div>
