@@ -22,15 +22,16 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import '../user/skeleton.css'
 import { useDispatch } from 'react-redux';
-import { getMyProfile, signOut } from '../store/action';
+import { getBankProfile, getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import BankProfile from './BankProfile';
 // import Profile from './opt/Profile';
 // import Posts from './opt/Posts';
 // import PostPage from './opt/PostsPage';
 // import OtherProfile from './opt/OtherProfile';
 // import PostDetails from './opt/PostDetails';
-import Settings from './opt/Settings';
+// import Settings from './opt/Settings';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -111,27 +112,17 @@ const BankSkeleton = props => {
         <div>
             <List style={{marginTop:'55px'}}>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/posts" activeClassName="Mui-selected">
+                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/profile" activeClassName="Mui-selected">
                     <ListItemIcon><ReceiptIcon /> </ListItemIcon>
-                    <ListItemText primary={'Posts'} />
-                </ListItem>
-                <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/events" activeClassName="Mui-selected" exact>
-                    <ListItemIcon><InsertInvitationIcon /> </ListItemIcon>
-                    <ListItemText primary={'Events'} />
-                </ListItem>
-                <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/explore" activeClassName="Mui-selected" exact>
-                    <ListItemIcon><ExploreIcon /> </ListItemIcon>
-                    <ListItemText primary={'Explore'} />
-                </ListItem>
-                <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/profile" activeClassName="Mui-selected" exact>
-                    <ListItemIcon><PersonIcon/> </ListItemIcon>
                     <ListItemText primary={'Profile'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/settings" activeClassName="Mui-selected" exact>
+                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/counts" activeClassName="Mui-selected">
+                    <ListItemIcon><ReceiptIcon /> </ListItemIcon>
+                    <ListItemText primary={'Counts'} />
+                </ListItem>
+                <Divider/>
+                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/settings" activeClassName="Mui-selected" exact>
                     <ListItemIcon><SettingsApplicationsIcon /> </ListItemIcon>
                     <ListItemText primary={'Settings'} />
                 </ListItem>
@@ -147,30 +138,22 @@ const BankSkeleton = props => {
 
     const mainContentSelection = (
     <Switch>
-      <Route path="/user/profile" exact>
-        <Profile />
+      <Route path="/bloodbank/profile" exact>
+        <BankProfile />
       </Route>
-      <Route path="/user/profile/:username" exact>
-        <OtherProfile />
+      <Route path="/bloodbank/profile/:username" exact>
+        BloodBank Specific Profile
       </Route>
-      <Route path="/user/posts" exact>
-        <PostPage />
+      <Route path="/bloodbank/counts" exact>
+        Set BloodBank Counts
       </Route>
-      <Route path="/user/post/:id">
-          <PostDetails />
+      <Route path="/bloodbank/settings">
+        BloodBank Settings
       </Route>
-      <Route path="/user/events" exact>
-        <>
-        Events
-        </>
+      <Route path="/bloodbank/event/:id">
+        Specific Event
       </Route>
-      <Route path="/user/settings" exact>
-        <Settings />
-      </Route>
-      <Route path="/user/explore" exact>
-        <Posts url={'/user/posts?for=all'} label='All Posts'/>
-      </Route>
-      <Redirect to="/user/profile" />
+      <Redirect to="/bloodbank/profile" />
     </Switch>
     )
 

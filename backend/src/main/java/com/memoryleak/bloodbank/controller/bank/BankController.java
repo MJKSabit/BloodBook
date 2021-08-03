@@ -32,7 +32,7 @@ public class BankController {
     BloodBankBloodCountRepository bloodBankBloodCountRepository;
 
     @GetMapping("/bloodbank/profile/{username}")
-    @JsonView(View.ExtendedPublic.class)
+    @JsonView(View.Private.class)
     public ResponseEntity<BloodBank> profile(@PathVariable String username) {
         BloodBank user = bloodBankRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         if (user == null)
@@ -42,10 +42,10 @@ public class BankController {
     }
 
     @GetMapping("/bloodbank/profile")
-    @JsonView(View.ExtendedPublic.class)
-    public RedirectView myProfile(@RequestHeader("Authorization") String bearerToken) {
+    @JsonView(View.Private.class)
+    public ResponseEntity<BloodBank> myProfile(@RequestHeader("Authorization") String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return new RedirectView("/bloodbank/profile/"+username);
+        return profile(username);
     }
 
     @GetMapping("/bloodbank/count/{username}")
@@ -59,8 +59,8 @@ public class BankController {
     }
 
     @GetMapping("/bloodbank/count")
-    public RedirectView myCount(@RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity<List<BloodBankBloodCount>> myCount(@RequestHeader("Authorization") String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return new RedirectView("/bloodbank/count/"+username);
+        return count(username);
     }
 }

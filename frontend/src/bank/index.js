@@ -5,6 +5,7 @@ import store from "../store";
 import ForgotPassword from "../user/auth/ForgotPassword";
 import SignIn from "../user/auth/SignIn";
 import BankSignUp from "./BankSignUp";
+import BankSkeleton from "./BankSkeleton";
 
 export default function BloodBank() {
   const [isSignedIn, setSignedIn] = useState(store.getState().jwt !== null)
@@ -33,7 +34,7 @@ export default function BloodBank() {
   </Switch>)
 
   const signedIn = (
-    <Typography>Hello BloodBank</Typography>
+    <BankSkeleton />
   )
 
   return isSignedIn ? signedIn : notSignedIn

@@ -130,9 +130,9 @@ export const signUpBloodBank = async (details) => {
     await axios.post(`${API_URL}/register/bloodbank`, details)
 }
 
-export const getBankProfile = (username = '') => {
+export const getBankProfile = (username = null) => {
     return (dispatch, state) => {
-        axios.get(`${API_URL}/bloodbank/profile/${username}`).then ( profile => {
+        axios.get(`${API_URL}/bloodbank/profile${username ? '/'+username : ''}`).then ( profile => {
             dispatch({
                 type: MY_PROFILE,
                 payload: {
@@ -143,8 +143,8 @@ export const getBankProfile = (username = '') => {
     }
 }
 
-export const getBankBloodCount = async (username = '') => {
-    const count = await axios.get(`${API_URL}/bloodbank/count/${username}`)
+export const getBankBloodCount = async (username = null) => {
+    const count = await axios.get(`${API_URL}/bloodbank/count${username ? '/'+username : ''}`)
     return count.data
 }
 
