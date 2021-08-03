@@ -46,12 +46,10 @@ public class WebSecurityConfig
                 .authorizeRequests()
                 .antMatchers("/callback/**", "/callback").permitAll()
                 .antMatchers("/admin/**", "/admin").hasRole("ADMIN")
-                .antMatchers(
-                        "/user/**", "/user",
-                        "/bloodbank/count/*", "/bloodbank/profile/*",
-                        "/bloodbank/events/*", "/bloodbank/event/*"
-                ).hasRole("USER")
-                .antMatchers("/bloodbank/**", "/bloodbank/").hasRole("BLOODBANK")
+                .antMatchers("/user/**", "/user").hasRole("USER")
+                .antMatchers("/bloodbank/*", "/bloodbank").hasRole("BLOODBANK")
+                .antMatchers("/bloodbank/count/*", "/bloodbank/profile/*",
+                        "/bloodbank/events/*", "/bloodbank/event/*").hasAnyRole("BLOODBANK", "USER")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

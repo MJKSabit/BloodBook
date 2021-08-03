@@ -1,8 +1,9 @@
-import { Avatar, Box, Grid, Link, Paper, Typography } from "@material-ui/core"
+import { Avatar, Box, Card, CardContent, Grid, Link, Paper, Typography } from "@material-ui/core"
 import { Email, LocationOn } from "@material-ui/icons"
 import { useEffect } from "react"
 import { useState } from "react"
 import store from "../store"
+import { getBankBloodCount } from "../store/action"
 import { getMapLink } from "../user/opt/UserCard"
 import "./styles.css"
 
@@ -11,8 +12,6 @@ const ProfileCard = props => {
 
   if (!user)
     return null
-
-  console.log(user)
 
   return <Box mt={5}>
     <Paper>
@@ -85,6 +84,47 @@ const ProfileCard = props => {
   </Box>
 }
 
+const BGCountCard = ({bloodGroup, inStock}) => {
+  return <Card variant='outlined'>
+    <CardContent>
+      <Typography color='textSecondary' component='p'>
+        {bloodGroup}
+      </Typography>
+      <Typography variant='h3'>
+        {inStock}
+      </Typography>
+    </CardContent>
+  </Card>
+}
+
+const CountCard = (props) => {
+  const {username} = props
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    getBankBloodCount(username).then(
+      dt => setData(dt),
+      err => console.log(err)
+    )
+  }, [])
+
+  if (data === null) 
+    return null
+
+  return <Paper>
+    <Box p={3} mt={5}>
+      <Typography variant='body1' style={{marginBottom: '20px'}}>Blood in Stock</Typography>
+      <Grid container spacing={3}>
+        { data.map(value => (
+          <Grid item md={3} sm={4} xs={6}>
+            <BGCountCard bloodGroup={value.bloodGroup} inStock={value.inStock} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  </Paper>
+}
+
 const BankProfile = (props) => {
   const [profile, setProfile] = useState(store.getState().profile)
 
@@ -93,7 +133,12 @@ const BankProfile = (props) => {
   if (profile === null)
     return null
 
-  return <ProfileCard user={profile}/>
+  const username = profile.user.username
+
+  return <>
+    <ProfileCard user={profile}/>
+    <CountCard username={username} />
+  </>
 }
 
 export default BankProfile

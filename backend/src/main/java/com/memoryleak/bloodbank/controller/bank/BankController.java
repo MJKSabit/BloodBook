@@ -31,8 +31,8 @@ public class BankController {
     @Autowired
     BloodBankBloodCountRepository bloodBankBloodCountRepository;
 
-    @GetMapping("/bloodbank/profile/{username}")
     @JsonView(View.Private.class)
+    @GetMapping("/bloodbank/profile/{username}")
     public ResponseEntity<BloodBank> profile(@PathVariable String username) {
         BloodBank user = bloodBankRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         if (user == null)
