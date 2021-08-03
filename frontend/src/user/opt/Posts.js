@@ -1,7 +1,7 @@
 import React from 'react'
 import './posts.css'
 import './profile.css'
-import {Avatar, Box, Button, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Avatar, Box, Button, IconButton, Menu, MenuItem, Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
@@ -39,9 +39,11 @@ const Posts = props => {
 
   return(
       <div>
-          <div className={'posts-title'}>
-            <Box pt={4}>
-              {label || 'Posts'}
+          <div>
+            <Box mt={5} mb={5} pl={3}>
+              <Typography color='textSecondary' variant='h5'>
+                {label || 'Posts'}
+              </Typography>
             </Box>
           </div>
           <div className={'posts-list-container'}>

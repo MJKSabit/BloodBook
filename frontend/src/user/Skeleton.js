@@ -31,6 +31,7 @@ import PostPage from './opt/PostsPage';
 import OtherProfile from './opt/OtherProfile';
 import PostDetails from './opt/PostDetails';
 import Settings from './opt/Settings';
+import Explore from './opt/Explore';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -168,7 +169,8 @@ const Skeleton=props=>{
         <Settings />
       </Route>
       <Route path="/user/explore" exact>
-        <Posts url={'/user/posts?for=all'} label='All Posts'/>
+        {/* <Posts url={'/user/posts?for=all'} label='All Posts'/> */}
+        <Explore />
       </Route>
       <Redirect to="/user/profile" />
     </Switch>

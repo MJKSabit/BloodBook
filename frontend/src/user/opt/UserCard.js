@@ -21,7 +21,7 @@ const UserCard = props => {
   const ownProfile = user.user.email !== undefined
 
   return(
-    <div>
+    <div style={{marginTop: '30px'}}>
       <Paper style={{padding:'30px'}}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
