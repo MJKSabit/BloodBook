@@ -185,6 +185,17 @@ export const getPosts = async (url, page=0) => {
     return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
 }
 
+export const getEvents = async (url, page=0) => {
+    const adder = url.match(/\?/) !== null ? '&' : '?'
+    const data = await axios.get(`${API_URL}${url}${adder}page=${page}`)
+    return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
+}
+
+export const deleteEvent = async (id) => {
+    const response = await axios.delete(`${API_URL}/bloodbank/event/${id}`)
+    return response.data
+}
+
 export const addEvent = async (event, notify) => {
     const response = await axios.post(`${API_URL}/bloodbank/event?notify=${notify}`, event)
     return response.data

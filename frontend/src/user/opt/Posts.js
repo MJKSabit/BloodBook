@@ -48,7 +48,7 @@ const Posts = props => {
               {posts.map( post => (<Post post={post}></Post>))}
           </div>
           <div className={'post-list-container'} style={{visibility: hasMore ? 'visible': 'hidden'}}>
-            <Button onClick={() => fetchData()} disabled={!hasMore} fullWidth='true'>
+            <Button onClick={() => fetchData()} disabled={!hasMore} fullWidth={true}>
               Load More
             </Button>
           </div>

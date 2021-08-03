@@ -9,6 +9,7 @@ import LocationSelector from "../generic/LocationSelector"
 import store from "../store"
 import { addEvent, getBankBloodCount, getOtherBankProfile } from "../store/action"
 import { getMapLink } from "../user/opt/UserCard"
+import Events from "./Events"
 import "./styles.css"
 
 const ProfileCard = props => {
@@ -252,6 +253,9 @@ const BankProfile = (props) => {
     <ProfileCard user={profile}/>
     <CountCard username={username} />
     <CreateEvent />
+    <Box mt={5} mb={5}>
+      <Events url={`/bloodbank/events/${username}`} label='Events'/>
+    </Box>
   </>
 }
 
