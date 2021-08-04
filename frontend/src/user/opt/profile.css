@@ -13,9 +13,10 @@
   color : #ffffff;
   margin-left: auto;
   padding: 10px 12px;
-  background-color: #ff0000;
-  font-size: 2em;
-  border-radius: 20px;
+  background-color: #f23030;
+  font-size: 1.75em;
+  font-weight: bold;
+  border-radius: 10px;
 }
 
 .profile-body{

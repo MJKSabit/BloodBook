@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Paper, Typography } from "@material-ui/core"
+import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Paper, Tooltip, Typography } from "@material-ui/core"
 import { FileCopyOutlined, Info, LocationOn, MoreVert, QueryBuilder, VisibilityOutlined } from "@material-ui/icons";
 import { useEffect, useState } from "react"
 import { Link as RouterLink, useHistory } from "react-router-dom";
@@ -103,9 +103,11 @@ export const Event = props => {
                   } variant='body1'> {event.user.name} </Link>
                 </div>
                 <div className={'post-date'}>
-                <Typography variant='body2' title={new Date(event.posted).toLocaleString('en-GB')}>
-                  {new Date(event.posted).toLocaleDateString('en-GB')}
-                </Typography>
+                  <Tooltip title={new Date(event.posted).toLocaleString('en-GB')}  placement='right'>
+                    <Typography variant='body2'>
+                      {new Date(event.posted).toLocaleDateString('en-GB')}
+                    </Typography>
+                  </Tooltip>
                 </div>
                 <div className={'post-info-container'}>
                     <div className={'profile-entry-container'}>

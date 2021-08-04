@@ -15,7 +15,7 @@ const LocationViewer = ({location}) => {
     )
   }, [location])
 
-  const text = placename ? `${placename} ↗️` : `${location.latitude}, ${location.longitude} ↗️`
+  const text = placename ? `${placename} ↗` : `${location.latitude}, ${location.longitude} ↗`
 
   return <Link
     href={`https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}`}

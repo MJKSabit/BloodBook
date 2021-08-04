@@ -137,21 +137,21 @@ const Settings = props => {
   const FacebookTokenSettings = <Paper>
     <Box p={4} mt={5} mb={5}>
       <Grid container spacing={2}  alignItems="center">
-        <Grid item xs={8}>Facebook Connection</Grid>
-        <Grid item xs={4}>
+        <Grid item md={8} xs={6}>Facebook Connection</Grid>
+        <Grid item md={4} xs={6}>
           <Button fullWidth disabled={profile.facebook === null} 
           variant='outlined' color='secondary' 
           onClick={ e => deleteMessengerToken()}>
             Disconnect
           </Button>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item md={8} xs={6}>
           <TextField fullWidth variant='outlined'
             label='Messenger Token'
             value={facebookToken}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item md={4} xs={6}>
           <Button fullWidth color="primary" variant='contained' 
           onClick={ e => getMessengerToken().then(token => setFacebookToken(token))}>
             Generate

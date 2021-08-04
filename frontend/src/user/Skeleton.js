@@ -26,7 +26,6 @@ import { getMyProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Profile from './opt/Profile';
-import Posts from './opt/Posts';
 import PostPage from './opt/PostsPage';
 import OtherProfile from './opt/OtherProfile';
 import PostDetails from './opt/PostDetails';
@@ -189,7 +188,7 @@ const Skeleton=props=>{
     return(
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar style={{backgroundColor:'#0090ff'}} position="fixed" className={classes.appBar}>
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <IconButton
                         color="inherit"

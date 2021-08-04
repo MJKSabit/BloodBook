@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper, Typography } from "@material-ui/core"
+import { Box, CircularProgress, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { exploreBanks } from "../../store/action"

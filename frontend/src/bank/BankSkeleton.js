@@ -15,14 +15,12 @@ import List from "@material-ui/core/List";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ReceiptIcon from '@material-ui/icons/Receipt';
-import InsertInvitationIcon from '@material-ui/icons/InsertInvitation';
 import ExploreIcon from '@material-ui/icons/Explore';
-import PersonIcon from '@material-ui/icons/Person';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import '../user/skeleton.css'
 import { useDispatch } from 'react-redux';
-import { getBankProfile, getMyProfile, signOut } from '../store/action';
+import { getBankProfile, signOut } from '../store/action';
 import store from '../store';
 import { NavLink, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import BankProfile, { OtherBankProfile } from './BankProfile';

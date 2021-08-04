@@ -4,7 +4,6 @@ import {Avatar, Box, Grid, useMediaQuery} from "@material-ui/core";
 import './profile.css'
 import MailIcon from '@material-ui/icons/Mail';
 import { Facebook, InvertColors, LocationOn, WatchLater } from '@material-ui/icons';
-import { Link } from '@material-ui/core';
 import LocationViewer from '../../generic/LocationViewer';
 
 const UserCard = props => {

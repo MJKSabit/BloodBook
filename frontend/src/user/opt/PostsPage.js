@@ -1,7 +1,6 @@
-import { Box, CircularProgress, Paper } from "@material-ui/core"
+import { Box, CircularProgress } from "@material-ui/core"
 import store from "../../store"
 import CreatePost from "./CreatePost"
-import Posts from "./Posts"
 import PostSelection from "./PostSelection"
 
 const PostPage = props => {

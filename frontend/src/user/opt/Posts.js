@@ -1,7 +1,7 @@
 import React from 'react'
 import './posts.css'
 import './profile.css'
-import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Typography} from "@material-ui/core";
+import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
@@ -26,7 +26,6 @@ const Posts = props => {
     if (url && more) {
       setLoading(true)
       getPosts(url, page).then(response => {
-        console.log(response)
         setPosts(posts.concat(response.content))
         setHasMore(response.hasNext)
         setPage(response.page+1)
@@ -93,9 +92,11 @@ export const Post = props => {
                       <Link component={RouterLink} to={`/user/profile/${post.user.user.username}`} variant='body1'> {post.user.name} </Link>
                     </div>
                     <div className={'post-date'}>
-                    <Typography to={`/user/post/${post.id}`} variant='body2' title={new Date(post.posted).toLocaleString('en-GB')}>
-                      {new Date(post.posted).toLocaleDateString('en-GB')}
-                    </Typography>
+                      <Tooltip title={new Date(post.posted).toLocaleString('en-GB')} placement='right'>
+                        <Typography to={`/user/post/${post.id}`} variant='body2'>
+                          {new Date(post.posted).toLocaleDateString('en-GB')}
+                        </Typography>
+                      </Tooltip>
                     </div>
                     <div className={'post-info-container'}>
                         <div className={'profile-entry-container'}>
@@ -136,22 +137,22 @@ export const Post = props => {
                         handleClose()
                         history.push(`/user/post/${post.id}`)
                       }}><VisibilityOutlined style={{paddingRight: '8px'}}/> View Post</MenuItem>
-                      { editAccess && <>
+                      { editAccess && [
                         <MenuItem onClick={(e) => {
                           handleClose(e)
                           changePostManaged(post.id).then (
                             data => setPost(data),
                             err => console.log(err)
                           )
-                        }}><CheckCircleOutlined style={{paddingRight: '8px'}}/>Change Managed</MenuItem>
+                        }} key={1}><CheckCircleOutlined style={{paddingRight: '8px'}}/>Change Managed</MenuItem>,
                         <MenuItem onClick={(e) => {
                           handleClose(e)
                           deletePost(post.id).then(
                             () => setPost(null),
                             err => console.log(err)
                           )
-                        }}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
-                      </>}
+                        }} key={2}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
+                      ]}
                     </Menu>
                 </div>
                 <div className={'post-right profile-bg'}>

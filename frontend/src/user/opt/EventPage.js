@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Paper } from "@material-ui/core"
+import { Box, CircularProgress} from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
