@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "bloodbank_user")
+@Table(name = "bloodbank_user", indexes = {
+        @Index(name = "bb_to_user", columnList = "user_id", unique = true)
+})
 public class BloodBank implements Serializable {
 
     @JsonIgnore

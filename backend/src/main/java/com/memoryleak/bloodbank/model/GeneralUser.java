@@ -12,7 +12,10 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "general_user")
+@Table(name = "general_user", indexes = {
+        @Index(name = "g_user_bg__act__ld", columnList = "blood_group, is_active_donor, last_donation"),
+        @Index(name = "g_user_u", columnList = "user_id", unique = true)
+})
 public class GeneralUser implements Serializable {
 
     @JsonIgnore
@@ -34,7 +37,7 @@ public class GeneralUser implements Serializable {
 //    @JsonView(View.ExtendedPublic.class)
     private String imageURL;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "blood_group")
     @JsonView(View.ExtendedPublic.class)
     private String bloodGroup;
 
@@ -44,7 +47,7 @@ public class GeneralUser implements Serializable {
     private Date lastDonation;
 
     @JsonView(View.Private.class)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_active_donor")
     private boolean isActiveDonor;
 
     @Column

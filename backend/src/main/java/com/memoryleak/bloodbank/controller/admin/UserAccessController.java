@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +62,7 @@ public class UserAccessController {
         return ResponseEntity.ok(
                 userRepository.findUserByActiveAndBannedAndRole(
                         active, banned, role,
-                        PageRequest.of(page, PAGE_SIZE)
+                        PageRequest.of(page, PAGE_SIZE, Sort.by("id"))
                 )
         );
     }

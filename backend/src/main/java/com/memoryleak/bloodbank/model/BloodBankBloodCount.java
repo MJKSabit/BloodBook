@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "blood_count")
+@Table(name = "blood_count", indexes = {
+        @Index(name = "bbb_count_bb", columnList = "bb_id"),
+        @Index(name = "bbb_count_stock", columnList = "in_stock"),
+        @Index(name = "bbb_count_bb__stock", columnList = "bb_id, in_stock", unique = true)
+})
 public class BloodBankBloodCount {
     @JsonIgnore
     @Id

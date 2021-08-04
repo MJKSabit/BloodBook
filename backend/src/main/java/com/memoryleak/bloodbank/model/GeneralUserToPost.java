@@ -8,6 +8,9 @@ import com.memoryleak.bloodbank.config.View;
 import javax.persistence.*;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "p4u_u__p", columnList = "general_user_id, post_id", unique = true)
+})
 public class GeneralUserToPost {
     @JsonIgnore
     @Id

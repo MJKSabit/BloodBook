@@ -42,7 +42,7 @@ public class User implements Serializable {
     private String role;
 
     @OneToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "location_id", unique = true)
     @JsonView(View.Private.class)
     private Location location;
 

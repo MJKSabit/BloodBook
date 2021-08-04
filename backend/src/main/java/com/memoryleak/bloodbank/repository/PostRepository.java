@@ -12,7 +12,5 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Long> {
 
     Slice<Post> findByUser(GeneralUser user, Pageable pageable);
 
-    Slice<Post> findByBloodGroup(String bloodGroup, Pageable pageable);
-
     Post findPostById(long id);
 }

@@ -9,7 +9,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "post")
+@Table(name = "post", indexes = {
+        @Index(name = "post_gu", columnList = "general_user_id")
+})
 public class Post {
 
     @Id

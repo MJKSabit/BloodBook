@@ -9,7 +9,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "event")
+@Table(name = "event", indexes = {
+        @Index(name = "event_user", columnList = "bb_user_id")
+})
 public class Event {
 
     @Id

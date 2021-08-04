@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "e4u_u", columnList = "general_user_id"),
+        @Index(name = "e4u_e", columnList = "event_id"),
+})
 public class GeneralUserToEvent {
     @JsonIgnore
     @Id
