@@ -1,4 +1,5 @@
-import { Avatar, CircularProgress, Grid } from "@material-ui/core"
+import { Avatar, Button, CircularProgress, Grid } from "@material-ui/core"
+import { CloudUploadOutlined } from "@material-ui/icons"
 import { useState } from "react"
 import { uploadImage } from "../store/action"
 
@@ -29,7 +30,13 @@ export default function ImageUploader({onUpload, init=null}) {
         }
       </Grid>
       <Grid item>
-        <input type="file" onChange={ onFileSelected } accept="image/*"/> 
+        <input type="file" onChange={ onFileSelected } accept="image/*" multiple={false}
+          style={{ display: 'none' }} id="raised-button-file"/>
+        <label htmlFor="raised-button-file">
+          <Button variant="outlined" component="span">
+            <CloudUploadOutlined style={{marginRight: '8px'}}/> Upload
+          </Button>
+        </label> 
       </Grid>
     </Grid>
   )

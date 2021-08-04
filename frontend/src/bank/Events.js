@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Paper, Typography } from "@material-ui/core"
-import { Info, LocationOn, MoreVert, QueryBuilder } from "@material-ui/icons";
+import { FileCopyOutlined, Info, LocationOn, MoreVert, QueryBuilder, VisibilityOutlined } from "@material-ui/icons";
 import { useEffect, useState } from "react"
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import LocationViewer from "../generic/LocationViewer";
 import store from "../store"
 import { deleteEvent, getEvents, notifyUser } from "../store/action";
@@ -67,6 +67,8 @@ export const Event = props => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [event, setEvent] = useState(props.event)
 
+  const history = useHistory()
+
   if (event === null)
     return null
 
@@ -101,14 +103,14 @@ export const Event = props => {
                   } variant='body1'> {event.user.name} </Link>
                 </div>
                 <div className={'post-date'}>
-                <Link component={RouterLink} to={eventLink} variant='body2'>
-                  {new Date(event.posted).toLocaleDateString()}
-                </Link>
+                <Typography variant='body2' title={new Date(event.posted).toLocaleString('en-GB')}>
+                  {new Date(event.posted).toLocaleDateString('en-GB')}
+                </Typography>
                 </div>
                 <div className={'post-info-container'}>
                     <div className={'profile-entry-container'}>
                         <QueryBuilder style={{marginRight:'8px'}}/>
-                        At: {new Date(event.eventDate).toLocaleDateString()}
+                        At: {new Date(event.eventDate).toLocaleDateString('en-GB')}
                     </div>
                     <div className={'profile-entry-container'}>
                         <LocationOn style={{marginRight:'8px'}}/>
@@ -135,7 +137,11 @@ export const Event = props => {
                       () => store.dispatch(notifyUser('Copied!')),
                       () => store.dispatch(notifyUser('Can not copy!'))
                     )
-                  }}>Copy Link</MenuItem>
+                  }}><FileCopyOutlined style={{paddingRight: '8px'}}/> Copy Link</MenuItem>
+                  <MenuItem onClick={(e) => {
+                    handleClose()
+                    history.push(eventLink)
+                  }}><VisibilityOutlined style={{paddingRight: '8px'}}/> View Event</MenuItem>
                   { editAccess && 
                     <MenuItem onClick={(e) => {
                       handleClose(e)

@@ -86,10 +86,10 @@ const ProfileCard = props => {
 const BGCountCard = ({bloodGroup, inStock}) => {
   return <Card variant='outlined'>
     <CardContent>
-      <Typography color='textSecondary' component='p'>
+      <Typography color='secondary' component='p'>
         {bloodGroup}
       </Typography>
-      <Typography variant='h3'>
+      <Typography variant='h2' align='right'>
         {inStock}
       </Typography>
     </CardContent>

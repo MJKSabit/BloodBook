@@ -10,8 +10,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { changePostManaged, deletePost, getPosts, notifyUser } from '../../store/action';
 import { Link } from '@material-ui/core';
-import { CheckCircle, LocationOn } from '@material-ui/icons';
-import { Link as RouterLink } from "react-router-dom";
+import { CheckCircle, CheckCircleOutlined, DeleteOutlined, FileCopyOutlined, LocationOn, VisibilityOutlined } from '@material-ui/icons';
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import store from '../../store';
 import LocationViewer from '../../generic/LocationViewer';
 
@@ -67,6 +67,8 @@ export const Post = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [post, setPost] = useState(props.post)
 
+  const history = useHistory()
+
   if (post === null)
     return null
 
@@ -91,9 +93,9 @@ export const Post = props => {
                       <Link component={RouterLink} to={`/user/profile/${post.user.user.username}`} variant='body1'> {post.user.name} </Link>
                     </div>
                     <div className={'post-date'}>
-                    <Link component={RouterLink} to={`/user/post/${post.id}`} variant='body2'>
-                      {new Date(post.posted).toLocaleDateString()}
-                    </Link>
+                    <Typography to={`/user/post/${post.id}`} variant='body2' title={new Date(post.posted).toLocaleString('en-GB')}>
+                      {new Date(post.posted).toLocaleDateString('en-GB')}
+                    </Typography>
                     </div>
                     <div className={'post-info-container'}>
                         <div className={'profile-entry-container'}>
@@ -102,7 +104,7 @@ export const Post = props => {
                         </div>
                         <div className={'profile-entry-container'}>
                             <QueryBuilderIcon style={{marginRight:'8px'}}/>
-                            Needed at: {new Date(post.needed).toLocaleDateString()}
+                            Needed at: {new Date(post.needed).toLocaleDateString('en-GB')}
                         </div>
                         <div className={'profile-entry-container'}>
                             <LocationOn style={{marginRight:'8px'}}/>
@@ -129,7 +131,11 @@ export const Post = props => {
                           () => store.dispatch(notifyUser('Copied!')),
                           () => store.dispatch(notifyUser('Can not copy!'))
                         )
-                      }}>Copy Link</MenuItem>
+                      }}><FileCopyOutlined style={{paddingRight: '8px'}}/> Copy Link</MenuItem>
+                      <MenuItem onClick={(e) => {
+                        handleClose()
+                        history.push(`/user/post/${post.id}`)
+                      }}><VisibilityOutlined style={{paddingRight: '8px'}}/> View Post</MenuItem>
                       { editAccess && <>
                         <MenuItem onClick={(e) => {
                           handleClose(e)
@@ -137,14 +143,14 @@ export const Post = props => {
                             data => setPost(data),
                             err => console.log(err)
                           )
-                        }}>Change Managed</MenuItem>
+                        }}><CheckCircleOutlined style={{paddingRight: '8px'}}/>Change Managed</MenuItem>
                         <MenuItem onClick={(e) => {
                           handleClose(e)
                           deletePost(post.id).then(
                             () => setPost(null),
                             err => console.log(err)
                           )
-                        }}>Delete</MenuItem>
+                        }}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
                       </>}
                     </Menu>
                 </div>

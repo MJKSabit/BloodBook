@@ -276,7 +276,7 @@ axios.interceptors.response.use(
 
 axios.interceptors.request.use( config => {
     const jwt = store.getState().jwt
-    if (jwt)
+    if (jwt && config.url.includes(API_URL))
         config.headers.Authorization = `Bearer ${jwt}`
     return config
 })

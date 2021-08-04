@@ -80,7 +80,7 @@ export default function SignUp(props) {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Typography variant="subtitle2" align='center'>
+        <Typography variant="subtitle2" align='center' color='textSecondary'>
           Make sure:<br /> 
           Username: uses A~Z, a~z and _ with length 6~29 <br />
           Password: 8~20 characters + matches Confirm Password <br />
@@ -175,9 +175,9 @@ export default function SignUp(props) {
                 onChange={e => setConfirmPassword(e.target.value)}
                 onBlur={ e => {
                   if (password !== confirmPassword) {
-                    setError({...error, ...error, passwordMatcher: true})
+                    setError({...error, passwordMatcher: true})
                     dispatch(notifyUser("Passwords don't match"))
-                  } else setError({...error, ...error, passwordMatcher: false})
+                  } else setError({...error, passwordMatcher: false})
                 }}
               />
             </Grid>
@@ -260,6 +260,7 @@ export default function SignUp(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={error}
             onClick={ e => {
               e.preventDefault()
               const data = {

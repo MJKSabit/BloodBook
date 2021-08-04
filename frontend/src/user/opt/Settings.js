@@ -39,7 +39,7 @@ const Settings = props => {
     <Box p={4} mt={5} mb={5}>
     <Grid container spacing={2}  alignItems="center">
       <Grid item xs={12}>
-        <Typography variant='h4'>
+        <Typography variant='h4' style={{padding: '20px'}}>
           General Settings
         </Typography>
       </Grid>
@@ -52,7 +52,7 @@ const Settings = props => {
       </Grid>
       
       <Grid item xs={4}>
-        <Typography variant='body2'>
+        <Typography variant='body2' color='textSecondary'>
           Profile Picture
         </Typography>
       </Grid>
@@ -63,7 +63,7 @@ const Settings = props => {
       </Grid>
 
       <Grid item xs={4}>
-        <Typography variant='body2'>
+        <Typography variant='body2' color='textSecondary'>
           Approximate Location
         </Typography>
       </Grid>

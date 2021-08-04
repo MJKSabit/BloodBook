@@ -69,7 +69,7 @@ const UserCard = props => {
                 </div>
                 <div className={'profile-entry-container'}>
                     <WatchLater style={{marginRight:'8px'}}/>
-                    {`Last Donation: ${new Date(user.lastDonation).toLocaleDateString()}`}
+                    {`Last Donation: ${new Date(user.lastDonation).toLocaleDateString('en-GB')}`}
                 </div>
                 <div className={'profile-entry-container'}>
                     <LocationOn style={{marginRight:'8px'}}/>

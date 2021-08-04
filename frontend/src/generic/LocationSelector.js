@@ -72,7 +72,7 @@ export default function LocationSelector({lat, long, onSelected}) {
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <TextField 
-            label='Location' 
+            label='Press ENTER to search' 
             style={{'width': '100%'}}
             onKeyDown={
               e => e.key === 'Enter' && search(e.target.value)
@@ -85,10 +85,10 @@ export default function LocationSelector({lat, long, onSelected}) {
           />
           <SimpleDialog open={open} onClose={handleClose} options={options} />
         </Grid>
-        <Grid item xs={6} style={{paddingTop: '10px', paddingBottom: '10px'}}>
+        <Grid item xs={6} style={{paddingTop: '20px', paddingBottom: '10px'}}>
           <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}} />
         </Grid>
-        <Grid item xs={6} style={{paddingTop: '10px', paddingBottom: '10px'}}>
+        <Grid item xs={6} style={{paddingTop: '20px', paddingBottom: '10px'}}>
           <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} />
         </Grid>
         <Grid item xs={12}>
