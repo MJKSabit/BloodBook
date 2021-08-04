@@ -6,10 +6,6 @@ import ReactJson from "react-json-view"
 import store from "../store"
 import { getUserData, getUserList, notifyUser, setUserData, setUserStatus } from "../store/action"
 
-const UserCard = ({user, active, banned, role}) => {
-  return 
-}
-
 const UserAccess = props => {
 
   const [active, setActive] = useState(true)

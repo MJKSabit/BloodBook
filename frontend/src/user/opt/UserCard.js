@@ -62,7 +62,7 @@ const UserCard = props => {
                 </div>
                 <div className={'profile-entry-container'} title='Facebook'>
                     <Facebook style={{marginRight:'8px'}}/>
-                    {user.facebook || 'Not Connected'}
+                    {user.facebook ? 'Connected' : 'Not Connected'}
                 </div>
             </Grid>
             <Grid item xs={12} md={6}>

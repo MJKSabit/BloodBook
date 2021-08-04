@@ -23,7 +23,12 @@ const Explore = (props) => {
       BloodBanks near you:
     </Typography>
   </Box>
-  <BankList banks={banks} userType={userType} />
+  { banks.length !== 0 ?
+    <BankList banks={banks} userType={userType} /> :
+    <Typography color='textSecondary' variant='subtitle2' style={{padding: '10px'}}>
+      No bloodbank near you!
+    </Typography>
+  }
   </>
 }
 
