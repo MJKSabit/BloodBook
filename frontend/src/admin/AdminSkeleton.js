@@ -2,6 +2,8 @@ import { AppBar, Box, Button, Container, makeStyles, Toolbar, Typography } from 
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import store from "../store";
 import { signOut } from "../store/action";
+import Overview from "./Overview";
+import UserAccess from "./UserAccess";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,10 +23,10 @@ const AdminSkeleton = props => {
 
   const mainContent = <Switch>
     <Route path='/admin/overview' exact>
-      Overview Page
+      <Overview />
     </Route>
     <Route path='/admin/view'>
-      View and Edit User Info
+      <UserAccess />
     </Route>
     <Route>
       <Redirect to='/admin/overview' />
@@ -40,10 +42,9 @@ const AdminSkeleton = props => {
           </Typography>
           <Button color="inherit" onClick={() => history.push('/admin/overview')}>Overview</Button>
           <Button color="inherit" onClick={() => history.push('/admin/view')}>Change Access</Button>
-          <Button color="secondary" variant='contained' onClick={ () => {
-            store.dispatch(signOut())
-            // history.push('/admin/signin')
-          }}>Log Out</Button>
+          <Button color="secondary" variant='contained' onClick={ () => store.dispatch(signOut())}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Container maxWidth='md' >

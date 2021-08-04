@@ -223,6 +223,31 @@ export const saveBankSettings = async (data) => {
     return response
 }
 
+export const getAdminStats = async () => {
+    const response = await axios.get(`${API_URL}/admin/overview`)
+    return response.data
+}
+
+export const getUserList = async (url, page) => {
+    const data = await axios.get(`${API_URL}${url}&page=${page}`)
+    return {content: data.data.content, hasNext: !data.data.last, page: data.data.number}
+}
+
+export const setUserStatus = async (data) => {
+    const response = await axios.post(`${API_URL}/admin/user`, data)
+    return response.data
+}
+
+export const getUserData = async (userType, username) => {
+    const response = await axios.get(`${API_URL}/admin/${userType}/${username}`)
+    return response.data
+}
+
+export const setUserData = async (userType, username, data) => {
+    const response = await axios.post(`${API_URL}/admin/${userType}/${username}`, data)
+    return response.data
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {

@@ -42,10 +42,10 @@ public class UserAccessController {
     public String getOverview() {
         JSONObject response = new JSONObject();
 
-        response.put("users", generalUserRepository.count());
-        response.put("banks", bloodBankRepository.count());
-        response.put("posts", postRepository.count());
-        response.put("events", eventRepository.count());
+        response.put("Number of Users", generalUserRepository.count());
+        response.put("Number of BloodBanks", bloodBankRepository.count());
+        response.put("Number of Posts", postRepository.count());
+        response.put("Number of Events", eventRepository.count());
 
         return response.toString();
     }
