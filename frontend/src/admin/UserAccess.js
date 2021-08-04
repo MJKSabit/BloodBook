@@ -2,8 +2,9 @@ import { Box, Button, Card, CardActions, CardHeader, Checkbox, Dialog, DialogAct
 import { Edit, Lock } from "@material-ui/icons"
 import { useEffect } from "react"
 import { useState } from "react"
+import ReactJson from "react-json-view"
 import store from "../store"
-import { getUserList, notifyUser, setUserStatus } from "../store/action"
+import { getUserData, getUserList, notifyUser, setUserData, setUserStatus } from "../store/action"
 
 const UserCard = ({user, active, banned, role}) => {
   return 
@@ -94,6 +95,45 @@ const UserAccess = props => {
     </DialogActions>
   </Dialog>
 
+  const [openUserDetailsDialog, setOpenUserDetailsDialog] = useState(false);
+  const [userDetails, setUserDetails] = useState(null)
+
+  const handleUserDetailsChange = (username) => {
+    store.dispatch(notifyUser("Loading ..."))
+    getUserData(role.toLowerCase(), username).then( data => {
+      setUsername(username)
+      setUserDetails(data)
+      setOpenUserDetailsDialog(true)
+    })
+  }
+
+  const handleDetailsDialogClose = () => {
+    setOpenUserDetailsDialog(false);
+  };
+
+  const detailsDialog = <Dialog open={openUserDetailsDialog} onClose={handleDetailsDialogClose}>
+    <DialogTitle>Change "{username}" Details</DialogTitle>
+    <DialogContent>
+      <ReactJson src={userDetails} onEdit={ (e) => setUserDetails(e.updated_src) } 
+        indentWidth={2} quotesOnKeys={false}/>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleDetailsDialogClose} color="primary">
+        Cancel
+      </Button>
+      <Button onClick={ () => {
+        setOpenUserDetailsDialog(false)
+        setUserData(role.toLowerCase(), username, userDetails).then(
+          (data) => {
+            store.dispatch(notifyUser('Updated "'+username+'" details'))
+            setUsers(users.map(user => user.username === username ? data.user : user))
+          }
+        )}} color='primary' variant='contained'>
+        Update
+      </Button>
+    </DialogActions>
+  </Dialog>
+
   const userList = <Grid container alignContent='center' spacing={3} style={{marginTop: '10px'}}>
     {users.map(user => (
       <Grid item xs={12} sm={6} md={4} >
@@ -104,7 +144,7 @@ const UserAccess = props => {
             <IconButton onClick={() => handleChangePrivilage(user.username)}>
               <Lock />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => handleUserDetailsChange(user.username)}>
               <Edit />
             </IconButton>
           </CardActions>
@@ -150,6 +190,7 @@ const UserAccess = props => {
     </Grid>
     {userList}
     {privilageDialog}
+    {detailsDialog}
   </Box>
 }
 
