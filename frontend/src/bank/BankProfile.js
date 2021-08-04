@@ -1,5 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns"
-import { Avatar, Box, Button, Card, CardContent, Checkbox, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Link, Paper, TextField, Typography } from "@material-ui/core"
+import { Avatar, Box, Button, Card, CardContent, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Link, Paper, TextField, Typography } from "@material-ui/core"
 import { Email, LocationOn } from "@material-ui/icons"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { useEffect } from "react"
@@ -114,7 +114,7 @@ const CountCard = (props) => {
   }, [])
 
   if (data === null) 
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+    return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   return <Paper>
     <Box p={3} mt={5}>
@@ -245,7 +245,7 @@ const BankProfile = (props) => {
   useEffect(() => store.subscribe( () => setProfile(store.getState().profile)), [])
 
   if (profile === null)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   const username = profile.user.username
 
@@ -272,7 +272,7 @@ export const OtherBankProfile = props => {
   }, [])
 
   if (profile === null)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   return <>
     <ProfileCard user={profile}/>

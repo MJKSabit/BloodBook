@@ -1,4 +1,4 @@
-import { Paper } from "@material-ui/core"
+import { Box, CircularProgress, Paper } from "@material-ui/core"
 import store from "../../store"
 import CreatePost from "./CreatePost"
 import Posts from "./Posts"
@@ -6,7 +6,7 @@ import PostSelection from "./PostSelection"
 
 const PostPage = props => {
   if (!store.getState().profile)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   return (
     <>

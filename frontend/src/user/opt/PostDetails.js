@@ -1,4 +1,4 @@
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core"
+import { Avatar, Box, CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
@@ -11,8 +11,8 @@ export const BankList = (props) => {
   const urlPrefix = userType === 'user' ? '/user/bloodbank/' : '/bloodbank/profile/'
   const history = useHistory()
 
-  if (banks === null)
-    return null
+  if (banks === null || banks.length === 0)
+    return <Typography variant='subtitle2' style={{paddingLeft: '10px', marginTop: '30px'}}>No Matches!</Typography>
 
   return <Paper>
     <Box mt={5} mb={5}>
@@ -49,7 +49,7 @@ const PostDetails = (props) => {
   }, [])
 
   if (post === null)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
   
   return (
     <>

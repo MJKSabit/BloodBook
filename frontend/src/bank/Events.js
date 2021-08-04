@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, IconButton, Link, Menu, MenuItem, Paper, Typography } from "@material-ui/core"
+import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Paper, Typography } from "@material-ui/core"
 import { Info, LocationOn, MoreVert, QueryBuilder } from "@material-ui/icons";
 import { useEffect, useState } from "react"
 import { Link as RouterLink } from "react-router-dom";
@@ -30,11 +30,14 @@ const Events = props => {
   }
 
   useEffect( () => {
+    setHasMore(true)
     setEvents([])
+    setLoading(true)
     getEvents(url, 0).then(response => {
       setEvents(response.content)
       setHasMore(response.hasNext)
       setPage(response.page+1)
+      setLoading(false)
     })
   }, [url])
 
@@ -52,7 +55,7 @@ const Events = props => {
       </div>
       <div className={'post-list-container'} style={{visibility: hasMore ? 'visible': 'hidden'}}>
         <Button onClick={() => fetchData()} disabled={loading} fullWidth={true}>
-          Load More
+          <CircularProgress style={{visibility: loading ? 'visible' : 'hidden', marginRight: '20px'}} /> Load More
         </Button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns"
-import { Box, Button, Checkbox, FormControlLabel, Grid, Link, Paper, TextField, Typography } from "@material-ui/core"
+import { Box, Button, Checkbox, CircularProgress, FormControlLabel, Grid, Link, Paper, TextField, Typography } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -33,7 +33,7 @@ const Settings = props => {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   if (!profile)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   const GeneralSettings = (<Paper>
     <Box p={4} mt={5} mb={5}>

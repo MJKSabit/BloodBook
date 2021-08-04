@@ -24,7 +24,7 @@ import '../user/skeleton.css'
 import { useDispatch } from 'react-redux';
 import { getBankProfile, getMyProfile, signOut } from '../store/action';
 import store from '../store';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { NavLink, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import BankProfile, { OtherBankProfile } from './BankProfile';
 import SetBloodCount from './SetBloodCount';
 import BankSettings from './BankSettings';
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BankSkeleton = props => {
-
+    const history = useHistory()
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
@@ -137,7 +137,10 @@ const BankSkeleton = props => {
                     <ListItemText primary={'Settings'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} onClick={() => dispatch(signOut())} button>
+                <ListItem style={{padding:'20px'}} onClick={() => {
+                        dispatch(signOut())
+                        history.push('/user/signin')
+                    }} button>
                     <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
                     <ListItemText primary={'Sign out'} />
                 </ListItem>

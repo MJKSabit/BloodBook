@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Paper, TextField, Typography } from "@material-ui/core"
+import { Box, Button, CircularProgress, Grid, Paper, TextField, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useHistory } from "react-router-dom"
@@ -19,7 +19,7 @@ const SetBloodCount = props => {
   }, [])
 
   if (blood === null)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   const inputViews = []
 

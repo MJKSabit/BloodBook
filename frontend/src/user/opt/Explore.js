@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@material-ui/core"
+import { Box, CircularProgress, Paper, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { exploreBanks } from "../../store/action"
@@ -16,7 +16,7 @@ const Explore = (props) => {
   }, [])
 
   if (banks === null)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   return <><Box mt={5} mb={5} pl={3}>
     <Typography color='textSecondary' variant='h5'>

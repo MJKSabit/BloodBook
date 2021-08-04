@@ -1,7 +1,7 @@
 import React from 'react'
 import './posts.css'
 import './profile.css'
-import {Avatar, Box, Button, IconButton, Menu, MenuItem, Typography} from "@material-ui/core";
+import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
@@ -56,7 +56,7 @@ const Posts = props => {
           </div>
           <div className={'post-list-container'} style={{visibility: hasMore ? 'visible': 'hidden'}}>
             <Button onClick={() => fetchData(posts, hasMore, page)} disabled={loading} fullWidth={true}>
-              Load More
+              <CircularProgress style={{visibility: loading ? 'visible' : 'hidden', marginRight: '20px'}} /> Load More
             </Button>
           </div>
       </div>

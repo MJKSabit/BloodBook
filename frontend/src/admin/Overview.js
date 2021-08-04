@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Paper, Typography } from "@material-ui/core"
+import { Box, Card, CardContent, CircularProgress, Grid, Paper, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { getAdminStats } from "../store/action"
@@ -29,7 +29,9 @@ const Overview = props => {
   }, [])
 
   if (data === null) 
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+    return (<Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}>
+              <CircularProgress />
+            </Box>)
   
   return <Paper>
   <Box p={3} mt={2} mb={2}>

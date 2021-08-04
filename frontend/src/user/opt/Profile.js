@@ -1,11 +1,11 @@
 import Posts from "./Posts"
 import UserCard from "./UserCard"
 import store from "../../store"
-import { Paper } from "@material-ui/core"
+import { Box, CircularProgress, Paper } from "@material-ui/core"
 
 const Profile = props => {
   if (!store.getState().profile)
-    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
+  return <Box display='flex' style={{alignItems: 'center', justifyContent: 'center'}} my={5}> <CircularProgress /></Box>
 
   const username = store.getState().profile.user.username
   return (<>
