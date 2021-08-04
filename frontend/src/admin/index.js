@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import store from "../store";
 import ForgotPassword from "../user/auth/ForgotPassword";
 import SignIn from "../user/auth/SignIn";
+import AdminSkeleton from "./AdminSkeleton";
 
 export default function Admin() {
   const [isSignedIn, setSignedIn] = useState(store.getState().jwt !== null)
@@ -29,7 +30,7 @@ export default function Admin() {
   </Switch>)
 
   const signedIn = (
-    <Typography>Hello Admin</Typography>
+    <AdminSkeleton />
   )
 
   return isSignedIn ? signedIn : notSignedIn
