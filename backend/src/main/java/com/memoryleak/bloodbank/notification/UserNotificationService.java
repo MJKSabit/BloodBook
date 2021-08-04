@@ -103,7 +103,7 @@ public class UserNotificationService {
         String subject = String.format("Upcoming Event by %s", event.getUser().getName());
         String postText = String.format("Hello BloodBook User,\n" +
                         "%s (%s) is going to arrange an event near you\n" +
-                        "At: %s (Posted At: )\n" +
+                        "At: %s (Posted At: %s)\n" +
                         "Information:\n" +
                         "%s\n\n" +
                         "Location: %s\n" +

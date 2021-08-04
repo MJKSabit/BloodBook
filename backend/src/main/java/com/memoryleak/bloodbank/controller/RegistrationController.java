@@ -175,7 +175,7 @@ public class RegistrationController {
             emailNotification.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Password Reset",
-                    "Go to the link below to activate your BloodBook Account\n"+
+                    "Go to the link below to reset your BloodBook Account Password\n"+
                             BASE_URL+"/forgot/"+jwtVerification
             );
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -193,7 +193,7 @@ public class RegistrationController {
         User user = userService.findByUsername(username);
         String password = UUID.randomUUID().toString();
         user.setPassword(password);
-        userService.save(user);
+        userService.save(user, user.getRole());
         return ResponseEntity.ok("Password Reset! Use Password: "+password);
     }
 }

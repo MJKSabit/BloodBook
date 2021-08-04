@@ -1,6 +1,7 @@
 package com.memoryleak.bloodbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import org.hibernate.proxy.HibernateProxyHelper;
@@ -103,6 +104,7 @@ public class GeneralUser implements Serializable {
     }
 
     @JsonView(View.Private.class)
+    @JsonProperty(value="isActiveDonor")
     public boolean isActiveDonor() {
         return isActiveDonor;
     }
