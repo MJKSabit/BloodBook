@@ -2,11 +2,11 @@ import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem
 import { Info, LocationOn, MoreVert, QueryBuilder } from "@material-ui/icons";
 import { useEffect, useState } from "react"
 import { Link as RouterLink } from "react-router-dom";
+import LocationViewer from "../generic/LocationViewer";
 import store from "../store"
 import { deleteEvent, getEvents, notifyUser } from "../store/action";
 import '../user/opt/posts.css'
 import '../user/opt/profile.css'
-import { getMapLink } from "../user/opt/UserCard";
 
 const Events = props => {
   let {url, label, userType} = props
@@ -112,12 +112,7 @@ export const Event = props => {
                     </div>
                     <div className={'profile-entry-container'}>
                         <LocationOn style={{marginRight:'8px'}}/>
-                        <Link 
-                          href={getMapLink(event.location.latitude, event.location.longitude)}
-                          rel="noopener noreferrer" 
-                          target="_blank">
-                          {`${event.location.latitude}, ${event.location.longitude} ↗️`}
-                        </Link>
+                          <LocationViewer location={event.location} />
                     </div>
                     <div className={'profile-entry-container'}>
                         <Info style={{marginRight:'8px'}}/>

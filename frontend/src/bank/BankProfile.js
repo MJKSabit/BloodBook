@@ -6,9 +6,9 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import LocationSelector from "../generic/LocationSelector"
+import LocationViewer from "../generic/LocationViewer"
 import store from "../store"
 import { addEvent, getBankBloodCount, getOtherBankProfile } from "../store/action"
-import { getMapLink } from "../user/opt/UserCard"
 import Events from "./Events"
 import "./styles.css"
 
@@ -66,13 +66,7 @@ const ProfileCard = props => {
                     <LocationOn/>
                   </Grid>
                   <Grid item>
-                    <Link 
-                      href={getMapLink(user.user.location.latitude, user.user.location.longitude)}
-                      rel="noopener noreferrer" 
-                      target="_blank"
-                    >
-                      {`${user.user.location.latitude}, ${user.user.location.longitude} ↗️`}
-                    </Link>
+                    <LocationViewer location={user.user.location} />
                   </Grid>
                 </Grid>
               </Grid>

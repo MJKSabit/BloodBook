@@ -14,8 +14,8 @@ export default function CreatePost(props) {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [notify, setNotify] = useState(true)
   const [info, setInfo] = useState('');
-  const [longitude, setLongitude] = useState(location.latitude)
-  const [latitude, setLatitude] = useState(location.longitude)
+  const [longitude, setLongitude] = useState(location.longitude)
+  const [latitude, setLatitude] = useState(location.latitude)
 
   return (
     <>

@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import { blue } from '@material-ui/core/colors';
+import LocationViewer from './LocationViewer';
 
 const useStyles = makeStyles({
   avatar: {
@@ -84,11 +85,16 @@ export default function LocationSelector({lat, long, onSelected}) {
           />
           <SimpleDialog open={open} onClose={handleClose} options={options} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{paddingTop: '10px', paddingBottom: '10px'}}>
           <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{paddingTop: '10px', paddingBottom: '10px'}}>
           <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant='body2' color='textSecondary' style={{paddingBottom: '10px'}}>
+            Selected: <LocationViewer location={{latitude: location.lat, longitude: location.long}} />
+          </Typography>
         </Grid>
       </Grid>
     </Box>

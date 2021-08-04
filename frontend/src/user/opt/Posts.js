@@ -11,9 +11,9 @@ import { useEffect } from 'react';
 import { changePostManaged, deletePost, getPosts, notifyUser } from '../../store/action';
 import { Link } from '@material-ui/core';
 import { CheckCircle, LocationOn } from '@material-ui/icons';
-import { getMapLink } from './UserCard';
 import { Link as RouterLink } from "react-router-dom";
 import store from '../../store';
+import LocationViewer from '../../generic/LocationViewer';
 
 const Posts = props => {
   const {url, label} = props
@@ -106,12 +106,7 @@ export const Post = props => {
                         </div>
                         <div className={'profile-entry-container'}>
                             <LocationOn style={{marginRight:'8px'}}/>
-                            <Link 
-                              href={getMapLink(post.location.latitude, post.location.longitude)}
-                              rel="noopener noreferrer" 
-                              target="_blank">
-                              {`${post.location.latitude}, ${post.location.longitude} ↗️`}
-                            </Link>
+                            <LocationViewer location={post.location} />
                         </div>
                         <div className={'profile-entry-container'}>
                             <InfoIcon style={{marginRight:'8px'}}/>

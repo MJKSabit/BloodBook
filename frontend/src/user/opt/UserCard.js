@@ -5,10 +5,7 @@ import './profile.css'
 import MailIcon from '@material-ui/icons/Mail';
 import { Facebook, InvertColors, LocationOn, WatchLater } from '@material-ui/icons';
 import { Link } from '@material-ui/core';
-
-export function getMapLink(lat, lng) {
-  return "https://www.google.com/maps/search/?api=1&query="+lat+","+lng;
-}
+import LocationViewer from '../../generic/LocationViewer';
 
 const UserCard = props => {
 
@@ -76,12 +73,7 @@ const UserCard = props => {
                 </div>
                 <div className={'profile-entry-container'}>
                     <LocationOn style={{marginRight:'8px'}}/>
-                    <Link 
-                      href={getMapLink(user.user.location.latitude, user.user.location.longitude)}
-                      rel="noopener noreferrer" 
-                      target="_blank">
-                      {`${user.user.location.latitude}, ${user.user.location.longitude} ↗️`}
-                    </Link>
+                    <LocationViewer location={user.user.location} />
                 </div>
             </Grid>
         </Grid>
