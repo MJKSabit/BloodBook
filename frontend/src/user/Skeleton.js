@@ -24,7 +24,7 @@ import './skeleton.css'
 import { useDispatch } from 'react-redux';
 import { getMyProfile, signOut } from '../store/action';
 import store from '../store';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { NavLink, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Profile from './opt/Profile';
 import Posts from './opt/Posts';
 import PostPage from './opt/PostsPage';
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Skeleton=props=>{
-
+    const history = useHistory()
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
@@ -140,7 +140,10 @@ const Skeleton=props=>{
                     <ListItemText primary={'Settings'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} onClick={() => dispatch(signOut())} button>
+                <ListItem style={{padding:'20px'}} onClick={() => {
+                        dispatch(signOut())
+                        history.push('/user/signin')
+                    }} button>
                     <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
                     <ListItemText primary={'Sign out'} />
                 </ListItem>

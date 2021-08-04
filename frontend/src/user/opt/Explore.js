@@ -16,7 +16,7 @@ const Explore = (props) => {
   }, [])
 
   if (banks === null)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   return <><Box mt={5} mb={5} pl={3}>
     <Typography color='textSecondary' variant='h5'>

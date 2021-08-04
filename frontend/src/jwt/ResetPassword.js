@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Paper, TextField, Typography } from "@material-ui/core"
+import { Box, Button, Container, Grid, TextField, Typography } from "@material-ui/core"
 import { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import store from "../store"
@@ -13,7 +13,6 @@ const ResetPassword = props => {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   return <Container maxWidth='sm'>
-    <Paper>
       <Box p={4} mt={5} mb={5}>
         <Grid container spacing={2}  alignItems="center">
           <Grid item xs={12}>
@@ -67,7 +66,6 @@ const ResetPassword = props => {
           </Box>
         </Grid>
       </Box>
-    </Paper>
   </Container>
 
   

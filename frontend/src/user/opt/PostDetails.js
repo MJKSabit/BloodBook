@@ -49,7 +49,7 @@ const PostDetails = (props) => {
   }, [])
 
   if (post === null)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
   
   return (
     <>

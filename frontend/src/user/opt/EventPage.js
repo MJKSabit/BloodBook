@@ -1,3 +1,4 @@
+import { Paper } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
@@ -18,7 +19,7 @@ const EventPage = props => {
   }, [])
 
   if (event === null) 
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   return <Event event={event} userType={userType}/>
 }

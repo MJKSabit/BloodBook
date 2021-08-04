@@ -19,7 +19,7 @@ const SetBloodCount = props => {
   }, [])
 
   if (blood === null)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   const inputViews = []
 

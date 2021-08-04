@@ -33,7 +33,7 @@ const Settings = props => {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   if (!profile)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   const GeneralSettings = (<Paper>
     <Box p={4} mt={5} mb={5}>

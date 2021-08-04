@@ -114,7 +114,7 @@ const CountCard = (props) => {
   }, [])
 
   if (data === null) 
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   return <Paper>
     <Box p={3} mt={5}>
@@ -245,7 +245,7 @@ const BankProfile = (props) => {
   useEffect(() => store.subscribe( () => setProfile(store.getState().profile)), [])
 
   if (profile === null)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   const username = profile.user.username
 
@@ -272,7 +272,7 @@ export const OtherBankProfile = props => {
   }, [])
 
   if (profile === null)
-    return null
+    return <Paper style={{padding: '20px'}}>Still Loading...</Paper>
 
   return <>
     <ProfileCard user={profile}/>
