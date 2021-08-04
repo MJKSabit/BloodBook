@@ -12,6 +12,8 @@ import Admin from './admin';
 import { Snackbar } from '@material-ui/core';
 import { useState } from 'react';
 import BloodBank from './bank';
+import ActivateAccount from './jwt/ActivateAccount';
+import ResetPassword from './jwt/ResetPassword';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -38,6 +40,12 @@ function App() {
           </Route>
           <Route path='/bloodbank'>
             <BloodBank />
+          </Route>
+          <Route path='/activate/:jwt'>
+            <ActivateAccount />
+          </Route>
+          <Route path='/forgot/:jwt'>
+            <ResetPassword />
           </Route>
           <Route>
             <Redirect to='/user' />

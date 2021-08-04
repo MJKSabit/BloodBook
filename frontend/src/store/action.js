@@ -248,6 +248,16 @@ export const setUserData = async (userType, username, data) => {
     return response.data
 }
 
+export const activateAccount = async (jwt) => {
+    await axios.post(`${API_URL}/activate`, {jwt})
+    store.dispatch(notifyUser('Account Activated'))
+}
+
+export const resetPassword = async (jwt, password) => {
+    await axios.post(`${API_URL}/reset-password`, {jwt, password})
+    store.dispatch(notifyUser('Password Reset Successful'))
+}
+
 axios.interceptors.response.use(
     response => response,
     error => {

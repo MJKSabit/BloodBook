@@ -26,6 +26,9 @@ public class RegistrationController {
     @Value("${BASE_URL:http://localhost:8080}")
     String BASE_URL;
 
+    @Value("${FRONTEND_URL:http://localhost:3000}")
+    String FRONTEND_URL;
+
     private static final Pattern usernameMatcher = Pattern.compile("^[A-Za-z]\\w{5,29}$");
     public static final Pattern passwordMatcher = Pattern.compile("^.{8,20}$");
     private static final Pattern emailMatcher = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}");
@@ -101,7 +104,7 @@ public class RegistrationController {
                     Collections.singletonList(user.getEmail()),
                     "Confirm Your Account",
                     "Go to the link below to activate your BloodBook Account\n"+
-                            BASE_URL+"/register/activate/"+jwtVerification
+                            FRONTEND_URL+"/activate/"+jwtVerification
                     );
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else
@@ -151,8 +154,9 @@ public class RegistrationController {
             return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(path = "/register/activate/{jwtVerify}")
-    public ResponseEntity<String> activateUser(@PathVariable String jwtVerify) {
+    @PostMapping(path = "/activate")
+    public ResponseEntity<String> activateUser(@RequestBody String jwtVerifyStr) {
+        String jwtVerify = new JSONObject(jwtVerifyStr).getString("jwt");
         String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify, "activate");
 
         if (username == null) return
@@ -176,24 +180,26 @@ public class RegistrationController {
                     Collections.singletonList(user.getEmail()),
                     "Confirm Password Reset",
                     "Go to the link below to reset your BloodBook Account Password\n"+
-                            BASE_URL+"/forgot/"+jwtVerification
+                            FRONTEND_URL+"/forgot/"+jwtVerification
             );
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         } else
             return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(path = "/forgot/{jwtVerify}")
-    public ResponseEntity<String> passwordReset(@PathVariable String jwtVerify) {
+    @PostMapping(path = "/reset-password")
+    public ResponseEntity<String> passwordReset(@RequestBody String jwtVerifyStr) {
+        JSONObject object = new JSONObject(jwtVerifyStr);
+        String jwtVerify = object.getString("jwt");
+        String password = object.getString("password");
         String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify, "forgot");
 
         if (username == null) return
                 ResponseEntity.badRequest().build();
 
         User user = userService.findByUsername(username);
-        String password = UUID.randomUUID().toString();
         user.setPassword(password);
         userService.save(user, user.getRole());
-        return ResponseEntity.ok("Password Reset! Use Password: "+password);
+        return ResponseEntity.accepted().build();
     }
 }
