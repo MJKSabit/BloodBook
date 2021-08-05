@@ -265,7 +265,10 @@ axios.interceptors.response.use(
       const status = error.response.status;
 
       if (status === UNAUTHORIZED || status === FORBIDDEN) {
-        store.dispatch(signOut());
+        if (store.getState().jwt) 
+            store.dispatch(signOut());
+        else
+            store.dispatch(notifyUser("Failed!"))
       } else {
         store.dispatch(notifyUser(error.message))
         console.log(error)

@@ -6,15 +6,14 @@ import { useState } from "react"
 const LocationViewer = ({location}) => {
   const [placename, setPlacename] = useState(null)
 
-  useEffect(() => {
-    axios.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?localityLanguage=en&latitude=${location.latitude}&longitude=${location.longitude}`).then(
-      response => {
-        const area = `${response.data.locality}, ${response.data.principalSubdivision}, ${response.data.countryName}`
-        setPlacename(area)
-      },
-      err => setPlacename(`${location.latitude}, ${location.longitude} ↗`)
-    )
-  }, [location])
+  // useEffect(() => {
+  //   axios.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?localityLanguage=en&latitude=${location.latitude}&longitude=${location.longitude}`).then(
+  //     response => {
+  //       const area = `${response.data.locality}, ${response.data.principalSubdivision}, ${response.data.countryName}`
+  //       setPlacename(area)
+  //     }
+  //   )
+  // }, [location])
 
   const text = placename ? `${placename} ↗` : `${location.latitude}, ${location.longitude} ↗`
 
