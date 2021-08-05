@@ -33,6 +33,8 @@ public class AuthService {
     public static final String ROLE_BLOOD_BANK      = "BLOODBANK";
 
     public static final String VERIFY_ACTIVATE      = "activate";
+    public static final String VERIFY_FORGOT        = "forgot";
+
 
     public static final Pattern USERNAME_MATCHER = Pattern.compile(
             "^[A-Za-z]\\w{5,29}$"
@@ -222,6 +224,39 @@ public class AuthService {
         } else {
             return false;
         }
+    }
+
+    public boolean forgotPassword(JSONObject data) {
+        User user = userService.findByUsername(data.getString(USERNAME_KEY));
+
+        if (user == null)
+            return false;
+
+        String jwtVerification = jwtTokenUtil.generateVerifyToken(
+                user.getUsername(), user.getEmail(), VERIFY_FORGOT);
+
+        notificationService.sendEmail(
+                Collections.singletonList(user.getEmail()),
+                "Confirm Password Reset",
+                "Go to the link below to reset your BloodBook Account Password\n"+
+                        FRONTEND_URL+"/forgot/"+jwtVerification
+        );
+
+        return true;
+    }
+
+    public boolean resetPassword(JSONObject object) {
+        String jwtVerify = object.getString(JWT_KEY);
+        String password = object.getString(PASSWORD_KEY);
+        String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwtVerify, VERIFY_FORGOT);
+
+        if (username == null)
+            return false;
+
+        User user = userService.findByUsername(username);
+        user.setPassword(password);
+        userService.saveWithRawPassword(user);
+        return true;
     }
 
 }

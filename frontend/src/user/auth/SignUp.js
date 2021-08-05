@@ -51,7 +51,7 @@ export default function SignUp(props) {
   const userType = props.userType || 'user'
   const classes = useStyles();
 
-  const [error, setError] = useState({username: false, email: false, password: false, confirmPassword: false})
+  const [error, setError] = useState({username: true, email: true, password: true, confirmPassword: true})
 
   const [bloodGroup, setBloodgroup] = useState('A+')
   const [active, setActive] = useState(true)
@@ -260,7 +260,7 @@ export default function SignUp(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={error}
+            disabled={error.username || error.email || error.confirmPassword || error.password}
             onClick={ e => {
               e.preventDefault()
               const data = {

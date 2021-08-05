@@ -47,7 +47,7 @@ export default function BankSignUp(props) {
   const userType = props.userType || 'bloodbank'
   const classes = useStyles();
 
-  const [error, setError] = useState({username: false, email: false, password: false, confirmPassword: false})
+  const [error, setError] = useState({username: true, email: true, password: true, confirmPassword: true})
 
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
@@ -167,9 +167,9 @@ export default function BankSignUp(props) {
                 onChange={e => setConfirmPassword(e.target.value)}
                 onBlur={ e => {
                   if (password !== confirmPassword) {
-                    setError({...error, ...error, passwordMatcher: true})
+                    setError({ ...error, confirmPassword: true})
                     dispatch(notifyUser("Passwords don't match"))
-                  } else setError({...error, ...error, passwordMatcher: false})
+                  } else setError({...error, confirmPassword: false})
                 }}
               />
             </Grid>
@@ -210,6 +210,7 @@ export default function BankSignUp(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={error.username || error.email || error.confirmPassword || error.password}
             onClick={ e => {
               e.preventDefault()
               const data = {

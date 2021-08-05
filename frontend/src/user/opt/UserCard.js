@@ -5,6 +5,7 @@ import './profile.css'
 import MailIcon from '@material-ui/icons/Mail';
 import { Facebook, InvertColors, LocationOn, WatchLater } from '@material-ui/icons';
 import LocationViewer from '../../generic/LocationViewer';
+import { makeStyles } from '@material-ui/styles';
 
 const UserCard = props => {
 
@@ -21,11 +22,11 @@ const UserCard = props => {
       <Paper style={{padding:'30px'}}>
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <center>
+            <div className={'square'}>
               <Avatar 
-                style={{position:'relative', width:'100%', height:'100%'}} 
+                style={{position: 'absolute', top: '0', left: '0', height: '100%', width: '100%'}}
                 src={user.imageURL}/>
-            </center>
+            </div>
           </Grid>
           <Grid item xs={8}>
             <div className={'profile-header'}>

@@ -18,12 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-
-import static com.memoryleak.bloodbank.controller.RegistrationController.passwordMatcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class UserController {
     private final static Logger logger = LogManager.getLogger(UserController.class);
+
+    public static final Pattern passwordMatcher = Pattern.compile("^.{8,20}$");
 
     @Autowired
     LocationRepository locationRepository;

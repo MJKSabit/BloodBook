@@ -10,7 +10,7 @@ import LocationViewer from "../generic/LocationViewer"
 import store from "../store"
 import { addEvent, getBankBloodCount, getOtherBankProfile } from "../store/action"
 import Events from "./Events"
-import "./styles.css"
+import "../user/opt/profile.css"
 
 const ProfileCard = props => {
   const {user} = props
@@ -23,11 +23,11 @@ const ProfileCard = props => {
       <Box p={6} >
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
-            <Box className='square'>
-              <Avatar src={user.imageURL} 
-              style={{position:'absolute', width:'100%', height:'100%'}} 
-              />
-            </Box>
+            <div className={'square'}>
+                <Avatar 
+                  style={{position: 'absolute', top: '0', left: '0', height: '100%', width: '100%'}}
+                  src={user.imageURL}/>
+              </div>
           </Grid>
           <Grid item xs={12} sm={8}>
             <Grid

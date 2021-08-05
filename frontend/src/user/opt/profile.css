@@ -30,3 +30,16 @@
   align-items: center;
   padding: 5px;
 }
+
+.square {
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  position: relative;
+}
+/* 
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+} */
