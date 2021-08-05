@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
-
 @Service
 public class EventService {
     public final static int PAGE_SIZE = 30;

@@ -4,51 +4,31 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.BloodBank;
 import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.User;
-import com.memoryleak.bloodbank.repository.*;
+import com.memoryleak.bloodbank.service.AdminService;
+import com.memoryleak.bloodbank.service.BloodBankService;
+import com.memoryleak.bloodbank.service.GeneralUserService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
 
 @RestController
 public class UserAccessController {
 
     @Autowired
-    BloodBankRepository bloodBankRepository;
+    AdminService adminService;
 
     @Autowired
-    GeneralUserRepository generalUserRepository;
+    BloodBankService bloodBankService;
 
     @Autowired
-    PostRepository postRepository;
-
-    @Autowired
-    EventRepository eventRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    LocationRepository locationRepository;
+    GeneralUserService generalUserService;
 
     @GetMapping("/admin/overview")
     public String getOverview() {
-        JSONObject response = new JSONObject();
-
-        response.put("Number of Users", generalUserRepository.count());
-        response.put("Number of BloodBanks", bloodBankRepository.count());
-        response.put("Number of Posts", postRepository.count());
-        response.put("Number of Events", eventRepository.count());
-
-        return response.toString();
+        return adminService.overview().toString();
     }
 
     @GetMapping("/admin/users")
@@ -56,108 +36,64 @@ public class UserAccessController {
                                               @RequestParam boolean active,
                                               @RequestParam boolean banned,
                                               @RequestParam(required = false, defaultValue = "0") int page) {
-        if (!(role.equals("USER") || role.equals("BLOODBANK")))
+        Slice<User> users = adminService.users(role, active, banned, page);
+        if (users==null)
             return ResponseEntity.badRequest().build();
-
-        return ResponseEntity.ok(
-                userRepository.findUserByActiveAndBannedAndRole(
-                        active, banned, role,
-                        PageRequest.of(page, PAGE_SIZE, Sort.by("id"))
-                )
-        );
+        else
+            return ResponseEntity.ok(users);
     }
-
-    private void updateUser(User updateTo, User updateWith) {
-        Location location = updateTo.getLocation();
-        location.setLatitude(updateWith.getLocation().getLatitude());
-        location.setLongitude(updateWith.getLocation().getLongitude());
-        locationRepository.save(location);
-
-        updateTo.setEmail(updateWith.getEmail());
-        updateTo.setUsername(updateWith.getUsername());
-        userRepository.save(updateTo);
-    }
-
 
     @PostMapping("/admin/user")
     public ResponseEntity<User> setStatus(@RequestBody String strReq) {
-        JSONObject request = new JSONObject(strReq);
-        String username = request.getString("username");
-        boolean active = request.getBoolean("active");
-        boolean banned = request.getBoolean("banned");
-
-        User user = userRepository.findUserByUsernameIgnoreCase(username);
-
+        User user = adminService.accessControl(new JSONObject(strReq));
         if (user == null)
             return ResponseEntity.notFound().build();
-
-        user.setActive(active);
-        user.setBanned(banned);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(user);
+        else
+            return ResponseEntity.ok(user);
     }
 
-    @Transactional
     @JsonView(View.Private.class)
     @PostMapping("admin/bloodbank/{username}")
     public ResponseEntity<BloodBank> setBloodBank(@PathVariable String username,
                                           @RequestBody BloodBank rBloodBank) {
-        BloodBank bloodBank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
+        BloodBank bloodBank = adminService.updateBloodBank(username, rBloodBank);
         if (bloodBank==null)
             return ResponseEntity.notFound().build();
-
-        updateUser(bloodBank.getUser(), rBloodBank.getUser());
-
-        bloodBank.setName(rBloodBank.getName());
-        bloodBank.setImageURL(rBloodBank.getImageURL());
-        bloodBank.setAbout(rBloodBank.getAbout());
-        bloodBankRepository.save(bloodBank);
-
-        return ResponseEntity.ok(bloodBank);
+        else
+            return ResponseEntity.ok(bloodBank);
     }
 
     @JsonView(View.Private.class)
     @GetMapping("admin/bloodbank/{username}")
-    public ResponseEntity<BloodBank> setBloodBank(@PathVariable String username) {
-        BloodBank bloodBank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
+    public ResponseEntity<BloodBank> getBloodBank(@PathVariable String username) {
+        BloodBank bloodBank = bloodBankService.get(username);
+
         if (bloodBank==null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(bloodBank);
+        else
+            return ResponseEntity.ok(bloodBank);
     }
 
-    @Transactional
     @JsonView(View.Private.class)
     @PostMapping("admin/user/{username}")
     public ResponseEntity<GeneralUser> setUser(@PathVariable String username,
                                                     @RequestBody GeneralUser rGeneralUser) {
-        GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
+        GeneralUser generalUser = adminService.updateGeneralUser(username, rGeneralUser);
 
         if (generalUser==null)
             return ResponseEntity.notFound().build();
-
-        updateUser(generalUser.getUser(), rGeneralUser.getUser());
-
-        generalUser.setName(rGeneralUser.getName());
-        generalUser.setImageURL(rGeneralUser.getImageURL());
-        generalUser.setAbout(rGeneralUser.getAbout());
-        generalUser.setFacebook(rGeneralUser.getFacebook());
-        generalUser.setActiveDonor(rGeneralUser.isActiveDonor());
-        generalUser.setLastDonation(rGeneralUser.getLastDonation());
-        generalUser.setBloodGroup(rGeneralUser.getBloodGroup());
-        generalUserRepository.save(generalUser);
-
-        return ResponseEntity.ok(generalUser);
+        else
+            return ResponseEntity.ok(generalUser);
     }
 
     @JsonView(View.Private.class)
     @GetMapping("admin/user/{username}")
     public ResponseEntity<GeneralUser> getUser(@PathVariable String username) {
-        GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
+        GeneralUser generalUser = generalUserService.get(username);
 
         if (generalUser==null)
             return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(generalUser);
+        else
+            return ResponseEntity.ok(generalUser);
     }
 }

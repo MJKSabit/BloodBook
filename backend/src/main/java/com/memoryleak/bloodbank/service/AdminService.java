@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminService {
@@ -33,7 +34,13 @@ public class AdminService {
     UserRepository userRepository;
 
     @Autowired
-    LocationRepository locationRepository;
+    GeneralUserService generalUserService;
+
+    @Autowired
+    BloodBankService bloodBankService;
+
+    @Autowired
+    LocationService locationService;
 
     public JSONObject overview() {
         JSONObject data = new JSONObject();
@@ -71,14 +78,15 @@ public class AdminService {
         Location location = mergeTo.getLocation();
         location.setLatitude(mergeWith.getLocation().getLatitude());
         location.setLongitude(mergeWith.getLocation().getLongitude());
-        locationRepository.save(location);
+        locationService.save(location);
 
         mergeTo.setEmail(mergeWith.getEmail());
         mergeTo.setUsername(mergeWith.getUsername());
         userRepository.save(mergeTo);
     }
 
-    public BloodBank updateBloodBank(BloodBank mergeTo, BloodBank mergeWith) {
+    @Transactional
+    protected BloodBank updateBloodBank(BloodBank mergeTo, BloodBank mergeWith) {
         updateUser(mergeTo.getUser(), mergeWith.getUser());
 
         mergeTo.setName(mergeWith.getName());
@@ -87,7 +95,15 @@ public class AdminService {
         return bloodBankRepository.save(mergeTo);
     }
 
-    public GeneralUser updateGeneralUser(GeneralUser mergeTo, GeneralUser mergeWith) {
+    public BloodBank updateBloodBank(String username, BloodBank mergeWith) {
+        BloodBank bank = bloodBankService.get(username);
+        if (bank==null)
+            return null;
+        return updateBloodBank(bank, mergeWith);
+    }
+
+    @Transactional
+    protected GeneralUser updateGeneralUser(GeneralUser mergeTo, GeneralUser mergeWith) {
         updateUser(mergeTo.getUser(), mergeWith.getUser());
 
         mergeTo.setName(mergeWith.getName());
@@ -100,5 +116,10 @@ public class AdminService {
         return generalUserRepository.save(mergeTo);
     }
 
+    public GeneralUser updateGeneralUser(String username, GeneralUser mergeWith) {
+        GeneralUser user = generalUserService.get(username);
+        if (user == null) return null;
+        return updateGeneralUser(user, mergeWith);
+    }
 
 }

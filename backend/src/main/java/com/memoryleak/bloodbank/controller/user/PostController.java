@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final static Logger logger = LogManager.getLogger(PostController.class);
 
-    public final static int PAGE_SIZE = 30;
-
     @Autowired
     PostService postService;
 
