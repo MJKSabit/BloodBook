@@ -11,7 +11,8 @@ const LocationViewer = ({location}) => {
       response => {
         const area = `${response.data.locality}, ${response.data.principalSubdivision}, ${response.data.countryName}`
         setPlacename(area)
-      }
+      },
+      err => setPlacename(`${location.latitude}, ${location.longitude} ↗`)
     )
   }, [location])
 

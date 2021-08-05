@@ -10,7 +10,6 @@ import com.github.messenger4j.send.NotificationType;
 import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.recipient.IdRecipient;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
-import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.service.GeneralUserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
@@ -30,12 +29,12 @@ import static java.util.Optional.of;
 
 @RestController
 @RequestMapping("/callback")
-public class MessengerCallbackController {
+public class MessengerController {
 
     @Value("${FRONTEND_URL:https://blood-book.netlify.app}")
     String FRONTEND_URL;
 
-    private static final Logger logger = LoggerFactory.getLogger(MessengerCallbackController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessengerController.class);
 
     private final Messenger messenger;
 
@@ -49,7 +48,7 @@ public class MessengerCallbackController {
     GeneralUserService generalUserService;
 
     @Autowired
-    public MessengerCallbackController(final Messenger messenger) {
+    public MessengerController(final Messenger messenger) {
         this.messenger = messenger;
     }
 

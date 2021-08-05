@@ -18,7 +18,7 @@ public class GeneralUserService {
     public static final String NAME_KEY             = "name";
     public static final String IMAGE_URL_KEY        = "imageURL";
     public static final String ABOUT_KEY            = "about";
-    public static final String ACTIVE_KEY           = "active";
+    public static final String ACTIVE_KEY           = "isActiveDonor";
     public static final String LAST_DONATION_KEY    = "lastDonation";
 
     public static final String VERIFY_MESSENGER = "messenger";
@@ -44,7 +44,7 @@ public class GeneralUserService {
 
     public GeneralUser retrieve(GeneralUser generalUser, JSONObject data) {
         generalUser.setBloodGroup(
-                data.getString(BLOOD_GROUP_KEY).toUpperCase());
+                data.optString(BLOOD_GROUP_KEY, generalUser.getBloodGroup()));
         generalUser.setName(
                 data.getString(NAME_KEY));
         generalUser.setImageURL(

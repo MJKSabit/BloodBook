@@ -265,7 +265,7 @@ export default function SignUp(props) {
               e.preventDefault()
               const data = {
                 name, latitude, longitude, password, lastDonation: selectedDate.getTime(),
-                imageURL, about, bloodGroup, email, username, active
+                imageURL, about, bloodGroup, email, username, isAciveDonor: active
               }
               signUpUser(data).then(response => {
                 dispatch(notifyUser('Check your Email to confirm your account!'))

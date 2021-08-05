@@ -137,7 +137,7 @@ const BankSkeleton = props => {
                 <Divider/>
                 <ListItem style={{padding:'20px'}} onClick={() => {
                         dispatch(signOut())
-                        history.push('/user/signin')
+                        history.push('/bloodbank/signin')
                     }} button>
                     <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
                     <ListItemText primary={'Sign out'} />
