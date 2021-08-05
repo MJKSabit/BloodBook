@@ -16,6 +16,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,9 @@ public class AuthService {
     public static final String LATITUDE_KEY         = "latitude";
     public static final String LONGITUDE_KEY        = "longitude";
 
+    public static final String OLD_KEY              = "old";
+    public static final String NEW_KEY              = "new";
+
     public static final double DEFAULT_LATITUDE     = 0;
     public static final double DEFAULT_LONGITUDE    = 0;
 
@@ -61,6 +65,7 @@ public class AuthService {
 
     private final static Logger logger = LogManager.getLogger(AuthService.class);
 
+
     @Value("${BASE_URL:http://localhost:8080}")
     String BASE_URL;
 
@@ -68,9 +73,6 @@ public class AuthService {
     String FRONTEND_URL;
 
     // Repositories
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     GeneralUserRepository generalUserRepository;
@@ -259,6 +261,25 @@ public class AuthService {
         userService.update(user);
 
         return true;
+    }
+
+    public boolean changePassword(String jwt, JSONObject request) {
+        String oldPassword = request.getString(OLD_KEY);
+        String newPassword = request.getString(NEW_KEY);
+
+        if (!PASSWORD_MATCHER.matcher(newPassword).matches())
+            return false;
+
+        String username = jwtTokenUtil.getUsernameFromToken(jwt);
+        User user = userService.findByUsername(username);
+
+        if (userService.matchPassword(user, oldPassword)) {
+            user.setPassword(newPassword);
+            userService.saveWithRawPassword(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

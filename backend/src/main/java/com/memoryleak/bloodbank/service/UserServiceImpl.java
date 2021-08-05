@@ -42,6 +42,10 @@ public class UserServiceImpl implements UserService {
         saveWithRawPassword(user);
     }
 
+    public boolean matchPassword(User user, String password) {
+        return bCryptPasswordEncoder.matches(password, user.getPassword());
+    }
+
     public boolean hasUser(User user) {
         return userRepository.countUserByEmailOrUsernameIgnoreCase(user.getEmail(), user.getUsername()) > 0;
     }
