@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.controller.user;
+package com.memoryleak.bloodbank.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
@@ -46,16 +46,6 @@ public class UserController {
                                              @RequestBody String requestText) {
         String jwt = bearerToken.substring(7);
         return generalUserService.update(jwt, new JSONObject(requestText));
-    }
-
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changeUserPassword(@RequestHeader("Authorization") String bearerToken,
-                                             @RequestBody String requestText) {
-        String jwt = bearerToken.substring(7);
-        if (authService.changePassword(jwt, new JSONObject(requestText)))
-            return ResponseEntity.ok().build();
-        else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping("/user/messenger-token")

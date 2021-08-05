@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.controller.bank;
+package com.memoryleak.bloodbank.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
@@ -72,5 +72,12 @@ public class BankController {
                                                     @RequestBody String settings) {
         BloodBank bank = bankService.update(bearerToken.substring(7), new JSONObject(settings));
         return ResponseEntity.ok(bank);
+    }
+
+    @JsonView(View.Public.class)
+    @GetMapping("/explore")
+    List<BloodBank> exploreNearbyBloodBank(@RequestHeader("Authorization") String bearerToken) {
+        String jwt = bearerToken.substring(7);
+        return bankService.bloodBanksNearUser(jwt);
     }
 }

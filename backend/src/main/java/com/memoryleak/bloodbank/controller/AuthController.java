@@ -11,7 +11,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 public class AuthController {
@@ -31,5 +34,31 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changeUserPassword(@RequestHeader("Authorization") String bearerToken,
+                                                @RequestBody String requestText) {
+        String jwt = bearerToken.substring(7);
+        if (authService.changePassword(jwt, new JSONObject(requestText)))
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PostMapping(path = "/forgot")
+    public ResponseEntity<?> forgotPassword(@RequestBody String requestString) throws IOException {
+        if (authService.forgotPassword(new JSONObject(requestString)))
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        else
+            return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping(path = "/reset-password")
+    public ResponseEntity<?> passwordReset(@RequestBody String jwtVerifyStr) {
+        if (authService.resetPassword(new JSONObject(jwtVerifyStr)))
+            return ResponseEntity.accepted().build();
+        else
+            return ResponseEntity.badRequest().build();
     }
 }

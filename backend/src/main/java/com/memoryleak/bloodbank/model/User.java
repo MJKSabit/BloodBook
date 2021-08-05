@@ -17,7 +17,6 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @JsonView(View.ExtendedPublic.class)
     @Column(unique = true, nullable = false)
     private String username;
 

@@ -26,15 +26,12 @@ public class GeneralUser implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-//    @JsonView(View.ExtendedPublic.class)
     private User user;
 
     @Column(nullable = false)
-//    @JsonView(View.ExtendedPublic.class)
     private String name;
 
     @Column(nullable = true)
-//    @JsonView(View.ExtendedPublic.class)
     private String imageURL;
 
     @Column(nullable = false, name = "blood_group")

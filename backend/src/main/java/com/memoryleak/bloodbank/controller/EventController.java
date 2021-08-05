@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.controller.bank;
+package com.memoryleak.bloodbank.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
@@ -63,5 +63,22 @@ public class EventController {
             return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(event);
+    }
+
+    @JsonView(View.Public.class)
+    @GetMapping("/user/events")
+    public Slice<Event> eventsForUser(@RequestHeader("Authorization") String bearerToken,
+                                      @RequestParam(required = false, defaultValue = "my", name = "for") String filter,
+                                      @RequestParam(required = false, defaultValue = "0") int page) {
+
+        switch (filter) {
+            case "my":
+                String jwt = bearerToken.substring(7);
+                return eventService.eventsForUser(jwt, page);
+            case "all":
+                return eventService.allEvents(page);
+            default:
+                return null;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.controller.user;
+package com.memoryleak.bloodbank.controller.data;
 
 import com.memoryleak.bloodbank.model.BloodBank;
 import com.memoryleak.bloodbank.model.Post;

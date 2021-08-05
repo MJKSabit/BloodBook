@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.controller.admin;
+package com.memoryleak.bloodbank.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class UserAccessController {
+public class AdminController {
 
     @Autowired
     AdminService adminService;

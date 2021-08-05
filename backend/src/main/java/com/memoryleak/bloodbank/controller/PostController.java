@@ -1,7 +1,8 @@
-package com.memoryleak.bloodbank.controller.user;
+package com.memoryleak.bloodbank.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
+import com.memoryleak.bloodbank.controller.data.PostDetails;
 import com.memoryleak.bloodbank.model.Post;
 import com.memoryleak.bloodbank.service.PostService;
 import org.apache.logging.log4j.LogManager;

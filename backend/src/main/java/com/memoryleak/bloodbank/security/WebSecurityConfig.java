@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.Collections;
+
+import static com.memoryleak.bloodbank.service.AuthService.*;
 
 
 @Configuration
@@ -45,17 +46,16 @@ public class WebSecurityConfig
         http.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers("/callback/**", "/callback").permitAll()
-                .antMatchers("/admin/**", "/admin").hasRole("ADMIN")
-                .antMatchers("/user/**", "/user").hasRole("USER")
-                .antMatchers("/bloodbank/*", "/bloodbank").hasRole("BLOODBANK")
+                .antMatchers("/admin/**", "/admin").hasRole(ROLE_ADMIN)
+                .antMatchers("/user/**", "/user").hasRole(ROLE_USER)
+                .antMatchers("/bloodbank/*", "/bloodbank").hasRole(ROLE_BLOOD_BANK)
                 .antMatchers("/bloodbank/count/*", "/bloodbank/profile/*",
                         "/bloodbank/events/*", "/bloodbank/event/*",
-                        "/explore").hasAnyRole("BLOODBANK", "USER")
-                .antMatchers("/change-password").hasAnyRole("BLOODBANK", "USER", "ADMIN")
+                        "/explore").hasAnyRole(ROLE_BLOOD_BANK, ROLE_USER)
+                .antMatchers("/change-password").hasAnyRole(ROLE_BLOOD_BANK, ROLE_USER, ROLE_ADMIN)
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and().httpBasic()
                 .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
@@ -67,12 +67,9 @@ public class WebSecurityConfig
         return super.authenticationManagerBean();
     }
 
-
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-
     }
 
     @Bean
@@ -85,7 +82,6 @@ public class WebSecurityConfig
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
 

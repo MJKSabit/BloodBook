@@ -52,20 +52,4 @@ public class RegistrationController {
         else
             return ResponseEntity.badRequest().build();
     }
-
-    @PostMapping(path = "/forgot")
-    public ResponseEntity<?> forgotPassword(@RequestBody String requestString) throws IOException {
-        if (authService.forgotPassword(new JSONObject(requestString)))
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        else
-            return ResponseEntity.badRequest().build();
-    }
-
-    @PostMapping(path = "/reset-password")
-    public ResponseEntity<?> passwordReset(@RequestBody String jwtVerifyStr) {
-        if (authService.resetPassword(new JSONObject(jwtVerifyStr)))
-            return ResponseEntity.accepted().build();
-        else
-            return ResponseEntity.badRequest().build();
-    }
 }
