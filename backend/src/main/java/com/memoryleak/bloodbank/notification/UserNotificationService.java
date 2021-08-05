@@ -66,6 +66,7 @@ public class UserNotificationService {
             if (user.getFacebook() != null)
                 facebookRecipients.add(user.getFacebook());
 
+            // TODO : REMOVE AFTER REFACTOR
             postForUserRepository.save(new GeneralUserToPost(user, post));
         }
 
@@ -134,5 +135,9 @@ public class UserNotificationService {
                 logger.error(e.toString());
             }
         }
+    }
+
+    public void sendEmail(List<String> to, String subject, String message) {
+        emailNotification.sendEmail(to, subject, message);
     }
 }

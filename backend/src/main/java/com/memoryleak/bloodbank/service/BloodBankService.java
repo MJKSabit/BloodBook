@@ -18,7 +18,7 @@ public class BloodBankService {
     public static final String IMAGE_URL_KEY        = "imageURL";
     public static final String ABOUT_KEY            = "about";
 
-    public static final String[] BLOOD_GROUPS      = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"};
+    public static final String[] BLOOD_GROUPS       = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"};
 
     @Autowired
     BloodBankRepository bloodBankRepository;

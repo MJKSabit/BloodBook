@@ -15,6 +15,9 @@ public class LocationService {
     public static final double DEFAULT_LATITUDE     = 0;
     public static final double DEFAULT_LONGITUDE    = 0;
 
+    public static final double MAX_LATITUDE         = 90;
+    public static final double MAX_LONGITUDE        = 180;
+
     @Autowired
     LocationRepository locationRepository;
 
@@ -33,6 +36,11 @@ public class LocationService {
     }
 
     public Location save(Location location) {
+        if (Math.abs(location.getLongitude()) > MAX_LONGITUDE)
+            location.setLongitude(DEFAULT_LONGITUDE);
+        if (Math.abs(location.getLatitude()) > MAX_LATITUDE)
+            location.setLongitude(DEFAULT_LATITUDE);
+
         return locationRepository.save(location);
     }
 }

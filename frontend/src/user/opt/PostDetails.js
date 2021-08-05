@@ -11,7 +11,10 @@ export const BankList = (props) => {
   const urlPrefix = userType === 'user' ? '/user/bloodbank/' : '/bloodbank/profile/'
   const history = useHistory()
 
-  if (banks === null || banks.length === 0)
+  if (banks === null)
+  return <Typography variant='subtitle2' style={{paddingLeft: '10px', marginTop: '30px'}}>Only Post Owner can see list of bloodbanks!</Typography>
+
+  if (banks.length === 0)
     return <Typography variant='subtitle2' style={{paddingLeft: '10px', marginTop: '30px'}}>No Matches!</Typography>
 
   return <Paper>

@@ -2,6 +2,7 @@ package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.Location;
+import com.memoryleak.bloodbank.model.Post;
 import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
@@ -9,7 +10,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class GeneralUserService {
@@ -23,6 +26,8 @@ public class GeneralUserService {
 
     public static final String VERIFY_MESSENGER = "messenger";
 
+    public static final int DONATION_GAP_DAYS = 56;
+
     @Autowired
     GeneralUserRepository generalUserRepository;
 
@@ -34,6 +39,10 @@ public class GeneralUserService {
 
     public GeneralUser get(String username) {
         return generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
+    }
+
+    public GeneralUser getFromJWT(String jwt) {
+        return get(jwtTokenUtil.getUsernameFromToken(jwt));
     }
 
     public GeneralUser retrieve(GeneralUser generalUser, JSONObject data) {
@@ -65,6 +74,15 @@ public class GeneralUserService {
 
         retrieve(generalUser, data);
         return generalUserRepository.save(generalUser);
+    }
+
+    public List<GeneralUser> getMatchingPost(Post post) {
+        return generalUserRepository.getMatchPostRequirement(
+                post.getBloodGroup(),
+                Date.from(post.getNeeded().toInstant().minus(Duration.ofDays(DONATION_GAP_DAYS))),
+                post.getLocation().getLatitude(),
+                post.getLocation().getLongitude()
+        );
     }
 
     public String generateMessengerToken(String jwt) {
