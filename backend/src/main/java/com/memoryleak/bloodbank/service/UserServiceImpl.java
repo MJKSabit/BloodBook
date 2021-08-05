@@ -2,12 +2,17 @@ package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.repository.UserRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    public static final String USERNAME_KEY         = "username";
+    public static final String PASSWORD_KEY         = "password";
+    public static final String EMAIL_KEY            = "email";
 
     @Autowired
     private UserRepository userRepository;
@@ -30,6 +35,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String username, String password) {
         return userRepository.findUserByUsernameIgnoreCase(username);
+    }
+
+    /**
+     * Deserialize User
+     */
+    public User retrieveUser(User user, JSONObject data) {
+        user.setUsername(
+                data.getString(USERNAME_KEY));
+        user.setPassword(
+                data.getString(PASSWORD_KEY));
+        user.setEmail(
+                data.getString(EMAIL_KEY));
+
+        return user;
     }
 
     public void saveWithRawPassword(User user) {

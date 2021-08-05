@@ -16,7 +16,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +94,15 @@ public class AuthService {
     UserDetailsService userDetailsService;
 
     @Autowired
+    LocationService locationService;
+
+    @Autowired
+    GeneralUserService generalUserService;
+
+    @Autowired
+    BloodBankService bloodBankService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired @Qualifier("spring")
@@ -129,61 +137,28 @@ public class AuthService {
 
     // De-Serializers
 
-    private User retrieveUser(JSONObject signUpData) {
+    private User retrieveUser(JSONObject data) {
         User user = new User();
-        user.setUsername(
-                signUpData.getString(USERNAME_KEY));
-        user.setPassword(
-                signUpData.getString(PASSWORD_KEY));
-        user.setEmail(
-                signUpData.getString(EMAIL_KEY));
-        user.setLocation(retrieveLocation(signUpData));
-
-        return user;
+        user.setLocation(retrieveLocation(data));
+        return userService.retrieveUser(user, data);
     }
 
-    private Location retrieveLocation(JSONObject signUpData) {
-        Location location = new Location();
-        location.setLongitude(
-                signUpData.optDouble(LONGITUDE_KEY, DEFAULT_LONGITUDE));
-        location.setLatitude(
-                signUpData.optDouble(LATITUDE_KEY, DEFAULT_LATITUDE));
-
-        return location;
-    }
-
-    private GeneralUser retrieveGeneralUser(JSONObject signUpData) {
-        GeneralUser generalUser = new GeneralUser();
-        generalUser.setBloodGroup(
-                signUpData.getString(BLOOD_GROUP_KEY).toUpperCase());
-        generalUser.setName(
-                signUpData.getString(NAME_KEY));
-        generalUser.setImageURL(
-                signUpData.optString(IMAGE_URL_KEY));
-        generalUser.setAbout(
-                signUpData.getString(ABOUT_KEY));
-        generalUser.setActiveDonor(
-                signUpData.getBoolean(ACTIVE_KEY));
-        generalUser.setLastDonation(new Date(
-                signUpData.getLong(LAST_DONATION_KEY)));
-        generalUser.setUser(
-                retrieveUser(signUpData)
+    private Location retrieveLocation(JSONObject data) {
+        return locationService.retrieveLocation(
+                new Location(), data
         );
+    }
 
-        return generalUser;
+    private GeneralUser retrieveGeneralUser(JSONObject data) {
+        GeneralUser generalUser = new GeneralUser();
+        generalUser.setUser(retrieveUser(data));
+        return generalUserService.retrieveGeneralUser(generalUser, data);
     }
 
     private BloodBank retrieveBloodBank(JSONObject signUpData) {
         BloodBank bloodBank = new BloodBank();
-        bloodBank.setName(
-                signUpData.getString(NAME_KEY));
-        bloodBank.setImageURL(
-                signUpData.optString(IMAGE_URL_KEY));
-        bloodBank.setAbout(
-                signUpData.getString(ABOUT_KEY));
-        bloodBank.setUser(
-                retrieveUser(signUpData));
-        return bloodBank;
+        bloodBank.setUser(retrieveUser(signUpData));
+        return bloodBankService.retrieveBloodBank(bloodBank, signUpData);
     }
 
 
