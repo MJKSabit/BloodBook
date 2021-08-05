@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void save(User user, String role) {
@@ -32,4 +32,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByUsernameIgnoreCase(username);
     }
 
+    public void saveWithRawPassword(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    public void saveWithRawPassword(User user, String roleUser) {
+        user.setRole(roleUser);
+        saveWithRawPassword(user);
+    }
+
+    public boolean hasUser(User user) {
+        return userRepository.countUserByEmailOrUsernameIgnoreCase(user.getEmail(), user.getUsername()) > 0;
+    }
+
+    public void update(User user) {
+        userRepository.save(user);
+    }
 }

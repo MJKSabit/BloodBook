@@ -12,5 +12,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     User findUserByUsernameIgnoreCase(String username);
 
+    int countUserByEmailOrUsernameIgnoreCase(String email, String username);
+
     Slice<User> findUserByActiveAndBannedAndRole(boolean active, boolean banned, String role, Pageable pageable);
 }
