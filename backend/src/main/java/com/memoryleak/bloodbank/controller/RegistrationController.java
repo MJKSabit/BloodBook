@@ -83,7 +83,7 @@ public class RegistrationController {
         user.setLocation(location);
 
         if (validUser(user) && userService.findByUsername(user.getUsername()) == null) {
-            userService.save(user);
+            userService.save(user, "USER");
 
             GeneralUser generalUser = new GeneralUser();
             generalUser.setUser(user);

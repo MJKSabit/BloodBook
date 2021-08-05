@@ -52,7 +52,7 @@ public class AuthService {
     // Services
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     @Autowired
     UserDetailsService userDetailsService;
