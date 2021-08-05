@@ -4,36 +4,25 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.BloodBank;
 import com.memoryleak.bloodbank.model.BloodBankBloodCount;
-import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.repository.BloodBankBloodCountRepository;
-import com.memoryleak.bloodbank.repository.BloodBankRepository;
-import com.memoryleak.bloodbank.util.JwtTokenUtil;
+import com.memoryleak.bloodbank.service.BloodBankService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class BankController {
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    BloodBankRepository bloodBankRepository;
-
-    @Autowired
-    BloodBankBloodCountRepository bloodBankBloodCountRepository;
+    BloodBankService bankService;
 
     @JsonView(View.Private.class)
     @GetMapping("/bloodbank/profile/{username}")
     public ResponseEntity<BloodBank> profile(@PathVariable String username) {
-        BloodBank user = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
+        BloodBank user = bankService.get(username);
         if (user == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
@@ -43,40 +32,37 @@ public class BankController {
     @GetMapping("/bloodbank/profile")
     @JsonView(View.Private.class)
     public ResponseEntity<BloodBank> myProfile(@RequestHeader("Authorization") String bearerToken) {
-        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return profile(username);
+        BloodBank user = bankService.getFromJWT(bearerToken.substring(7));
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/bloodbank/count/{username}")
     public ResponseEntity<List<BloodBankBloodCount>> count(@PathVariable String username) {
-        BloodBank user = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
-        if (user == null)
+        List<BloodBankBloodCount> bankBloodCounts = bankService.getBloodCount(username);
+        if (bankBloodCounts == null)
             ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        List<BloodBankBloodCount> bankBloodCounts = bloodBankBloodCountRepository.findAllByBloodBank(user);
         return ResponseEntity.ok(bankBloodCounts);
     }
 
     @GetMapping("/bloodbank/count")
     public ResponseEntity<List<BloodBankBloodCount>> myCount(@RequestHeader("Authorization") String bearerToken) {
-        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return count(username);
+        List<BloodBankBloodCount> bankBloodCounts = bankService.getBloodCountFromJWT(bearerToken.substring(7));
+        if (bankBloodCounts == null)
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.ok(bankBloodCounts);
     }
 
     @PostMapping("/bloodbank/count")
     public ResponseEntity<List<BloodBankBloodCount>> setMyCount(@RequestHeader("Authorization") String bearerToken,
                                                                 @RequestBody String stringBody) {
-        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        BloodBank bank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
-
-        JSONObject counts = new JSONObject(stringBody);
-
-        List<BloodBankBloodCount> bankBloodCounts = bloodBankBloodCountRepository.findAllByBloodBank(bank);
-        for (BloodBankBloodCount bloodCount : bankBloodCounts) {
-            bloodCount.setInStock(counts.optInt(bloodCount.getBloodGroup(), 0));
-            bloodBankBloodCountRepository.save(bloodCount);
-        }
-
+        List<BloodBankBloodCount> bankBloodCounts = bankService.setBloodCount(
+                bearerToken.substring(7), new JSONObject(stringBody)
+        );
         return ResponseEntity.ok(bankBloodCounts);
     }
 
@@ -84,14 +70,7 @@ public class BankController {
     @JsonView(View.Private.class)
     public ResponseEntity<BloodBank> changeSettings(@RequestHeader("Authorization") String bearerToken,
                                                     @RequestBody String settings) {
-        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        BloodBank bank = bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
-
-        JSONObject request = new JSONObject(settings);
-        bank.setAbout(request.getString("about"));
-        bank.setImageURL(request.getString("imageURL"));
-        bloodBankRepository.save(bank);
-
+        BloodBank bank = bankService.update(bearerToken.substring(7), new JSONObject(settings));
         return ResponseEntity.ok(bank);
     }
 }

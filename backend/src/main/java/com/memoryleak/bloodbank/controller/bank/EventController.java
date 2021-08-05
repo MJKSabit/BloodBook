@@ -2,26 +2,16 @@ package com.memoryleak.bloodbank.controller.bank;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
-import com.memoryleak.bloodbank.model.*;
+import com.memoryleak.bloodbank.model.Event;
 import com.memoryleak.bloodbank.service.EventService;
-import com.memoryleak.bloodbank.service.UserNotificationService;
-import com.memoryleak.bloodbank.repository.*;
-import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
-
-import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
 
 @RestController
 public class EventController {
@@ -29,33 +19,7 @@ public class EventController {
     private final static Logger logger = LogManager.getLogger(EventController.class);
 
     @Autowired
-    EventRepository eventRepository;
-
-    @Autowired
-    BloodBankRepository bloodBankRepository;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    LocationRepository locationRepository;
-
-    @Autowired
-    GeneralUserRepository generalUserRepository;
-
-    @Autowired
-    EventForUserRepository eventForUserRepository;
-
-    @Autowired
-    UserNotificationService userNotificationService;
-
-    @Autowired
     EventService eventService;
-
-    private BloodBank getUser(String bearerToken) {
-        String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
-        return bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
-    }
 
     @GetMapping("/bloodbank/events/{username}")
     @JsonView(View.Public.class)
