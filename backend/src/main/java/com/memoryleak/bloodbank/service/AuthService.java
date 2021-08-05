@@ -20,37 +20,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
 
     public static final String JWT_KEY              = "jwt";
-    public static final String BLOOD_GROUP_KEY      = "bloodGroup";
-    public static final String NAME_KEY             = "name";
-    public static final String IMAGE_URL_KEY        = "imageURL";
-    public static final String ABOUT_KEY            = "about";
-    public static final String ACTIVE_KEY           = "active";
-    public static final String LAST_DONATION_KEY    = "lastDonation";
-    public static final String USERNAME_KEY         = "username";
-    public static final String PASSWORD_KEY         = "password";
-    public static final String EMAIL_KEY            = "email";
-    public static final String LATITUDE_KEY         = "latitude";
-    public static final String LONGITUDE_KEY        = "longitude";
-
     public static final String OLD_KEY              = "old";
     public static final String NEW_KEY              = "new";
-
-    public static final double DEFAULT_LATITUDE     = 0;
-    public static final double DEFAULT_LONGITUDE    = 0;
 
     public static final String ROLE_USER            = "USER";
     public static final String ROLE_BLOOD_BANK      = "BLOODBANK";
 
     public static final String VERIFY_ACTIVATE      = "activate";
-
-    private static final String[] BLOOD_GROUPS = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"};
 
     public static final Pattern USERNAME_MATCHER = Pattern.compile(
             "^[A-Za-z]\\w{5,29}$"
@@ -64,26 +46,11 @@ public class AuthService {
 
     private final static Logger logger = LogManager.getLogger(AuthService.class);
 
-
     @Value("${BASE_URL:http://localhost:8080}")
     String BASE_URL;
 
     @Value("${FRONTEND_URL:http://localhost:3000}")
     String FRONTEND_URL;
-
-    // Repositories
-
-    @Autowired
-    GeneralUserRepository generalUserRepository;
-
-    @Autowired
-    BloodBankRepository bloodBankRepository;
-
-    @Autowired
-    BloodBankBloodCountRepository bloodBankBloodCountRepository;
-
-    @Autowired
-    LocationRepository locationRepository;
 
     // Services
 
@@ -152,7 +119,7 @@ public class AuthService {
     private GeneralUser retrieveGeneralUser(JSONObject data) {
         GeneralUser generalUser = new GeneralUser();
         generalUser.setUser(retrieveUser(data));
-        return generalUserService.retrieveGeneralUser(generalUser, data);
+        return generalUserService.retrieve(generalUser, data);
     }
 
     private BloodBank retrieveBloodBank(JSONObject signUpData) {
@@ -169,9 +136,9 @@ public class AuthService {
         if (!isValid(user.getUser()))
             throw new ValidationException();
 
-        locationRepository.save(user.getUser().getLocation());
+        locationService.save(user.getUser().getLocation());
         userService.saveWithRawPassword(user.getUser(), ROLE_USER);
-        generalUserRepository.save(user);
+        generalUserService.save(user);
     }
 
     private void saveWithRawPassword(BloodBank user) throws ValidationException {
@@ -179,9 +146,9 @@ public class AuthService {
         if (!isValid(user.getUser()))
             throw new ValidationException();
 
-        locationRepository.save(user.getUser().getLocation());
+        locationService.save(user.getUser().getLocation());
         userService.saveWithRawPassword(user.getUser(), ROLE_BLOOD_BANK);
-        bloodBankRepository.save(user);
+        bloodBankService.save(user);
     }
 
 
@@ -213,9 +180,7 @@ public class AuthService {
             throw new ValidationException();
 
         saveWithRawPassword(bloodBank);
-
-        for (String bloodGroup : BLOOD_GROUPS)
-            bloodBankBloodCountRepository.save(new BloodBankBloodCount(bloodBank, bloodGroup));
+        bloodBankService.createBloodCounts(bloodBank);
 
         emailNotification.sendEmail(
                 Collections.singletonList(user.getEmail()),

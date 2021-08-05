@@ -32,11 +32,11 @@ public class GeneralUserService {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    public GeneralUser getGeneralUser(String username) {
+    public GeneralUser get(String username) {
         return generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
     }
 
-    public GeneralUser retrieveGeneralUser(GeneralUser generalUser, JSONObject data) {
+    public GeneralUser retrieve(GeneralUser generalUser, JSONObject data) {
         generalUser.setBloodGroup(
                 data.getString(BLOOD_GROUP_KEY).toUpperCase());
         generalUser.setName(
@@ -53,7 +53,7 @@ public class GeneralUserService {
         return generalUser;
     }
 
-    public GeneralUser updateGeneralUser(String jwt, JSONObject data) {
+    public GeneralUser update(String jwt, JSONObject data) {
         String username = jwtTokenUtil.getUsernameFromToken(jwt);
         GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         User user = generalUser.getUser();
@@ -63,7 +63,7 @@ public class GeneralUserService {
         );
         locationService.save(location);
 
-        retrieveGeneralUser(generalUser, data);
+        retrieve(generalUser, data);
         return generalUserRepository.save(generalUser);
     }
 
