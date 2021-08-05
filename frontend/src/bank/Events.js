@@ -120,7 +120,7 @@ export const Event = props => {
                     </div>
                     <div className={'profile-entry-container'}>
                         <Info style={{marginRight:'8px'}}/>
-                        {event.info}
+                        <div style={{whiteSpace: "pre-wrap"}}>{event.info}</div>
                     </div>
                 </div>
             </div>

@@ -1,16 +1,18 @@
 import { Box, CircularProgress, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
+import store from "../../store"
 import { exploreBanks } from "../../store/action"
 import { BankList } from "./PostDetails"
 
 const Explore = (props) => {
   const [banks, setBanks] = useState(null)
   const userType = props.userType || 'user'
+  const username = store.getState().profile && store.getState().profile.user.username
 
   useEffect(() => {
     exploreBanks().then(
-      data => setBanks(data),
+      data => setBanks(userType === 'user' ? data : data.filter(d => d.user.username !== username)),
       err => console.log(err)
     )
   }, [])

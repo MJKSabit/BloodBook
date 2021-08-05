@@ -33,8 +33,10 @@ export default function CreatePost(props) {
           <Grid container>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel>Blood Group*</InputLabel>
-                <Select
+                <TextField
+                  label="Blood Group *"
+                  select
+                  variant='outlined'
                   value={bloodGroup}
                   onChange={ (e) => setBloodgroup(e.target.value) }
                 >
@@ -46,12 +48,13 @@ export default function CreatePost(props) {
                   <MenuItem value={'B-'}>B-</MenuItem>
                   <MenuItem value={'AB-'}>AB-</MenuItem>
                   <MenuItem value={'O-'}>O-</MenuItem>
-                </Select>
+                </TextField>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils} fullWidth>
                 <KeyboardDatePicker
+                  inputVariant="outlined"
                   fullWidth
                   disableToolbar
                   variant="inline"
@@ -75,7 +78,7 @@ export default function CreatePost(props) {
             <Grid item xs={8}>
               <LocationSelector onSelected={
                 (lat, long) => {setLatitude(lat); setLongitude(long)}
-              } lat={latitude} long={longitude} />
+              } />
             </Grid>
             <Grid item xs={12}>
               <TextField

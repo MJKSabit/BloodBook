@@ -64,6 +64,6 @@ public class BloodBankBloodCount {
     }
 
     public void setInStock(int inStock) {
-        this.inStock = 0;
+        this.inStock = inStock;
     }
 }

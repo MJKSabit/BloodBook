@@ -9,6 +9,7 @@ import com.memoryleak.bloodbank.repository.BloodBankRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class BloodBankService {
         BloodBank bloodBank = get(username);
         if (bloodBank == null)
             return null;
-        return bloodBankBloodCountRepository.findAllByBloodBank(bloodBank);
+        return bloodBankBloodCountRepository.findAllByBloodBank(bloodBank, Sort.by("id").ascending());
     }
 
     public List<BloodBankBloodCount> getBloodCountFromJWT(String jwt) {

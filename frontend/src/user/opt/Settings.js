@@ -88,6 +88,7 @@ const Settings = props => {
       <Grid item xs={12}>
         <MuiPickersUtilsProvider utils={DateFnsUtils} fullWidth>
           <KeyboardDatePicker
+            inputVariant="outlined"
             fullWidth
             disableToolbar
             variant="inline"

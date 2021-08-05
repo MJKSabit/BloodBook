@@ -170,14 +170,14 @@ export default function SignUp(props) {
                 label="Confirm Password"
                 type="password"
                 autoComplete="current-password"
-                error={error.passwordMatcher}
+                error={error.confirmPassword}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 onBlur={ e => {
                   if (password !== confirmPassword) {
-                    setError({...error, passwordMatcher: true})
+                    setError({...error, confirmPassword: true})
                     dispatch(notifyUser("Passwords don't match"))
-                  } else setError({...error, passwordMatcher: false})
+                  } else setError({...error, confirmPassword: false})
                 }}
               />
             </Grid>
@@ -203,8 +203,10 @@ export default function SignUp(props) {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel>Blood Group*</InputLabel>
-                <Select
+                <TextField
+                  label="Blood Group *"
+                  select
+                  variant='outlined'
                   value={bloodGroup}
                   onChange={ (e) => setBloodgroup(e.target.value) }
                 >
@@ -216,7 +218,7 @@ export default function SignUp(props) {
                   <MenuItem value={'B-'}>B-</MenuItem>
                   <MenuItem value={'AB-'}>AB-</MenuItem>
                   <MenuItem value={'O-'}>O-</MenuItem>
-                </Select>
+                </TextField>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -228,6 +230,7 @@ export default function SignUp(props) {
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils} fullWidth>
                 <KeyboardDatePicker
+                  inputVariant="outlined"
                   fullWidth
                   disableToolbar
                   variant="inline"
@@ -265,7 +268,7 @@ export default function SignUp(props) {
               e.preventDefault()
               const data = {
                 name, latitude, longitude, password, lastDonation: selectedDate.getTime(),
-                imageURL, about, bloodGroup, email, username, isAciveDonor: active
+                imageURL, about, bloodGroup, email, username, isActiveDonor: active
               }
               signUpUser(data).then(response => {
                 dispatch(notifyUser('Check your Email to confirm your account!'))

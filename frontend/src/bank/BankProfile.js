@@ -71,7 +71,7 @@ const ProfileCard = props => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant='subtitle2'>
+                <Typography variant='subtitle2' style={{whiteSpace: "pre-wrap"}}>
                   {user.about}
                 </Typography>
               </Grid>
@@ -143,6 +143,7 @@ const CreateEvent = (props) => {
           <Grid item xs={12}>
             <MuiPickersUtilsProvider utils={DateFnsUtils} fullWidth>
               <KeyboardDatePicker
+                inputVariant="outlined"
                 fullWidth
                 disableToolbar
                 variant="inline"

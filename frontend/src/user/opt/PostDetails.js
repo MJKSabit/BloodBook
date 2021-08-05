@@ -1,7 +1,8 @@
-import { Avatar, Box, CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core"
+import { Avatar, Box, CircularProgress, Divider, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@material-ui/core"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
+import store from "../../store"
 import { getPostDetails } from "../../store/action"
 import { Post } from "./Posts"
 
@@ -17,24 +18,26 @@ export const BankList = (props) => {
   if (banks.length === 0)
     return <Typography variant='subtitle2' style={{paddingLeft: '10px', marginTop: '30px'}}>No Matches!</Typography>
 
-  return <Paper>
+  return ( //<Paper square>
     <Box mt={5} mb={5}>
       <List>
-        { banks.map( bank => (
-          <ListItem>
+        <Divider />
+        { banks.map( bank => ([
+          <ListItem button style={{padding: '20px'}} 
+            onClick={() => history.push(`${urlPrefix}${bank.user.username}`)}>
             <ListItemAvatar>
               <Avatar src={bank.imageURL}/>
             </ListItemAvatar>
             <ListItemText
               primary={bank.name}
               secondary={`@${bank.user.username}`}
-              onClick={() => history.push(`${urlPrefix}${bank.user.username}`)}
               />
-          </ListItem>
+          </ListItem>,
+          <Divider/>]
         ))}
       </List>
-    </Box>
-  </Paper>
+    </Box>)
+  // </Paper>
 }
 
 const PostDetails = (props) => {

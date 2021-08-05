@@ -114,35 +114,35 @@ const Skeleton=props=>{
         <div>
             <List style={{marginTop:'55px'}}>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/posts" activeClassName="Mui-selected">
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/user/posts" activeClassName="Mui-selected">
                     <ListItemIcon><ReceiptIcon /> </ListItemIcon>
                     <ListItemText primary={'Posts'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/events" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/user/events" activeClassName="Mui-selected" exact>
                     <ListItemIcon><InsertInvitationIcon /> </ListItemIcon>
                     <ListItemText primary={'Events'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/explore" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/user/explore" activeClassName="Mui-selected" exact>
                     <ListItemIcon><ExploreIcon /> </ListItemIcon>
                     <ListItemText primary={'Explore'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/profile" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/user/profile" activeClassName="Mui-selected" exact>
                     <ListItemIcon><PersonIcon/> </ListItemIcon>
                     <ListItemText primary={'Profile'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/user/settings" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/user/settings" activeClassName="Mui-selected" exact>
                     <ListItemIcon><SettingsApplicationsIcon /> </ListItemIcon>
                     <ListItemText primary={'Settings'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} onClick={() => {
+                <ListItem button style={{padding:'20px'}} onClick={() => {
                         dispatch(signOut())
                         history.push('/user/signin')
-                    }} button>
+                    }}>
                     <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
                     <ListItemText primary={'Sign out'} />
                 </ListItem>

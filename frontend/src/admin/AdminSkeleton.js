@@ -39,7 +39,7 @@ const AdminSkeleton = props => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             BloodBank Admin

@@ -6,6 +6,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import { Facebook, InvertColors, LocationOn, WatchLater } from '@material-ui/icons';
 import LocationViewer from '../../generic/LocationViewer';
 import { makeStyles } from '@material-ui/styles';
+import CreatePost from './CreatePost';
 
 const UserCard = props => {
 
@@ -37,7 +38,7 @@ const UserCard = props => {
                   {user.bloodGroup}
               </div>}
             </div>
-            <div className={'profile-body'}>
+            <div className={'profile-body'} style={{whiteSpace: "pre-wrap"}}>
               {user.about}
             </div>
             {!matches && <Box display="flex" flexDirection="row-reverse">
@@ -50,7 +51,7 @@ const UserCard = props => {
           </Grid>
         </Grid>
       </Paper>
-      { ownProfile && <Paper style={{padding:'30px',marginTop:'20px'}}>
+      { ownProfile && [<Paper style={{padding:'30px',marginTop:'20px'}}>
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <div className={'profile-entry-container'} title='Email'>
@@ -77,7 +78,7 @@ const UserCard = props => {
                 </div>
             </Grid>
         </Grid>
-      </Paper>}
+      </Paper>, <CreatePost />]}
     </div>
   )
 }

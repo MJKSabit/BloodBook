@@ -16,6 +16,8 @@ import { signIn } from '../../store/action';
 import Copyright from './Copyright';
 import { Link as RouterLink } from 'react-router-dom';
 
+const userRoleMap = {'user': 'User', 'bloodbank': 'BloodBank', 'admin': 'Admin'}
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -58,7 +60,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in ({userRoleMap[userType]})
         </Typography>
         <form className={classes.form} noValidate>
           <TextField

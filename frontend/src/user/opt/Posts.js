@@ -113,7 +113,7 @@ export const Post = props => {
                         </div>
                         <div className={'profile-entry-container'}>
                             <InfoIcon style={{marginRight:'8px'}}/>
-                            {post.info}
+                            <span style={{whiteSpace: "pre-wrap"}}>{post.info}</span>
                         </div>
                     </div>
                 </div>

@@ -115,30 +115,30 @@ const BankSkeleton = props => {
         <div>
             <List style={{marginTop:'55px'}}>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/explore" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/bloodbank/explore" activeClassName="Mui-selected" exact>
                     <ListItemIcon><ExploreIcon /> </ListItemIcon>
                     <ListItemText primary={'Explore'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/profile" activeClassName="Mui-selected">
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/bloodbank/profile" activeClassName="Mui-selected">
                     <ListItemIcon><ReceiptIcon /> </ListItemIcon>
                     <ListItemText primary={'Profile'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/counts" activeClassName="Mui-selected">
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/bloodbank/counts" activeClassName="Mui-selected">
                     <ListItemIcon><AddBox /> </ListItemIcon>
                     <ListItemText primary={'Counts'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} component={NavLink} to="/bloodbank/settings" activeClassName="Mui-selected" exact>
+                <ListItem button style={{padding:'20px'}} component={NavLink} to="/bloodbank/settings" activeClassName="Mui-selected" exact>
                     <ListItemIcon><SettingsApplicationsIcon /> </ListItemIcon>
                     <ListItemText primary={'Settings'} />
                 </ListItem>
                 <Divider/>
-                <ListItem style={{padding:'20px'}} onClick={() => {
+                <ListItem button style={{padding:'20px'}} onClick={() => {
                         dispatch(signOut())
                         history.push('/bloodbank/signin')
-                    }} button>
+                    }} >
                     <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
                     <ListItemText primary={'Sign out'} />
                 </ListItem>

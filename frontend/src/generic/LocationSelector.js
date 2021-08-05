@@ -10,6 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import LocationViewer from './LocationViewer';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 function SimpleDialog(props) {
   const { onClose, open, options } = props;
@@ -44,6 +46,14 @@ export default function LocationSelector({lat, long, onSelected}) {
   const [location, setLocation] = React.useState({lat: lat, long: long})
   const [options, setOptions] = React.useState([]);
 
+  useEffect(() => {
+    axios.get('http://ip-api.com/json/?fields=status,lat,lon').then(
+      res => { if (res.data.status && !(location.lat || location.long)) {
+        setLocation({lat: res.data.lat, long: res.data.lon})
+      }}
+    )
+  }, [])
+
   const search = (query) => {
     mapboxGeoCoding(query).then(locations => {
       setOptions(locations)
@@ -62,6 +72,7 @@ export default function LocationSelector({lat, long, onSelected}) {
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <TextField 
+            variant='outlined'
             label='Press ENTER to search' 
             style={{'width': '100%'}}
             onKeyDown={
@@ -76,10 +87,12 @@ export default function LocationSelector({lat, long, onSelected}) {
           <SimpleDialog open={open} onClose={handleClose} options={options} />
         </Grid>
         <Grid item xs={6} style={{paddingTop: '20px', paddingBottom: '10px'}}>
-          <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}} />
+          <TextField label='Latitude' value={location.lat || ''} variant='outlined' style={{'width': '100%'}}
+            onBlur={ e => (onSelected && onSelected(location.lat, location.long))} onChange={ e => setLocation({lat: e.target.value, long: location.long})} />
         </Grid>
         <Grid item xs={6} style={{paddingTop: '20px', paddingBottom: '10px'}}>
-          <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} />
+          <TextField label='Longitude' value={location.long || ''} variant='outlined' style={{'width': '100%'}} 
+          onBlur={ e => (onSelected && onSelected(location.lat, location.long))} onChange={ e => setLocation({long: e.target.value, lat: location.lat})} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant='body2' color='textSecondary' style={{paddingBottom: '10px'}}>
