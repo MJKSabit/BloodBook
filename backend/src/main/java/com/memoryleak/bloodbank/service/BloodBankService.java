@@ -2,6 +2,8 @@ package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.model.BloodBank;
 import com.memoryleak.bloodbank.model.BloodBankBloodCount;
+import com.memoryleak.bloodbank.model.Location;
+import com.memoryleak.bloodbank.model.User;
 import com.memoryleak.bloodbank.repository.BloodBankBloodCountRepository;
 import com.memoryleak.bloodbank.repository.BloodBankRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
@@ -25,6 +27,9 @@ public class BloodBankService {
 
     @Autowired
     BloodBankBloodCountRepository bloodBankBloodCountRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -90,5 +95,13 @@ public class BloodBankService {
 
     public BloodBank save(BloodBank bloodBank) {
         return bloodBankRepository.save(bloodBank);
+    }
+
+    public List<BloodBank> bloodBanksNearUser(String jwt) {
+        User user = userService.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
+        Location location = user.getLocation();
+        return bloodBankRepository.exploreNearbyBloodBank(
+                location.getLatitude(), location.getLongitude()
+        );
     }
 }

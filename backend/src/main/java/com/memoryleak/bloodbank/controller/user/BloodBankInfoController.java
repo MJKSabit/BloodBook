@@ -2,40 +2,27 @@ package com.memoryleak.bloodbank.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
-import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.repository.*;
-import com.memoryleak.bloodbank.util.JwtTokenUtil;
+import com.memoryleak.bloodbank.model.BloodBank;
+import com.memoryleak.bloodbank.model.Event;
+import com.memoryleak.bloodbank.service.BloodBankService;
+import com.memoryleak.bloodbank.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
-import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
 
 @RestController
 public class BloodBankInfoController {
 
     @Autowired
-    EventForUserRepository eventForUserRepository;
+    BloodBankService bloodBankService;
 
     @Autowired
-    EventRepository eventRepository;
-
-    @Autowired
-    GeneralUserRepository generalUserRepository;
-
-    @Autowired
-    BloodBankRepository bloodBankRepository;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserRepository userRepository;
+    EventService eventService;
 
     @JsonView(View.Public.class)
     @GetMapping("/user/events")
@@ -45,12 +32,10 @@ public class BloodBankInfoController {
 
         switch (filter) {
             case "my":
-                GeneralUser generalUser = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(
-                        jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7))
-                );
-                return eventForUserRepository.findAllEventForUser(generalUser, PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+                String jwt = bearerToken.substring(7);
+                return eventService.eventsForUser(jwt, page);
             case "all":
-                return eventRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+                return eventService.allEvents(page);
             default:
                 return null;
         }
@@ -59,11 +44,8 @@ public class BloodBankInfoController {
     @JsonView(View.Public.class)
     @GetMapping("/explore")
     List<BloodBank> exploreBloodBank(@RequestHeader("Authorization") String bearerToken) {
-        User user = userRepository.findUserByUsernameIgnoreCase(
-                jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7))
-        );
-        Location location = user.getLocation();
-        return bloodBankRepository.exploreNearbyBloodBank(location.getLatitude(), location.getLongitude());
+        String jwt = bearerToken.substring(7);
+        return bloodBankService.bloodBanksNearUser(jwt);
     }
 
 }

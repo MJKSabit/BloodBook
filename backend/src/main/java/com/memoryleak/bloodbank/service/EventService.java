@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
+
 @Service
 public class EventService {
     public final static int PAGE_SIZE = 30;
@@ -120,6 +122,16 @@ public class EventService {
 
     public Event get(long id) {
         return eventRepository.findEventById(id);
+    }
+
+    public Slice<Event> eventsForUser(String jwt, int page) {
+        GeneralUser generalUser = generalUserService.getFromJWT(jwt);
+        return eventForUserRepository.findAllEventForUser(
+                generalUser, PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
+    }
+
+    public Slice<Event> allEvents(int page) {
+        return eventRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending()));
     }
 
     @Transactional
