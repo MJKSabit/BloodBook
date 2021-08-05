@@ -12,6 +12,7 @@ import com.github.messenger4j.send.recipient.IdRecipient;
 import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
+import com.memoryleak.bloodbank.service.GeneralUserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,9 @@ public class MessengerCallbackController {
 
     @Autowired
     private GeneralUserRepository generalUserRepository;
+
+    @Autowired
+    GeneralUserService generalUserService;
 
     @Autowired
     public MessengerCallbackController(final Messenger messenger) {
@@ -95,16 +99,11 @@ public class MessengerCallbackController {
         logger.info("Received message '{}' with text '{}' from user '{}' at '{}'", messageId, messageText, senderId, timestamp);
         logger.info("Received Message: {}", messageText);
 
-        String username = jwtTokenUtil.validateAndGetUsernameFromToken(messageText, "messenger");
+        String jwt = messageText.trim().substring(7);
+        String username = generalUserService.saveMessengerToken(jwt, senderId);
         String response = username == null ?
                 "Account Linking Failed!\nPlease enter exact verification token within specified time." :
                 "Account Linked Successfully with '"+username+"'.\nWelcome to BloodBook("+FRONTEND_URL+")!";
-
-        if (username != null) {
-            GeneralUser user = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
-            user.setFacebook(senderId);
-            generalUserRepository.save(user);
-        }
 
         sendTextMessage(senderId, response);
     }

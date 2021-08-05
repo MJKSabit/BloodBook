@@ -106,16 +106,16 @@ public class GeneralUserService {
         generalUserRepository.save(generalUser);
     }
 
-    public boolean saveMessengerToken(String jwt, String senderId) {
+    public String saveMessengerToken(String jwt, String senderId) {
         String username = jwtTokenUtil.validateAndGetUsernameFromToken(jwt, VERIFY_MESSENGER);
 
         if ( username==null )
-            return false;
+            return null;
 
         GeneralUser user = generalUserRepository.findGeneralUserByUserUsernameIgnoreCase(username);
         user.setFacebook(senderId);
         generalUserRepository.save(user);
-        return true;
+        return username;
     }
 
     public GeneralUser save(GeneralUser user) {
