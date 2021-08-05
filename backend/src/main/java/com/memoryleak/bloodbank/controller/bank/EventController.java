@@ -3,6 +3,7 @@ package com.memoryleak.bloodbank.controller.bank;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
 import com.memoryleak.bloodbank.model.*;
+import com.memoryleak.bloodbank.service.EventService;
 import com.memoryleak.bloodbank.service.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
@@ -48,6 +49,9 @@ public class EventController {
     @Autowired
     UserNotificationService userNotificationService;
 
+    @Autowired
+    EventService eventService;
+
     private BloodBank getUser(String bearerToken) {
         String username = jwtTokenUtil.getUsernameFromToken(bearerToken.substring(7));
         return bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username);
@@ -55,11 +59,8 @@ public class EventController {
 
     @GetMapping("/bloodbank/events/{username}")
     @JsonView(View.Public.class)
-    public Slice<Event> eventsOfUser(@PathVariable String username, @RequestParam(required = false, defaultValue = "0") int page) {
-        return eventRepository.findByUser(
-                bloodBankRepository.findBloodBankByUserUsernameIgnoreCase(username),
-                PageRequest.of(page, PAGE_SIZE, Sort.by("id").descending())
-        );
+    public Slice<Event> eventsOfBloodBank(@PathVariable String username, @RequestParam(required = false, defaultValue = "0") int page) {
+        return eventService.eventsByBloodBank(username, page);
     }
 
     @Transactional
@@ -68,57 +69,31 @@ public class EventController {
     public ResponseEntity<Event> createEvent(@RequestHeader("Authorization") String bearerToken,
                                              @RequestBody Event event,
                                              @RequestParam(required = false, defaultValue = "true") boolean notify) {
-        BloodBank user = getUser(bearerToken);
-
-        if (event == null)
-            return ResponseEntity.badRequest().build();
-
-        event.setId(null);
-
-        Location location = event.getLocation();
-        location.setId(null);
-        location = locationRepository.save(location);
-
-        event.setLocation(location);
-        event.setUser(user);
-        event.setPosted(new Date());
-        eventRepository.save(event);
-
-        if (notify) {
-            List<GeneralUser> users = generalUserRepository.getMatchEventRequirement(
-                    location.getLatitude(),
-                    location.getLongitude());
-            userNotificationService.notifyUsers(event, users);
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(event);
+        String jwt = bearerToken.substring(7);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                eventService.create(jwt, event, notify)
+        );
     }
 
     @JsonView(View.Public.class)
     @DeleteMapping("/bloodbank/event/{id}")
     public ResponseEntity<Event> deleteEvent(@RequestHeader("Authorization") String bearerToken, @PathVariable long id) {
-        Event event = eventRepository.findEventById(id);
-
-        if (event == null)
-            return ResponseEntity.notFound().build();
-
-        if (event.getUser().equals(getUser(bearerToken))) {
-            List<GeneralUserToEvent> generalUserToEvents = eventForUserRepository.findAllByEvent(event);
-
-            for (GeneralUserToEvent generalUserToEvent: generalUserToEvents)
-                eventForUserRepository.delete(generalUserToEvent);
-
-            eventRepository.delete(event);
-            return ResponseEntity.ok(event);
-        } else
+        String jwt = bearerToken.substring(7);
+        try {
+            Event event = eventService.delete(jwt, id);
+            if (event == null)
+                return ResponseEntity.notFound().build();
+            else
+                return ResponseEntity.ok(event);
+        } catch (IllegalAccessError ignore) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
-
 
     @JsonView(View.Public.class)
     @GetMapping("/bloodbank/event/{id}")
     public ResponseEntity<Event> getEvent(@PathVariable long id) {
-        Event event = eventRepository.findEventById(id);
+        Event event = eventService.get(id);
 
         if (event == null)
             return ResponseEntity.notFound().build();
