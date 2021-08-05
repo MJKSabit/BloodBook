@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,6 +84,7 @@ public class PostService {
                 new PostDetails(post);
     }
 
+    @Transactional
     public Post delete(long id, String jwt) throws IllegalAccessError {
         Post post = get(id);
         if (post == null) return null;
@@ -90,6 +92,7 @@ public class PostService {
         GeneralUser user = generalUserService.getFromJWT(jwt);
         if (!post.getUser().equals(user)) throw new IllegalAccessError();
 
+        // TODO : DELETE QUERY
         List<GeneralUserToPost> generalUserToPosts = postForUserRepository.findAllByPost(post);
         for (GeneralUserToPost generalUserToPost: generalUserToPosts)
             postForUserRepository.delete(generalUserToPost);
@@ -98,6 +101,7 @@ public class PostService {
         return post;
     }
 
+    @Transactional
     public Post create(String jwt, Post post, boolean notify) {
         GeneralUser user = generalUserService.getFromJWT(jwt);
 

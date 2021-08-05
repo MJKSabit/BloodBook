@@ -1,9 +1,6 @@
 package com.memoryleak.bloodbank.service;
 
-import com.memoryleak.bloodbank.model.GeneralUser;
-import com.memoryleak.bloodbank.model.Location;
-import com.memoryleak.bloodbank.model.Post;
-import com.memoryleak.bloodbank.model.User;
+import com.memoryleak.bloodbank.model.*;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.json.JSONObject;
@@ -83,6 +80,12 @@ public class GeneralUserService {
                 post.getLocation().getLatitude(),
                 post.getLocation().getLongitude()
         );
+    }
+
+    public List<GeneralUser> getMatchingEvent(Event event) {
+        return generalUserRepository.getMatchEventRequirement(
+            event.getLocation().getLatitude(),
+            event.getLocation().getLongitude());
     }
 
     public String generateMessengerToken(String jwt) {
