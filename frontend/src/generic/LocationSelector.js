@@ -43,12 +43,12 @@ function SimpleDialog(props) {
 
 export default function LocationSelector({lat, long, onSelected}) {
   const [open, setOpen] = React.useState(false);
-  const [location, setLocation] = React.useState({lat: lat, long: long})
+  const [location, setLocation] = React.useState({lat: lat || 0, long: long || 0})
   const [options, setOptions] = React.useState([]);
 
   useEffect(() => {
-    axios.get('http://ip-api.com/json/?fields=status,lat,lon').then(
-      res => { if (res.data.status && !(location.lat || location.long)) {
+    axios.get('https://extreme-ip-lookup.com/json/').then(
+      res => { if (res.data.status==='success' && !(location.lat || location.long)) {
         setLocation({lat: res.data.lat, long: res.data.lon})
       }}
     )
