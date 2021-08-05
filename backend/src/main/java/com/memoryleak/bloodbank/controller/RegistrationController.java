@@ -1,6 +1,7 @@
 package com.memoryleak.bloodbank.controller;
 
 import com.memoryleak.bloodbank.model.*;
+import com.memoryleak.bloodbank.service.AuthService;
 import com.memoryleak.bloodbank.service.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.service.UserService;
@@ -51,6 +52,9 @@ public class RegistrationController {
 
     @Autowired
     BloodBankRepository bloodBankRepository;
+
+    @Autowired
+    AuthService authService;
 
     private static final String[] bloodGroups = {"A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"};
 

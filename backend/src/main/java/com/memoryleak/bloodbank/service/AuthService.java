@@ -26,6 +26,9 @@ public class AuthService {
     public static final String OLD_KEY              = "old";
     public static final String NEW_KEY              = "new";
 
+    public static final String USERNAME_KEY         = "username";
+    public static final String PASSWORD_KEY         = "password";
+
     public static final String ROLE_USER            = "USER";
     public static final String ROLE_BLOOD_BANK      = "BLOODBANK";
 
@@ -77,7 +80,9 @@ public class AuthService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public JSONObject authenticate(String username, String password) throws DisabledException, BadCredentialsException {
+    public JSONObject authenticate(JSONObject loginData) throws DisabledException, BadCredentialsException {
+        String username = loginData.getString(USERNAME_KEY);
+        String password = loginData.getString(PASSWORD_KEY);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
