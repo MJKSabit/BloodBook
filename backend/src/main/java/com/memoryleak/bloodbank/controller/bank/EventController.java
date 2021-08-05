@@ -2,11 +2,9 @@ package com.memoryleak.bloodbank.controller.bank;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.memoryleak.bloodbank.config.View;
-import com.memoryleak.bloodbank.controller.user.PostController;
 import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.notification.UserNotificationService;
+import com.memoryleak.bloodbank.service.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
-import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

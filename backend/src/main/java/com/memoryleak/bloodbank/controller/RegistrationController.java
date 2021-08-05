@@ -1,13 +1,12 @@
 package com.memoryleak.bloodbank.controller;
 
 import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.notification.EmailNotification;
+import com.memoryleak.bloodbank.service.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.service.UserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RestController
@@ -49,8 +47,7 @@ public class RegistrationController {
     LocationRepository locationRepository;
 
     @Autowired
-    @Qualifier("spring")
-    EmailNotification emailNotification;
+    UserNotificationService notificationService;
 
     @Autowired
     BloodBankRepository bloodBankRepository;
@@ -100,7 +97,7 @@ public class RegistrationController {
             generalUserRepository.save(generalUser);
 
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "activate");
-            emailNotification.sendEmail(
+            notificationService.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Your Account",
                     "Go to the link below to activate your BloodBook Account\n"+
@@ -144,7 +141,7 @@ public class RegistrationController {
                 bloodBankBloodCountRepository.save(new BloodBankBloodCount(bloodBank, bloodGroup));
 
 
-            emailNotification.sendEmail(
+            notificationService.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Your Account",
                     "Reply to this Email with Scanned Verified Document to activate BloodBank Account in BloodBook!"
@@ -176,7 +173,7 @@ public class RegistrationController {
 
         if (user!=null) {
             String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), "forgot");
-            emailNotification.sendEmail(
+            notificationService.sendEmail(
                     Collections.singletonList(user.getEmail()),
                     "Confirm Password Reset",
                     "Go to the link below to reset your BloodBook Account Password\n"+

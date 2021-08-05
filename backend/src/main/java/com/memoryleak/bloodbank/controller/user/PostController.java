@@ -6,7 +6,7 @@ import com.memoryleak.bloodbank.model.GeneralUser;
 import com.memoryleak.bloodbank.model.GeneralUserToPost;
 import com.memoryleak.bloodbank.model.Location;
 import com.memoryleak.bloodbank.model.Post;
-import com.memoryleak.bloodbank.notification.UserNotificationService;
+import com.memoryleak.bloodbank.service.UserNotificationService;
 import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;

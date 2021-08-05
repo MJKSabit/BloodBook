@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.notification;
+package com.memoryleak.bloodbank.service;
 
 import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
@@ -14,8 +14,9 @@ import com.memoryleak.bloodbank.repository.PostForUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,8 +34,7 @@ public class UserNotificationService {
     String FRONTEND_URL;
 
     @Autowired
-    @Qualifier("spring")
-    EmailNotification emailNotification;
+    private JavaMailSender emailSender;
 
     @Autowired
     PostForUserRepository postForUserRepository;
@@ -85,7 +85,7 @@ public class UserNotificationService {
                 getMapLink(post.getLocation().getLatitude(), post.getLocation().getLongitude()),
                 getPostLink(post));
 
-        emailNotification.sendEmail(emails, subject, postText);
+        sendEmail(emails, subject, postText);
         sendFacebookMessage(facebookRecipients, postText);
     }
 
@@ -116,7 +116,7 @@ public class UserNotificationService {
                 getMapLink(event.getLocation().getLatitude(), event.getLocation().getLongitude()),
                 getEventLink(event));
 
-        emailNotification.sendEmail(emails, subject, postText);
+        sendEmail(emails, subject, postText);
         sendFacebookMessage(facebookRecipients, postText);
     }
 
@@ -137,7 +137,20 @@ public class UserNotificationService {
         }
     }
 
-    public void sendEmail(List<String> to, String subject, String message) {
-        emailNotification.sendEmail(to, subject, message);
+    public void sendEmail(List<String> to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("sabit.jehadul.karim@gmail.com");
+
+        if (to.size()>0) {
+            message.setTo(to.get(0));
+            String[] bccList = new String[to.size()-1];
+            for (int i = 1; i < to.size(); i++)
+                bccList[i-1] = to.get(i);
+            message.setBcc(bccList);
+
+            emailSender.send(message);
+        }
     }
 }

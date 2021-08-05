@@ -2,7 +2,6 @@ package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.controller.user.PostDetails;
 import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.notification.UserNotificationService;
 import com.memoryleak.bloodbank.repository.BloodBankRepository;
 import com.memoryleak.bloodbank.repository.PostForUserRepository;
 import com.memoryleak.bloodbank.repository.PostRepository;

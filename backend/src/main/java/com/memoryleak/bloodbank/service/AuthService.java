@@ -1,14 +1,11 @@
 package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.notification.EmailNotification;
-import com.memoryleak.bloodbank.repository.*;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -72,8 +69,8 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired @Qualifier("spring")
-    EmailNotification emailNotification;
+    @Autowired
+    UserNotificationService notificationService;
 
     // Utils
 
@@ -163,7 +160,7 @@ public class AuthService {
         saveWithRawPassword(generalUser);
 
         String jwtVerification = jwtTokenUtil.generateVerifyToken(user.getUsername(), user.getEmail(), VERIFY_ACTIVATE);
-        emailNotification.sendEmail(
+        notificationService.sendEmail(
                 Collections.singletonList(user.getEmail()),
                 "Confirm Your Account",
                 "Go to the link below to activate your BloodBook Account\n"+
@@ -182,7 +179,7 @@ public class AuthService {
         saveWithRawPassword(bloodBank);
         bloodBankService.createBloodCounts(bloodBank);
 
-        emailNotification.sendEmail(
+        notificationService.sendEmail(
                 Collections.singletonList(user.getEmail()),
                 "Confirm Your Account",
                 "Reply to this Email with Scanned Verified Document to activate BloodBank Account in BloodBook!"

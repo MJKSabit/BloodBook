@@ -1,7 +1,6 @@
 package com.memoryleak.bloodbank.service;
 
 import com.memoryleak.bloodbank.model.*;
-import com.memoryleak.bloodbank.notification.UserNotificationService;
 import com.memoryleak.bloodbank.repository.EventForUserRepository;
 import com.memoryleak.bloodbank.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.memoryleak.bloodbank.controller.user.PostController.PAGE_SIZE;
 
 @Service
 public class EventService {

@@ -1,4 +1,4 @@
-package com.memoryleak.bloodbank.notification;
+package com.memoryleak.bloodbank.controller;
 
 import com.github.messenger4j.Messenger;
 import com.github.messenger4j.exception.MessengerApiException;
@@ -29,12 +29,12 @@ import static java.util.Optional.of;
 
 @RestController
 @RequestMapping("/callback")
-public class MessengerPlatformCallbackHandler {
+public class MessengerCallbackController {
 
     @Value("${FRONTEND_URL:https://blood-book.netlify.app}")
     String FRONTEND_URL;
 
-    private static final Logger logger = LoggerFactory.getLogger(MessengerPlatformCallbackHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessengerCallbackController.class);
 
     private final Messenger messenger;
 
@@ -45,7 +45,7 @@ public class MessengerPlatformCallbackHandler {
     private GeneralUserRepository generalUserRepository;
 
     @Autowired
-    public MessengerPlatformCallbackHandler(final Messenger messenger) {
+    public MessengerCallbackController(final Messenger messenger) {
         this.messenger = messenger;
     }
 
