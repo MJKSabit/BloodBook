@@ -1,5 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns"
-import { Avatar, Box, Button, Card, CardContent, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Paper, TextField, Typography } from "@material-ui/core"
+import { Avatar, Backdrop, Box, Button, Card, CardContent, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, Paper, TextField, Typography } from "@material-ui/core"
 import { Email, LocationOn } from "@material-ui/icons"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { useEffect } from "react"
@@ -8,7 +8,7 @@ import { useHistory, useParams } from "react-router-dom"
 import LocationSelector from "../generic/LocationSelector"
 import LocationViewer from "../generic/LocationViewer"
 import store from "../store"
-import { addEvent, getBankBloodCount, getOtherBankProfile } from "../store/action"
+import { addEvent, getBankBloodCount, getOtherBankProfile, notifyUser } from "../store/action"
 import Events from "./Events"
 import "../user/opt/profile.css"
 
@@ -129,6 +129,7 @@ const CreateEvent = (props) => {
   const history = useHistory()
 
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [notify, setNotify] = useState(true)
   const [info, setInfo] = useState('');
@@ -197,6 +198,7 @@ const CreateEvent = (props) => {
               <Grid item xs={6}>
                 <Button fullWidth variant="contained" color="primary" onClick={
                   () => {
+                    setLoading(true)
                     addEvent({
                       info, 
                       location: {
@@ -208,8 +210,9 @@ const CreateEvent = (props) => {
                       data => {
                         history.push('/bloodbank/post/'+data.id)
                         setOpen(false)
+                        setLoading(false)
                       }, 
-                      err => console.log(err))
+                      err => {console.log(err); setLoading(false)})
                   }
                 }>Post</Button>
               </Grid>
@@ -229,6 +232,9 @@ const CreateEvent = (props) => {
         </Button>
       </Box>
     </Box>
+    <Backdrop open={loading} onClick={ () => store.dispatch(notifyUser('Still Loading!'))} style={{zIndex: '99999'}}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     {createEventDialog}
   </>
 }

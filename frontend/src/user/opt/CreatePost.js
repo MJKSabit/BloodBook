@@ -1,15 +1,16 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { Box, Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
+import { Backdrop, Box, Button, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { useState } from "react";
 import LocationSelector from "../../generic/LocationSelector";
 import store from "../../store";
-import { createNewPost } from "../../store/action";
+import { createNewPost, notifyUser } from "../../store/action";
 
 export default function CreatePost(props) {
   const location = store.getState().profile.user.location
 
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [bloodGroup, setBloodgroup] = useState('A+')
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [notify, setNotify] = useState(true)
@@ -27,6 +28,9 @@ export default function CreatePost(props) {
           </Button>
         </Box>
       </Box>
+      <Backdrop open={loading} onClick={ () => store.dispatch(notifyUser('Still Loading!'))} style={{zIndex: '99999'}}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Dialog fullWidth maxWidth='sm' open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Create BloodBook Post</DialogTitle>
         <DialogContent>
@@ -105,6 +109,7 @@ export default function CreatePost(props) {
                 <Grid item xs={6}>
                   <Button fullWidth variant="contained" color="primary" onClick={
                     () => {
+                      setLoading(true)
                       createNewPost({
                         info, 
                         bloodGroup, 
@@ -115,7 +120,9 @@ export default function CreatePost(props) {
                           latitude,
                           longitude
                         }
-                      }, notify).then(data => {setOpen(false)}, err => console.log(err))
+                      }, notify).then(
+                        data => {setOpen(false); setLoading(false)}, 
+                        err => {console.log(err); setLoading(false)})
                     }
                   }>Post</Button>
                 </Grid>

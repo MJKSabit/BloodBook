@@ -13,6 +13,9 @@ import com.github.messenger4j.webhook.event.TextMessageEvent;
 import com.memoryleak.bloodbank.repository.GeneralUserRepository;
 import com.memoryleak.bloodbank.service.GeneralUserService;
 import com.memoryleak.bloodbank.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,11 +101,24 @@ public class MessengerController {
         logger.info("Received message '{}' with text '{}' from user '{}' at '{}'", messageId, messageText, senderId, timestamp);
         logger.info("Received Message: {}", messageText);
 
-        String jwt = messageText.trim().substring(7);
-        String username = generalUserService.saveMessengerToken(jwt, senderId);
-        String response = username == null ?
-                "Account Linking Failed!\nPlease enter exact verification token within specified time." :
-                "Account Linked Successfully with '"+username+"'.\nWelcome to BloodBook("+FRONTEND_URL+")!";
+        String jwt = messageText.trim();
+        String response = null;
+
+
+        try {
+            String username = generalUserService.saveMessengerToken(jwt, senderId);
+
+            response = username == null ?
+                    "Account Linking Failed!\nPlease enter exact verification token within specified time." :
+                    "Account Linked Successfully with '"+username+"'.\nWelcome to BloodBook("+FRONTEND_URL+")!";
+
+        } catch (ExpiredJwtException e) {
+            response = "Token Expired! Generate a new Token!";
+        } catch (MalformedJwtException e) {
+            response = "Token Parsing Error!";
+        } catch (JwtException e) {
+            response = "Account Linking Failed!\nPlease enter exact verification token within specified time.";
+        }
 
         sendTextMessage(senderId, response);
     }

@@ -174,7 +174,7 @@ const BankSkeleton = props => {
     return(
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar style={{backgroundColor:'#0090ff'}} position="fixed" className={classes.appBar}>
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
