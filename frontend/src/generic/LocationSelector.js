@@ -1,7 +1,7 @@
 import { mapboxGeoCoding } from '../store/action';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, Typography } from '@material-ui/core';
 import { LocationOnOutlined, Search } from '@material-ui/icons';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,6 +12,7 @@ import Dialog from '@material-ui/core/Dialog';
 import LocationViewer from './LocationViewer';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useState } from 'react';
 
 function SimpleDialog(props) {
   const { onClose, open, options } = props;
@@ -45,6 +46,7 @@ export default function LocationSelector({lat, long, onSelected}) {
   const [open, setOpen] = React.useState(false);
   const [location, setLocation] = React.useState({lat: lat || 0, long: long || 0})
   const [options, setOptions] = React.useState([]);
+  const [typed, setTyped] = useState('')
 
   useEffect(() => {
     axios.get('https://extreme-ip-lookup.com/json/').then(
@@ -79,9 +81,15 @@ export default function LocationSelector({lat, long, onSelected}) {
             onKeyDown={
               e => e.key === 'Enter' && search(e.target.value)
             }
+            onChange={
+              e => setTyped(e.target.value)
+            }
+            value={typed}
             InputProps={{
               endAdornment: (
-                <Search color='inherit' size={20} onClick={e => search(e.target.previousSibling.value)} />
+                <IconButton onClick={e => search(typed)}>
+                  <Search color='inherit' size={20} />
+                </IconButton>
               ),
             }}
           />

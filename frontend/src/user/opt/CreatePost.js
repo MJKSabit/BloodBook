@@ -6,7 +6,7 @@ import LocationSelector from "../../generic/LocationSelector";
 import store from "../../store";
 import { createNewPost, notifyUser } from "../../store/action";
 
-export default function CreatePost(props) {
+export default function CreatePost({onPosted}) {
   const location = store.getState().profile.user.location
 
   const [open, setOpen] = useState(false)
@@ -121,7 +121,7 @@ export default function CreatePost(props) {
                           longitude
                         }
                       }, notify).then(
-                        data => {setOpen(false); setLoading(false)}, 
+                        data => {setOpen(false); setLoading(false); onPosted && onPosted(data)}, 
                         err => {console.log(err); setLoading(false)})
                     }
                   }>Post</Button>

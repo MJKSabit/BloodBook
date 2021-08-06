@@ -10,7 +10,7 @@ import CreatePost from './CreatePost';
 
 const UserCard = props => {
 
-  const {user} = props
+  const {user, onPosted} = props
   const matches = useMediaQuery('(min-width:960px)')
 
   if (!user)
@@ -78,7 +78,7 @@ const UserCard = props => {
                 </div>
             </Grid>
         </Grid>
-      </Paper>, <CreatePost />]}
+      </Paper>, <CreatePost onPosted={onPosted}/>]}
     </div>
   )
 }

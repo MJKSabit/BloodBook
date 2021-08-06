@@ -272,7 +272,7 @@ export default function SignUp(props) {
               }
               signUpUser(data).then(response => {
                 dispatch(notifyUser('Check your Email to confirm your account!'))
-                history.push('/user/signin')
+                history.push('/activate')
               }).catch(e => console.log(e))
             }}
           >

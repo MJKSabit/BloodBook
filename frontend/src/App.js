@@ -44,7 +44,13 @@ function App() {
           <Route path='/activate/:jwt'>
             <ActivateAccount />
           </Route>
+          <Route path='/activate'>
+            <ActivateAccount />
+          </Route>
           <Route path='/forgot/:jwt'>
+            <ResetPassword />
+          </Route>
+          <Route path='/forgot'>
             <ResetPassword />
           </Route>
           <Route>

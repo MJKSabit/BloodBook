@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { forgotPassword, signIn } from '../../store/action';
 import Copyright from './Copyright';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,6 +44,7 @@ export default function ForgotPassword(props) {
   const classes = useStyles();
   const [username, setUsername] = useState('')
 
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const forgotPasswordFunction = () => {
@@ -84,6 +85,7 @@ export default function ForgotPassword(props) {
               (e) => {
                 e.preventDefault()
                 forgotPasswordFunction()
+                history.push('/forgot')
               }
             }
           >

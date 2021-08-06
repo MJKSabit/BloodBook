@@ -9,6 +9,8 @@ const ResetPassword = props => {
   const {jwt} = useParams()
   const history = useHistory()
 
+  const [jwtIn, setJwtIn] = useState(jwt || '')
+  const [loading, setLoading] = useState(false)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -22,6 +24,15 @@ const ResetPassword = props => {
             <Typography variant='subtitle1'>
               Make sure new password and new confirm password matches with length of 8~20
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              fullWidth  
+              label="Enter Token Here"
+              value={jwtIn}
+              onChange={ (e) => setJwtIn(e.target.value)}
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -48,7 +59,7 @@ const ResetPassword = props => {
           <Box display='flex' flexDirection="row-reverse" mt={4}>
             <Box>
               <Button color="primary" variant='contained' onClick={ (e) => {
-                resetPassword(jwt, password).then(
+                resetPassword(jwtIn, password).then(
                   () => {
                     store.dispatch(notifyUser('Password Reset Successfully'))
                     history.push('/')
@@ -59,7 +70,7 @@ const ResetPassword = props => {
                   }
                 )
               }}
-              disabled={password !== confirmPassword || !passwordMatcher.test(password)}>
+              disabled={jwtIn === '' || password !== confirmPassword || !passwordMatcher.test(password)}>
                 Reset Password
               </Button>
             </Box>

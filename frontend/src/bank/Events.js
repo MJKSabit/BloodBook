@@ -1,5 +1,5 @@
-import { Avatar, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Paper, Tooltip, Typography } from "@material-ui/core"
-import { FileCopyOutlined, Info, LocationOn, MoreVert, QueryBuilder, VisibilityOutlined } from "@material-ui/icons";
+import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Link, Menu, MenuItem, Paper, Tooltip, Typography } from "@material-ui/core"
+import { DeleteOutlined, FileCopyOutlined, Info, LocationOn, MoreVert, QueryBuilder, VisibilityOutlined } from "@material-ui/icons";
 import { useEffect, useState } from "react"
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import LocationViewer from "../generic/LocationViewer";
@@ -66,6 +66,7 @@ export const Event = props => {
   const {userType} = props
   const [anchorEl, setAnchorEl] = useState(null);
   const [event, setEvent] = useState(props.event)
+  const [open, setOpen] = useState(false)
 
   const history = useHistory()
 
@@ -147,13 +148,33 @@ export const Event = props => {
                   { editAccess && 
                     <MenuItem onClick={(e) => {
                       handleClose(e)
+                      setOpen(true)
+                    }}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
+                  }
+                </Menu>
+                <Dialog open={open} onClose={e => setOpen(false)}>
+                  <DialogTitle >
+                    Confirm Delete
+                  </DialogTitle>
+                  <DialogContent>
+                    Do you really want to delete this?
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={e => setOpen(false)} color="primary">
+                      No
+                    </Button>
+                    <Button onClick={e => {
+                      store.dispatch(notifyUser('Deleting...'))
+                      setOpen(false)
                       deleteEvent(event.id).then(
                         () => setEvent(null),
                         err => console.log(err)
                       )
-                    }}>Delete</MenuItem>
-                  }
-                </Menu>
+                    }} color="primary" autoFocus>
+                      Yes
+                    </Button>
+                  </DialogActions>
+                </Dialog>
             </div>
         </div>
     </Paper>

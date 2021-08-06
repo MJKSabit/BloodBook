@@ -1,7 +1,7 @@
 import React from 'react'
 import './posts.css'
 import './profile.css'
-import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from "@material-ui/core";
+import {Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Menu, MenuItem, Tooltip, Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
@@ -16,11 +16,14 @@ import store from '../../store';
 import LocationViewer from '../../generic/LocationViewer';
 
 const Posts = props => {
-  const {url, label} = props
+  const {url, label, createdPost} = props
   const [posts, setPosts] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
+
+  useEffect( () => createdPost && setPosts([createdPost, ...posts])
+  , [createdPost])
 
   const fetchData = (posts, more, page) => {
     if (url && more) {
@@ -65,6 +68,7 @@ const Posts = props => {
 export const Post = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [post, setPost] = useState(props.post)
+  const [open, setOpen] = useState(false)
 
   const history = useHistory()
 
@@ -147,13 +151,33 @@ export const Post = props => {
                         }} key={1}><CheckCircleOutlined style={{paddingRight: '8px'}}/>Change Managed</MenuItem>,
                         <MenuItem onClick={(e) => {
                           handleClose(e)
+                          setOpen(true)
+                        }} key={2}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
+                      ]}
+                    </Menu>
+                    <Dialog open={open} onClose={e => setOpen(false)}>
+                      <DialogTitle >
+                        Confirm Delete
+                      </DialogTitle>
+                      <DialogContent>
+                        Do you really want to delete this?
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={e => setOpen(false)} color="primary">
+                          No
+                        </Button>
+                        <Button onClick={e => {
+                          store.dispatch(notifyUser('Deleting...'))
+                          setOpen(false)
                           deletePost(post.id).then(
                             () => setPost(null),
                             err => console.log(err)
                           )
-                        }} key={2}><DeleteOutlined style={{paddingRight: '8px'}}/>Delete</MenuItem>
-                      ]}
-                    </Menu>
+                        }} color="primary" autoFocus>
+                          Yes
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                 </div>
                 <div className={'post-right profile-bg'}>
                     {post.bloodGroup}
