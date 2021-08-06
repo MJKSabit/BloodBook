@@ -80,7 +80,7 @@ export default function LocationSelector({lat, long, onSelected}) {
             }
             InputProps={{
               endAdornment: (
-                <Search color='inherit' size={20} />
+                <Search color='inherit' size={20} onClick={e => search(e.target.previousSibling.value)} />
               ),
             }}
           />
