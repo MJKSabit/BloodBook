@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from "./index";
 import { NOTIFICATION, SIGN_IN, SIGN_OUT, UNAUTHORIZED, MY_PROFILE, REMOVE_MESSENGER, FORBIDDEN } from './actionTypes';
 
-const API_URL = 'http://localhost:8080' // https://blood-book.herokuapp.com
+const API_URL = "https://blood-book.herokuapp.com"
 const MAPBOX_GEOCODING_API = 'https://api.mapbox.com/geocoding/v5/mapbox.places'
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWprc2FiaXQiLCJhIjoiY2tvc3hlZXFxMDV6MjJwcWo3ejF0dHp5NSJ9.X19XUxgb1BCjxScWSUsg1g'
 const IMGBB_API = "https://api.imgbb.com/1/upload"

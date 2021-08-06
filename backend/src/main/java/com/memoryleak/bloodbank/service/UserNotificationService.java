@@ -8,7 +8,6 @@ import com.github.messenger4j.send.MessagingType;
 import com.github.messenger4j.send.NotificationType;
 import com.github.messenger4j.send.message.TextMessage;
 import com.github.messenger4j.send.recipient.IdRecipient;
-import com.memoryleak.bloodbank.model.*;
 import com.memoryleak.bloodbank.repository.EventForUserRepository;
 import com.memoryleak.bloodbank.repository.PostForUserRepository;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Optional.empty;

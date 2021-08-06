@@ -160,7 +160,9 @@ const Settings = props => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant='subtitle2'>
-            Copy this token and send a messeage to <Link href='https://www.facebook.com/BloodBook-101567685499403/'>BloodBook Facebook Page</Link>
+            Generate and copy this token and send a messeage to 
+            <Link href='https://www.facebook.com/BloodBook-101567685499403/' rel="noopener noreferrer" target="_blank">BloodBook Facebook Page</Link>
+             ( You need to be a tester, contact me via email or messenger)
           </Typography>
         </Grid>
       </Grid>

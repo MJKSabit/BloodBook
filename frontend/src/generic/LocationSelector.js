@@ -50,6 +50,7 @@ export default function LocationSelector({lat, long, onSelected}) {
     axios.get('https://extreme-ip-lookup.com/json/').then(
       res => { if (res.data.status==='success' && !(location.lat || location.long)) {
         setLocation({lat: res.data.lat, long: res.data.lon})
+        onSelected && onSelected(res.data.lat, res.data.lon)
       }}
     )
   }, [])

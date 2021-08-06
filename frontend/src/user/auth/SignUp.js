@@ -237,7 +237,7 @@ export default function SignUp(props) {
                   format="dd/MM/yyyy"
                   margin="normal"
                   id="date-picker-inline"
-                  label="Last Donation Date"
+                  label="Last Donation Date (choose any if never)"
                   value={selectedDate} 
                   onChange={ (e) => setSelectedDate(e)}
                   KeyboardButtonProps={{

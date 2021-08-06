@@ -171,7 +171,8 @@ public class AuthService {
         notificationService.sendEmail(
                 Collections.singletonList(user.getEmail()),
                 "Confirm Your Account",
-                "Go to the link below to activate your BloodBook Account\n"+
+                "Go to the link below to activate your BloodBook Account \n" +
+                        "[Sorry for <"+FRONTEND_URL+">, I was blocked and site was flagged not safe]\n"+
                         FRONTEND_URL+"/activate/"+jwtVerification
         );
     }
@@ -240,6 +241,7 @@ public class AuthService {
                 Collections.singletonList(user.getEmail()),
                 "Confirm Password Reset",
                 "Go to the link below to reset your BloodBook Account Password\n"+
+                        "[Sorry for <"+FRONTEND_URL+">, I was blocked and site was flagged not safe]\n"+
                         FRONTEND_URL+"/forgot/"+jwtVerification
         );
 
