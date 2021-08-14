@@ -37,7 +37,7 @@ const ActivateAccount = props => {
 
   return <Container maxWidth='sm'>
     <Box marginY={5}>
-      <Paper component="form" className={classes.root}>
+      <Paper component="form" className={classes.root} style={{width: '100%'}}>
           <Lock color='disabled' style={{padding: '10px'}}/>
         <InputBase
           className={classes.input}

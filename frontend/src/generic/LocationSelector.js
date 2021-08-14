@@ -66,8 +66,8 @@ export default function LocationSelector({lat, long, onSelected}) {
 
   const handleClose = (lat, long) => {
     setOpen(false);
-    setLocation({lat, long})
-    onSelected && onSelected(lat, long)
+    lat && long && setLocation({lat, long})
+    lat && long && onSelected && onSelected(lat, long)
   };
 
   return (
